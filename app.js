@@ -91,6 +91,9 @@ const volSlider = document.querySelector('#studio-vol-slider');
 const volIndicator = document.querySelector('#vol-indicator');
 const datasetSelect = document.querySelector('#dataset-select');
 const sphereNameBadge = document.querySelector('#studio-sphere-name');
+const studioSphereDisplay = document.querySelector('#studio-sphere-display');
+const studioNarrative = document.querySelector('#studio-narrative');
+const studioLayerTag = document.querySelector('#studio-layer-tag');
 const rampMin = document.querySelector('#ramp-min');
 const rampMax = document.querySelector('#ramp-max');
 
@@ -186,8 +189,20 @@ function applyStudioTheme(themeName) {
   studio.classList.remove('theme-general', 'theme-lithosphere', 'theme-atmosphere', 'theme-hydrosphere');
   studio.classList.add(`theme-${theme}`);
   studio.setAttribute('data-theme', theme);
+  const sphereCapitalized = theme.charAt(0).toUpperCase() + theme.slice(1);
   if (sphereNameBadge) {
-    sphereNameBadge.textContent = theme.charAt(0).toUpperCase() + theme.slice(1);
+    sphereNameBadge.textContent = sphereCapitalized;
+  }
+  if (studioSphereDisplay) {
+    studioSphereDisplay.textContent = sphereCapitalized;
+  }
+  const dsKey = worldToDataset[theme];
+  const ds = window.earthSonifier?.datasets?.[dsKey];
+  if (ds) {
+    if (studioNarrative) studioNarrative.textContent = ds.sub;
+    if (studioLayerTag) studioLayerTag.textContent = ds.title;
+    if (rampMin) rampMin.textContent = ds.rampMin;
+    if (rampMax) rampMax.textContent = ds.rampMax;
   }
 }
 
@@ -209,8 +224,14 @@ async function mountStudioDataset(dsKey) {
   const syncDs = window.earthSonifier.datasets?.[dsKey];
   if (syncDs) {
     applyStudioTheme(syncDs.theme);
+    if (studioSphereDisplay) studioSphereDisplay.textContent = syncDs.sphere;
+    if (studioNarrative) studioNarrative.textContent = syncDs.sub;
+    if (studioLayerTag) studioLayerTag.textContent = syncDs.title;
     if (rampMin) rampMin.textContent = syncDs.rampMin;
     if (rampMax) rampMax.textContent = syncDs.rampMax;
+    if (telUnit) telUnit.textContent = syncDs.unit;
+    if (telPhysVal) telPhysVal.textContent = ((syncDs.minVal + syncDs.maxVal) / 2).toFixed(1);
+    if (telAnomaly) telAnomaly.textContent = `Nominal ${syncDs.sphere} Range`;
   }
 
   const ds = await window.earthSonifier.loadDataset(dsKey);
@@ -219,8 +240,14 @@ async function mountStudioDataset(dsKey) {
   applyStudioTheme(ds.theme);
 
   if (sphereNameBadge) sphereNameBadge.textContent = ds.sphere;
+  if (studioSphereDisplay) studioSphereDisplay.textContent = ds.sphere;
+  if (studioNarrative) studioNarrative.textContent = ds.sub;
+  if (studioLayerTag) studioLayerTag.textContent = ds.title;
   if (rampMin) rampMin.textContent = ds.rampMin;
   if (rampMax) rampMax.textContent = ds.rampMax;
+  if (telUnit) telUnit.textContent = ds.unit;
+  if (telPhysVal) telPhysVal.textContent = ((ds.minVal + ds.maxVal) / 2).toFixed(1);
+  if (telAnomaly) telAnomaly.textContent = `Nominal ${ds.sphere} Range`;
 
   // Draw base map image onto canvas
   if (mapCanvas) {

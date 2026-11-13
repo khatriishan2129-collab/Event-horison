@@ -16,7 +16,6 @@
     <nav aria-label="Main navigation">
       <a href="#home" data-nav="home">Home</a>
       <a href="#explore" data-nav="explore">Explore</a>
-      <a href="#studio" data-nav="studio">Sonifier Studio</a>
       <button type="button" class="nav-about" data-about>About <span aria-hidden="true">↗</span></button>
     </nav>
     <span class="header-note"><span class="status-dot"></span> A different kind of discovery</span>
@@ -64,71 +63,91 @@
             </div>
           </div>
 
-          <div class="dataset-control">
-            <span class="control-label">SATELLITE LAYER:</span>
-            <select id="dataset-select" class="studio-select" aria-label="Select satellite dataset">
-              <option value="atmosphere_aod">Atmosphere · Aerosol Optical Depth (AOD)</option>
-              <option value="lithosphere_temp">Lithosphere · Land Surface Temp Anomaly (°C)</option>
-              <option value="hydrosphere_sst">Hydrosphere · Sea Surface Temperature (°C)</option>
-              <option value="general_precip">General · Global Precipitation (mm/day)</option>
-            </select>
-          </div>
-
           <div class="engine-status">
             <span class="status-pulse"></span>
             <span id="engine-status-text">Audio Engine Ready</span>
           </div>
         </div>
 
-        <!-- Studio Main Stage -->
+        <!-- Studio Main Stage: Left = Information & Telemetry Deck, Right = Map & Soundstage Deck -->
         <div class="studio-stage-grid">
-          <!-- Left: Map Canvas & Ramp -->
+          <!-- LEFT: Telemetry & Sonification Deck -->
+          <aside class="telemetry-deck">
+            <!-- Editorial Sphere Header -->
+            <div class="studio-intro-card">
+              <p class="eyebrow"><span></span> REALTIME SATELLITE SONIFICATION</p>
+              <h2 class="studio-hero-title">Listening to <em id="studio-sphere-display">Atmosphere</em></h2>
+              <p class="studio-hero-desc" id="studio-narrative">Atmospheric smoke, dust plumes & airborne clean-air visibility translated into continuous 12-voice acoustic frequencies.</p>
+            </div>
+
+            <!-- Primary Satellite Measurement Card -->
+            <div class="telemetry-tile hero-metric highlight-tile">
+              <div class="tile-top-row">
+                <span class="tile-tag"><span class="radar-dot"></span> SATELLITE MEASUREMENT</span>
+                <span class="sensor-pill" id="studio-layer-tag">Aerosol Optical Depth (AOD)</span>
+              </div>
+              <div class="telemetry-big"><span id="tel-phys-val">0.45</span> <span class="unit" id="tel-unit">AOD</span></div>
+              <div class="telemetry-meta" id="tel-anomaly">Nominal Atmospheric Range</div>
+            </div>
+
+            <!-- Dual Coordinates & Synth Voice Cards -->
+            <div class="telemetry-subgrid">
+              <div class="telemetry-tile">
+                <span class="tile-tag">SPATIAL POSITION</span>
+                <div class="telemetry-medium" id="tel-coords">28.6° N, 77.2° E</div>
+                <div class="telemetry-meta" id="tel-region">Central & East Asia</div>
+              </div>
+
+              <div class="telemetry-tile">
+                <span class="tile-tag">ACOUSTIC SYNTHESIS</span>
+                <div class="telemetry-medium" id="tel-voice">Low Cello (Red / Low)</div>
+                <div class="telemetry-meta" id="tel-freq">Pitch: 147 Hz · Stereo: 18% R</div>
+              </div>
+            </div>
+
+            <!-- Hue-Wheel Spectrum Equalizer Card -->
+            <div class="equalizer-card">
+              <div class="eq-header">
+                <span class="tile-tag">HUE-WHEEL COLOR REGISTERS</span>
+                <span class="eq-status-badge"><span class="mini-eq-dot"></span> 8 SPECTRAL VOICES</span>
+              </div>
+              <div class="hue-meter-grid" id="hue-meter-grid">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+          </aside>
+
+          <!-- RIGHT: Map Canvas & Soundstage Deck -->
           <div class="map-deck">
             <div class="map-viewport" id="map-viewport">
+              <div class="map-hud-top">
+                <span class="hud-status"><span class="hud-pulse"></span> GLOBAL SATELLITE RASTER</span>
+                <span class="hud-hint"><span class="hud-cursor-icon">✦</span> Click map to probe coordinates</span>
+              </div>
               <canvas id="studio-map-canvas"></canvas>
               <!-- Scanline overlays -->
               <div id="scanline-v" class="scanline scanline-v"></div>
               <div id="scanline-h" class="scanline scanline-h"></div>
               <div id="scan-target-orb" class="scan-target-orb"></div>
               <div id="probe-pin" class="probe-pin"></div>
+              
+              <!-- Corner telemetry brackets -->
+              <span class="map-bracket tl"></span>
+              <span class="map-bracket tr"></span>
+              <span class="map-bracket bl"></span>
+              <span class="map-bracket br"></span>
             </div>
 
             <!-- Calibrated Physical Ramp -->
             <div class="colormap-container">
-              <span class="ramp-bound min" id="ramp-min">0.0 AOD</span>
+              <div class="ramp-legend-row">
+                <span class="ramp-bound min" id="ramp-min">0.0 AOD</span>
+                <span class="ramp-label">Calibrated Planetary Observation Scale</span>
+                <span class="ramp-bound max" id="ramp-max">1.2+ AOD</span>
+              </div>
               <div class="ramp-track" id="ramp-track"></div>
-              <span class="ramp-bound max" id="ramp-max">1.2+ AOD</span>
             </div>
           </div>
-
-          <!-- Right: Telemetry & Hue-Wheel Voice Meter -->
-          <aside class="telemetry-deck">
-            <div class="telemetry-tile highlight-tile">
-              <span class="tile-tag">SATELLITE MEASUREMENT</span>
-              <div class="telemetry-big"><span id="tel-phys-val">0.45</span> <span class="unit" id="tel-unit">AOD</span></div>
-              <div class="telemetry-meta" id="tel-anomaly">Nominal Atmospheric Range</div>
-            </div>
-
-            <div class="telemetry-tile">
-              <span class="tile-tag">SPATIAL COORDINATES</span>
-              <div class="telemetry-medium" id="tel-coords">28.6° N, 77.2° E</div>
-              <div class="telemetry-meta" id="tel-region">Central & East Asia</div>
-            </div>
-
-            <div class="telemetry-tile">
-              <span class="tile-tag">ACTIVE SYNTHESIZER VOICE</span>
-              <div class="telemetry-medium" id="tel-voice">Low Cello (Red / Low)</div>
-              <div class="telemetry-meta" id="tel-freq">Pitch: 147 Hz · Stereo: 18% R</div>
-            </div>
-
-            <!-- Equalizer Meters -->
-            <div class="equalizer-card">
-              <span class="tile-tag">HUE-WHEEL COLOR REGISTERS</span>
-              <div class="hue-meter-grid" id="hue-meter-grid">
-                <!-- Injected via JavaScript -->
-              </div>
-            </div>
-          </aside>
         </div>
 
         <!-- Studio Bottom: Transport Controls & Scrubber -->
