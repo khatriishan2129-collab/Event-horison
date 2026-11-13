@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#040b10">
+  <meta name="description" content="Jukebox — a new way to experience our planet. Explore the land, air, and water that shape our world.">
+  <title>Jukebox — The planet has a rhythm.</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Jukebox home"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>jukebox<span class="brand-dot">.</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#home" data-nav="home">Home</a>
+      <a href="#explore" data-nav="explore">Explore</a>
+      <button type="button" class="nav-about" data-about>About <span aria-hidden="true">↗</span></button>
+    </nav>
+    <span class="header-note"><span class="status-dot"></span> A different kind of discovery</span>
+  </header>
+
+  <main>
+    <section id="home" class="home-page" aria-labelledby="home-heading">
+      <div class="video-stage" aria-hidden="true">
+        <video id="background-video" autoplay muted loop playsinline poster="assets/homepage_background.jpg"><source src="assets/homepage_background_loop.mp4" type="video/mp4"></video>
+      </div>
+      <div class="home-shade"></div>
+      <div class="hero-content">
+        <p class="eyebrow"><span></span> EARTH, IN A DIFFERENT FREQUENCY</p>
+        <h1 id="home-heading">The planet<br>has a <em>rhythm.</em></h1>
+        <p class="hero-description">From the ground beneath us to the skies above.<br class="desktop-break"> Discover the extraordinary connections that<br class="desktop-break"> make our world come alive.</p>
+        <a class="primary-button" href="#explore">Explore the planet <span aria-hidden="true">↗</span></a>
+        <div class="hero-caption"><span class="mini-wave" aria-hidden="true">▂ ▅ █ ▃ ▆ ▂</span> ONE PLANET. ENDLESS WAYS TO EXPLORE.</div>
+      </div>
+      <div class="home-bottom"><span>AN EXPLORATION OF EARTH & ITS ELEMENTS</span><span class="bottom-coordinate">LAND <i>·</i> AIR <i>·</i> WATER</span><button id="motion-toggle" class="motion-toggle" aria-label="Pause background video"><span aria-hidden="true">Ⅱ</span> Pause motion</button></div>
+    </section>
+
+    <section id="explore" class="explore-page" aria-labelledby="explore-heading" hidden>
+      <div class="explore-intro"><div><p class="eyebrow"><span></span> FOLLOW YOUR CURIOSITY</p><h1 id="explore-heading" tabindex="-1">A world of <em>discovery.</em></h1></div><p>Every layer tells a story.<br>Choose where yours begins.</p></div>
+      <div class="collection-label"><span>EXPLORE THE COLLECTION</span><span>04 WORLDS TO DISCOVER <span aria-hidden="true">↙</span></span></div>
+      <div class="tile-grid">
+        <button class="explore-tile general" data-world="General"><span class="tile-top"><span>01 / THE BIG PICTURE</span><span class="tile-arrow">↗</span></span><span class="tile-art globe-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="wire-globe"></span><span class="little-star">✦</span></span><span class="tile-copy"><span class="tile-kicker">EVERYTHING IS CONNECTED</span><span class="tile-title">General</span><span class="tile-description">Take a step back. See the whole planet in a new light.</span><span class="tile-link">Discover the connections <span>→</span></span></span></button>
+        <button class="explore-tile lithosphere" data-world="Lithosphere"><span class="tile-top"><span>02 / SOLID GROUND</span><span class="tile-arrow">↗</span></span><span class="tile-art" aria-hidden="true"><svg class="mountain-art" viewBox="0 0 360 260"><defs><linearGradient id="rock" x2="0.8" y2="1"><stop stop-color="#dfc3a5"/><stop offset="1" stop-color="#8c5230"/></linearGradient></defs><circle cx="258" cy="62" r="29" fill="#e7c15a" opacity=".8"/><path d="M-20 240 103 68 163 144 208 106 380 255Z" fill="url(#rock)"/><path d="m103 68 17 97 43-21-19 86 64-124 17 109 155 40H-20Z" fill="#8c5230"/><path d="m-20 250 142-72 61 49 72-52 125 80v20H-20" fill="#2b1d14"/><g fill="none" stroke="#dfc3a5" opacity=".25"><path d="m-20 267 145-73 56 47 76-50 123 77M-20 278l145-68 56 47 76-50 123 77"/></g></svg></span><span class="tile-copy"><span class="tile-kicker">BENEATH YOUR FEET</span><span class="tile-title">Lithosphere</span><span class="tile-description">Trace the textures, shifting landscapes, and stories of solid Earth.</span><span class="tile-link">Explore the land <span>→</span></span></span></button>
+        <button class="explore-tile atmosphere" data-world="Atmosphere"><span class="tile-top"><span>03 / ABOVE & BEYOND</span><span class="tile-arrow">↗</span></span><span class="tile-art sky-art" aria-hidden="true"><span class="sky-sun"></span><span class="air-ring r1"></span><span class="air-ring r2"></span><span class="air-ring r3"></span><span class="air-ring r4"></span><span class="air-ring r5"></span></span><span class="tile-copy"><span class="tile-kicker">SOMETHING IN THE AIR</span><span class="tile-title">Atmosphere</span><span class="tile-description">Follow the winds and the ever-changing sky that surrounds us.</span><span class="tile-link">Look to the skies <span>→</span></span></span></button>
+        <button class="explore-tile hydrosphere" data-world="Hydrosphere"><span class="tile-top"><span>04 / INTO THE BLUE</span><span class="tile-arrow">↗</span></span><span class="tile-art water-art" aria-hidden="true"><svg viewBox="0 0 360 260"><defs><linearGradient id="water" x2="0" y2="1"><stop stop-color="#52b6d9"/><stop offset="1" stop-color="#061824"/></linearGradient></defs><circle cx="180" cy="118" r="83" fill="url(#water)"/><g fill="none" stroke="#6fd4b2"><path d="M-30 148Q40 90 110 148t140 0 140 0M-30 161Q40 103 110 161t140 0 140 0M-30 174Q40 116 110 174t140 0 140 0M-30 187Q40 129 110 187t140 0 140 0M-30 200Q40 142 110 200t140 0 140 0M-30 213Q40 155 110 213t140 0 140 0M-30 226Q40 168 110 226t140 0 140 0M-30 239Q40 181 110 239t140 0 140 0"/></g></svg></span><span class="tile-copy"><span class="tile-kicker">A WORLD IN MOTION</span><span class="tile-title">Hydrosphere</span><span class="tile-description">Dive into the oceans, currents, and waters that connect our world.</span><span class="tile-link">Follow the water <span>→</span></span></span></button>
+      </div>
+      <footer class="explore-footer"><span class="footer-mark">A little curiosity goes a long way.</span><span>OUR PLANET. YOUR PERSPECTIVE.</span><a href="#home">Back to the surface ↑</a></footer>
+    </section>
+  </main>
+
+  <dialog id="info-dialog" aria-labelledby="dialog-title"><button class="dialog-close" aria-label="Close dialog">×</button><p class="eyebrow" id="dialog-eyebrow">THE JUKEBOX PROJECT</p><h2 id="dialog-title">A new perspective<br>on our planet.</h2><p id="dialog-description">Jukebox brings Earth observation and discovery together. Explore the land, air, and water that shape our world — and find the connections in between.</p><button class="primary-button dialog-done">Keep exploring <span aria-hidden="true">→</span></button></dialog>
+</body>
+</html>
