@@ -4,58 +4,2241 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#040b10">
-  <meta name="description" content="Jukebox — a new way to experience our planet. Explore the land, air, and water that shape our world.">
+  <meta name="description" content="Jukebox — a new way to experience our planet. Realtime NASA satellite Earth observation translated into spatial music and frequency.">
   <title>Jukebox — The planet has a rhythm.</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="sonifier.js" defer></script>
-  <script src="app.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --void: #040b10;
+      --ocean: #061824;
+      --navy: #0c2738;
+      --mint: #6fd4b2;
+      --cream: #eef3ee;
+      --mist: #b9ced6;
+      --gold: #e7c15a;
+      --violet: #7c66dc;
+      --rose: #d46ba8;
+      --theme-accent: #6fd4b2;
+      --theme-glow: rgba(111, 212, 178, 0.35);
+      --theme-glow-soft: rgba(111, 212, 178, 0.14);
+      --theme-border: rgba(111, 212, 178, 0.24);
+      --theme-border-highlight: rgba(111, 212, 178, 0.5);
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--void);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--cream);
+      font-family: var(--font-sans);
+      background: var(--void);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Subtle film grain & cosmic atmosphere overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.032;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    button, a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      border: 0;
+    }
+
+    button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 2px solid var(--theme-accent, var(--mint));
+      outline-offset: 4px;
+    }
+
+    button:disabled {
+      cursor: default;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* ==========================================================================
+       FLOATING GLASSMORPHIC SITE HEADER
+       ========================================================================== */
+    .site-header {
+      height: 82px;
+      padding: 0 3.5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      background: rgba(4, 11, 16, 0.72);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(185, 206, 214, 0.12);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .brand:hover {
+      transform: translateY(-1px);
+    }
+
+    .brand-dot {
+      color: var(--theme-accent, var(--mint));
+      transition: color 0.3s ease;
+    }
+
+    .brand-symbol {
+      display: flex;
+      align-items: center;
+      gap: 3.5px;
+      margin-right: 12px;
+      height: 28px;
+      transform: rotate(-10deg);
+    }
+
+    .brand-symbol i {
+      display: block;
+      width: 3.5px;
+      background: var(--theme-accent, var(--mint));
+      border-radius: 99px;
+      height: 12px;
+      transition: height 0.2s ease, background 0.3s ease;
+      box-shadow: 0 0 10px var(--theme-glow, rgba(111, 212, 178, 0.4));
+    }
+
+    .brand-symbol i:nth-child(2),
+    .brand-symbol i:nth-child(4) {
+      height: 21px;
+    }
+
+    .brand-symbol i:nth-child(3) {
+      height: 29px;
+    }
+
+    body.audio-active .brand-symbol i:nth-child(1) { animation: eq-bar 0.7s infinite ease-in-out 0.1s; }
+    body.audio-active .brand-symbol i:nth-child(2) { animation: eq-bar 0.55s infinite ease-in-out 0.25s; }
+    body.audio-active .brand-symbol i:nth-child(3) { animation: eq-bar 0.65s infinite ease-in-out 0.05s; }
+    body.audio-active .brand-symbol i:nth-child(4) { animation: eq-bar 0.5s infinite ease-in-out 0.35s; }
+    body.audio-active .brand-symbol i:nth-child(5) { animation: eq-bar 0.75s infinite ease-in-out 0.15s; }
+
+    @keyframes eq-bar {
+      0%, 100% { transform: scaleY(0.55); }
+      50% { transform: scaleY(1.2); }
+    }
+
+    .header-right-cluster {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+
+    .header-worlds-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(6, 20, 32, 0.65);
+      padding: 4px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(185, 206, 214, 0.12);
+    }
+
+    .world-pill-btn {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--mist);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.22s ease;
+      white-space: nowrap;
+    }
+
+    .world-pill-btn i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+      background: var(--pill-color, var(--mint));
+      box-shadow: 0 0 8px var(--pill-color, var(--mint));
+    }
+
+    .world-pill-btn:hover {
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.07);
+      transform: translateY(-1px);
+    }
+
+    .world-pill-btn.active {
+      color: var(--void);
+      background: var(--pill-color, var(--mint));
+      box-shadow: 0 0 16px color-mix(in srgb, var(--pill-color, var(--mint)) 45%, transparent);
+    }
+
+    .world-pill-btn.active i {
+      background: var(--void);
+      box-shadow: none;
+    }
+
+    nav {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      background: rgba(12, 39, 56, 0.42);
+      padding: 5px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(185, 206, 214, 0.14);
+    }
+
+    nav a, .nav-about {
+      font-size: 13px;
+      font-weight: 500;
+      background: none;
+      padding: 7px 16px;
+      border-radius: 999px;
+      color: var(--mist);
+      position: relative;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    nav a.active {
+      color: var(--void);
+      background: var(--theme-accent, var(--mint));
+      font-weight: 600;
+      box-shadow: 0 0 20px var(--theme-glow, rgba(111, 212, 178, 0.35));
+    }
+
+    nav a:not(.active):hover, .nav-about:hover {
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-about span {
+      padding-left: 4px;
+      color: var(--theme-accent, var(--mint));
+    }
+
+    /* ==========================================================================
+       PAGE 1: HOME — FULL-BLEED EARTH VIDEO BACKGROUND & RIGHT HERO STAGE
+       ========================================================================== */
+    .home-page {
+      min-height: 760px;
+      height: 100svh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: #040b10;
+    }
+
+    .video-stage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    #earth-fallback-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+    }
+
+    .video-stage video {
+      position: absolute;
+      inset: 0;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: center center;
+      opacity: 1;
+      display: block;
+      z-index: 1;
+    }
+
+    .home-shade {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at center, rgba(4, 11, 16, 0.15) 0%, rgba(4, 11, 16, 0.48) 100%),
+        linear-gradient(90deg, rgba(4, 11, 16, 0.2) 0%, rgba(4, 11, 16, 0.5) 50%, rgba(4, 11, 16, 0.68) 100%),
+        linear-gradient(0deg, #040b10 0%, transparent 16%, transparent 84%, rgba(4, 11, 16, 0.65) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      margin-left: 52%;
+      padding: 88px 4.5% 80px 0;
+      max-width: 720px;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2.4px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 22px;
+      color: var(--mint);
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .eyebrow > span {
+      width: 24px;
+      height: 1.5px;
+      background: var(--mint);
+      box-shadow: 0 0 8px var(--mint);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(50px, 5.4vw, 86px);
+      line-height: 1.02;
+      letter-spacing: -3.2px;
+      font-weight: 600;
+      margin: 0 0 24px;
+    }
+
+    h1 em, .studio-hero-title em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -1px;
+      padding-right: 6px;
+      background: linear-gradient(115deg, var(--mint) 10%, #eef3ee 55%, #b4a3f5 95%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      color: var(--mist);
+      font-size: 15.5px;
+      line-height: 1.8;
+      font-weight: 400;
+      margin: 0 0 34px;
+      max-width: 540px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      background: var(--mint);
+      color: var(--ocean);
+      padding: 17px 26px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 30px rgba(111, 212, 178, 0.25);
+    }
+
+    .primary-button span {
+      font-size: 19px;
+      font-weight: 500;
+      line-height: 1;
+      transition: transform 0.25s ease;
+    }
+
+    .primary-button:hover {
+      background: #94e5c9;
+      transform: translateY(-3px);
+      box-shadow: 0 14px 36px rgba(111, 212, 178, 0.4);
+    }
+
+    .primary-button:hover span {
+      transform: translateX(4px);
+    }
+
+    .secondary-listen-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 22px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cream);
+      background: rgba(12, 39, 56, 0.55);
+      border: 1px solid rgba(111, 212, 178, 0.3);
+      backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .secondary-listen-btn:hover {
+      border-color: var(--mint);
+      background: rgba(111, 212, 178, 0.14);
+      transform: translateY(-2px);
+    }
+
+    .hero-caption {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      color: rgba(185, 206, 214, 0.65);
+      margin-top: 38px;
+    }
+
+    .mini-wave {
+      color: var(--mint);
+      letter-spacing: 2px;
+      font-size: 13px;
+    }
+
+    .home-bottom {
+      position: absolute;
+      bottom: 26px;
+      left: 4.5%;
+      right: 4.5%;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      color: rgba(185, 206, 214, 0.6);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+    }
+
+    .bottom-coordinate i {
+      font-style: normal;
+      color: var(--mint);
+      margin: 0 10px;
+    }
+
+    .motion-toggle {
+      background: rgba(6, 24, 36, 0.65);
+      border: 1px solid rgba(185, 206, 214, 0.16);
+      border-radius: 999px;
+      color: var(--mist);
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.5px;
+      padding: 7px 14px;
+      transition: all 0.2s ease;
+    }
+
+    .motion-toggle:hover {
+      border-color: var(--mint);
+      color: var(--cream);
+    }
+
+    .motion-toggle span {
+      margin-right: 6px;
+      color: var(--mint);
+    }
+
+    /* ==========================================================================
+       PAGE 2: EXPLORE — 4 PLANETARY SPHERE CARDS
+       ========================================================================== */
+    .explore-page {
+      min-height: 100svh;
+      padding: 136px 4.5% 40px;
+      background:
+        radial-gradient(ellipse at 75% 0%, rgba(12, 39, 56, 0.6), transparent 52%),
+        radial-gradient(ellipse at 10% 75%, rgba(15, 59, 51, 0.25), transparent 55%),
+        var(--void);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .explore-intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 42px;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .explore-intro .eyebrow {
+      margin-bottom: 14px;
+    }
+
+    .explore-intro h1 {
+      font-size: clamp(40px, 4.2vw, 64px);
+      letter-spacing: -2.4px;
+      margin: 0;
+    }
+
+    .explore-intro > p {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: var(--mist);
+      margin: 0 0 4px;
+      max-width: 340px;
+    }
+
+    .collection-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.6px;
+      color: rgba(185, 206, 214, 0.65);
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(185, 206, 214, 0.1);
+    }
+
+    .collection-label > span:last-child span {
+      margin-left: 8px;
+      color: var(--mint);
+      font-size: 14px;
+    }
+
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .explore-tile {
+      --accent: var(--mint);
+      --mouse-x: 50%;
+      --mouse-y: 50%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      text-align: left;
+      min-height: 470px;
+      border: 1px solid rgba(185, 206, 214, 0.16);
+      border-radius: 18px;
+      background: linear-gradient(165deg, rgba(23, 78, 66, 0.28), rgba(6, 24, 36, 0.92) 78%);
+      padding: 24px 24px 0;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    }
+
+    /* Interactive radial cursor spotlight inside each card */
+    .explore-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(420px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.08), transparent 45%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .explore-tile:hover::before {
+      opacity: 1;
+    }
+
+    .explore-tile:hover {
+      transform: translateY(-9px);
+      border-color: var(--accent);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), 0 0 35px color-mix(in srgb, var(--accent) 22%, transparent);
+    }
+
+    .explore-tile.lithosphere {
+      --accent: #dfc3a5;
+      background: linear-gradient(165deg, rgba(140, 82, 48, 0.26), #15120e 78%);
+    }
+
+    .explore-tile.atmosphere {
+      --accent: #b4a3f5;
+      background: linear-gradient(165deg, rgba(124, 102, 220, 0.28), #0e1320 78%);
+    }
+
+    .explore-tile.hydrosphere {
+      --accent: #52b6d9;
+      background: linear-gradient(165deg, rgba(29, 106, 150, 0.32), #051420 78%);
+    }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      position: relative;
+      z-index: 3;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 1.3px;
+      color: var(--accent);
+    }
+
+    .tile-arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 15px;
+      color: var(--cream);
+      transition: all 0.3s ease;
+    }
+
+    .explore-tile:hover .tile-arrow {
+      transform: translate(3px, -3px);
+      background: var(--accent);
+      color: var(--void);
+      border-color: var(--accent);
+    }
+
+    .tile-art {
+      display: block;
+      height: 215px;
+      position: relative;
+      margin: 4px -24px 0;
+      overflow: hidden;
+    }
+
+    .tile-art svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .explore-tile:hover .tile-art svg {
+      transform: scale(1.05);
+    }
+
+    .tile-copy {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 3;
+      margin-top: 8px;
+      flex: 1;
+    }
+
+    .tile-kicker {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .tile-title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 2.2vw, 31px);
+      font-weight: 600;
+      letter-spacing: -0.8px;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .tile-description {
+      color: rgba(185, 206, 214, 0.78);
+      font-size: 13px;
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .tile-dataset-badge {
+      margin-top: auto;
+      margin-bottom: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--mist);
+    }
+
+    .tile-dataset-badge i {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .tile-link {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+      border-top: 1px solid rgba(185, 206, 214, 0.13);
+      padding: 16px 0 20px;
+      color: var(--accent);
+    }
+
+    .tile-link > span {
+      font-size: 17px;
+      transition: transform 0.25s ease;
+    }
+
+    .explore-tile:hover .tile-link > span {
+      transform: translateX(5px);
+    }
+
+    /* Animated Card Art Elements */
+    .wire-globe {
+      width: 132px;
+      height: 132px;
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(111, 212, 178, 0.65);
+      border-radius: 50%;
+      background:
+        repeating-radial-gradient(ellipse at center, transparent 0 11px, rgba(111, 212, 178, 0.22) 12px 13px, transparent 14px 22px),
+        linear-gradient(135deg, rgba(111, 212, 178, 0.28), rgba(15, 59, 51, 0.08));
+      box-shadow: inset -18px -8px 40px #040b10, 0 0 42px rgba(111, 212, 178, 0.18);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .explore-tile:hover .wire-globe {
+      transform: translate(-50%, -50%) scale(1.07) rotate(8deg);
+      box-shadow: inset -18px -8px 40px #040b10, 0 0 60px rgba(111, 212, 178, 0.35);
+    }
+
+    .wire-globe::before, .wire-globe::after {
+      content: '';
+      position: absolute;
+      inset: -1px 28px;
+      border: 1px solid rgba(111, 212, 178, 0.48);
+      border-radius: 50%;
+    }
+
+    .wire-globe::after {
+      inset: -1px 50px;
+    }
+
+    .orbit {
+      border: 1px dashed rgba(111, 212, 178, 0.42);
+      border-radius: 50%;
+      width: 220px;
+      height: 88px;
+      position: absolute;
+      top: 56px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-28deg);
+      transition: transform 0.6s ease;
+    }
+
+    .orbit-two {
+      transform: translateX(-50%) rotate(38deg);
+      border-color: rgba(111, 212, 178, 0.22);
+      border-style: solid;
+    }
+
+    .explore-tile:hover .orbit-one {
+      transform: translateX(-50%) rotate(-18deg) scale(1.05);
+    }
+
+    .explore-tile:hover .orbit-two {
+      transform: translateX(-50%) rotate(48deg) scale(1.05);
+    }
+
+    .little-star {
+      position: absolute;
+      left: 75%;
+      top: 30px;
+      color: var(--gold);
+      font-size: 18px;
+      text-shadow: 0 0 12px var(--gold);
+      animation: pulse-dot 2.4s infinite ease-in-out;
+    }
+
+    .sky-sun {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      left: 50%;
+      top: 38px;
+      transform: translateX(-50%);
+      background: linear-gradient(150deg, #dfc3a5, #d46ba8 50%, #7c66dc);
+      box-shadow: 0 0 55px rgba(180, 163, 245, 0.45);
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .explore-tile:hover .sky-sun {
+      transform: translateX(-50%) scale(1.09);
+      box-shadow: 0 0 75px rgba(212, 107, 168, 0.65);
+    }
+
+    .air-ring {
+      position: absolute;
+      border: 1px solid rgba(180, 163, 245, 0.35);
+      border-radius: 50%;
+      height: 65px;
+      width: 340px;
+      left: 50%;
+      top: 112px;
+      transform: translateX(-50%) rotate(-14deg);
+      background: linear-gradient(0deg, rgba(124, 102, 220, 0.12), transparent);
+      transition: transform 0.5s ease;
+    }
+
+    .r2 { top: 126px; width: 365px; }
+    .r3 { top: 140px; width: 390px; }
+    .r4 { top: 154px; width: 415px; }
+    .r5 { top: 168px; width: 440px; }
+
+    .explore-tile:hover .air-ring {
+      transform: translateX(-50%) rotate(-10deg) translateY(-4px);
+    }
+
+    .explore-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      align-items: center;
+      border-top: 1px solid rgba(185, 206, 214, 0.12);
+      margin-top: 42px;
+      padding: 24px 0 10px;
+      color: rgba(185, 206, 214, 0.55);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 1.2px;
+    }
+
+    .footer-mark {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 20px;
+      letter-spacing: 0;
+      color: var(--mist);
+    }
+
+    .explore-footer a {
+      font-size: 11.5px;
+      letter-spacing: 0.4px;
+      color: var(--mint);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       PAGE 3: INTERACTIVE SONIFICATION STUDIO & DYNAMIC THEMES
+       ========================================================================== */
+    .studio-page {
+      min-height: 100svh;
+      padding: 98px 3.5% 40px;
+      background: var(--studio-bg, #040b10);
+      color: var(--cream);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.45s ease;
+      position: relative;
+    }
+
+    .studio-container {
+      max-width: 1640px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .studio-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 11px 20px;
+      background: rgba(6, 20, 32, 0.65);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.18));
+      border-radius: 16px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.4);
+    }
+
+    .studio-nav-left {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .studio-back-btn {
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      color: var(--mist);
+      transition: color 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+    }
+
+    .studio-back-btn:hover {
+      color: var(--theme-accent, var(--mint));
+      border-color: var(--theme-accent, var(--mint));
+      transform: translateX(-2px);
+    }
+
+    .studio-divider {
+      color: rgba(185, 206, 214, 0.25);
+      font-size: 14px;
+    }
+
+    .sphere-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.25));
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: var(--theme-accent, var(--cream));
+      box-shadow: 0 0 15px var(--theme-glow-soft, rgba(111, 212, 178, 0.12));
+    }
+
+    .sphere-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--theme-accent, var(--mint));
+      box-shadow: 0 0 10px var(--theme-accent, var(--mint));
+    }
+
+    /* Quick Sphere Switcher & Dataset Select in Studio Header */
+    .studio-controls-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .dataset-select-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(4, 11, 16, 0.75);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.22));
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 11.5px;
+    }
+
+    .dataset-select-label {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 1px;
+      color: var(--mist);
+      text-transform: uppercase;
+    }
+
+    .dataset-select {
+      background: transparent;
+      color: var(--cream);
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding-right: 4px;
+    }
+
+    .dataset-select option {
+      background: #061824;
+      color: var(--cream);
+    }
+
+    .engine-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.4px;
+      color: var(--mist);
+      font-family: var(--font-mono);
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .status-pulse {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+      animation: pulse-dot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.55; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.22); }
+    }
+
+    /* Studio Main Grid: Compact Left Telemetry + Extra-Large Right Map & Controls Column */
+    .studio-stage-grid {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .telemetry-deck {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: sticky;
+      top: 98px;
+    }
+
+    .studio-right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .studio-intro-card {
+      padding: 2px 4px 6px;
+    }
+
+    .studio-hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(26px, 2.3vw, 34px);
+      line-height: 1.08;
+      letter-spacing: -1.4px;
+      font-weight: 600;
+      margin: 0 0 8px;
+      color: #ffffff;
+    }
+
+    .studio-hero-desc {
+      font-size: 12.5px;
+      line-height: 1.62;
+      color: var(--mist);
+      margin: 0;
+    }
+
+    .telemetry-tile {
+      background: rgba(6, 24, 36, 0.56);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.16));
+      border-radius: 14px;
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      transition: border-color 0.25s ease, transform 0.25s ease;
+    }
+
+    .telemetry-tile:hover {
+      border-color: var(--theme-border-highlight);
+    }
+
+    .telemetry-tile.hero-metric {
+      background:
+        radial-gradient(ellipse at 85% 0%, var(--theme-glow-soft, rgba(111, 212, 178, 0.18)), transparent 70%),
+        rgba(6, 24, 36, 0.68);
+      border-color: var(--theme-border-highlight, rgba(111, 212, 178, 0.45));
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35), 0 0 25px var(--theme-glow-soft, rgba(111, 212, 178, 0.1));
+    }
+
+    .tile-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .tile-tag {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 1.3px;
+      color: var(--theme-accent, var(--mint));
+      font-weight: 700;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .radar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--theme-accent, var(--mint));
+      box-shadow: 0 0 8px var(--theme-accent, var(--mint));
+      animation: pulse-dot 1.8s infinite;
+    }
+
+    .sensor-pill {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: 0.4px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.2));
+      color: var(--cream);
+      white-space: nowrap;
+    }
+
+    .telemetry-big-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .telemetry-big {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -1.2px;
+      font-family: var(--font-mono);
+      color: #ffffff;
+      line-height: 1.1;
+      text-shadow: 0 0 28px var(--theme-glow, rgba(111, 212, 178, 0.25));
+    }
+
+    .telemetry-big .unit {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mist);
+      margin-left: 5px;
+    }
+
+    .telemetry-meta {
+      font-size: 11.5px;
+      color: var(--mist);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+
+    .telemetry-subgrid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .telemetry-medium {
+      font-size: 14px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      color: var(--cream);
+      margin-top: 2px;
+    }
+
+    /* ==========================================================================
+       COLOR & WAVE AREA (PLACED BELOW PLAY/PAUSE & TIMELINE AREA)
+       ========================================================================== */
+    .color-wave-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .equalizer-card, .waveform-card {
+      background: rgba(6, 24, 36, 0.62);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.18));
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .eq-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .eq-status-badge {
+      font-size: 9.5px;
+      letter-spacing: 0.8px;
+      color: var(--mist);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+    }
+
+    .mini-eq-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--theme-accent, var(--mint));
+      box-shadow: 0 0 8px var(--theme-accent, var(--mint));
+    }
+
+    #studio-osc-canvas {
+      width: 100%;
+      height: 82px;
+      background: rgba(2, 8, 16, 0.65);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: block;
+    }
+
+    .hue-meter-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+    }
+
+    .hue-bar-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      background: rgba(2, 8, 16, 0.5);
+      padding: 8px 4px 6px;
+      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .hue-bar-track {
+      width: 100%;
+      height: 52px;
+      background: rgba(0, 0, 0, 0.55);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .hue-bar-fill {
+      width: 100%;
+      height: 10%;
+      border-radius: 4px;
+      transition: height 0.08s ease;
+    }
+
+    .hue-bar-name {
+      font-size: 8.5px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--mist);
+      font-family: var(--font-mono);
+    }
+
+    /* ==========================================================================
+       RIGHT STACK TOP: EXPANDED SATELLITE RASTER MAP & CALIBRATED RAMP
+       ========================================================================== */
+    .map-deck {
+      background: rgba(6, 24, 36, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.18));
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    }
+
+    .map-viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      min-height: 380px;
+      background: #020810;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: crosshair;
+      border: 1px solid var(--theme-border-highlight, rgba(185, 206, 214, 0.4));
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.7), 0 0 40px var(--theme-glow-soft, rgba(111, 212, 178, 0.16));
+      user-select: none;
+    }
+
+    .map-hud-top {
+      position: absolute;
+      top: 12px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 6;
+      pointer-events: none;
+      font-size: 9.5px;
+      letter-spacing: 1.1px;
+      color: var(--mist);
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+
+    .hud-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(4, 11, 16, 0.76);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+    }
+
+    .hud-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+
+    .hud-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(4, 11, 16, 0.76);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      color: var(--theme-accent, var(--cream));
+    }
+
+    .map-bracket {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--theme-accent, var(--mint));
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0.8;
+    }
+
+    .map-bracket.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; border-top-left-radius: 4px; }
+    .map-bracket.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; border-top-right-radius: 4px; }
+    .map-bracket.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; border-bottom-left-radius: 4px; }
+    .map-bracket.br { bottom: 10px; right: 10px; border-left: none; border-top: none; border-bottom-right-radius: 4px; }
+
+    .map-viewport canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .scanline {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.45;
+      transition: opacity 0.25s ease;
+      z-index: 4;
+    }
+
+    .studio-page.playing .scanline {
+      opacity: 1;
+    }
+
+    .scanline-v {
+      top: 0;
+      bottom: 0;
+      width: 2.5px;
+      left: 0%;
+      background: linear-gradient(180deg, transparent, var(--theme-accent, #6fd4b2) 15%, #ffffff 50%, var(--theme-accent, #6fd4b2) 85%, transparent);
+      box-shadow: 0 0 22px var(--theme-accent, #6fd4b2), 0 0 5px #ffffff;
+    }
+
+    .scanline-h {
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      top: 0%;
+      background: linear-gradient(90deg, transparent, var(--theme-accent, #6fd4b2) 15%, #ffffff 50%, var(--theme-accent, #6fd4b2) 85%, transparent);
+      box-shadow: 0 0 22px var(--theme-accent, #6fd4b2), 0 0 5px #ffffff;
+    }
+
+    .scan-target-orb {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      background: radial-gradient(circle, #ffffff 22%, var(--theme-accent, #6fd4b2) 68%, transparent 100%);
+      box-shadow: 0 0 25px var(--theme-accent, #6fd4b2), 0 0 50px var(--theme-glow, rgba(111, 212, 178, 0.5));
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      z-index: 4;
+    }
+
+    .scan-target-orb::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border: 1.5px dashed var(--theme-accent, #6fd4b2);
+      border-radius: 50%;
+      animation: spin-slow 4s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      to { transform: rotate(360deg); }
+    }
+
+    .studio-page.playing .scan-target-orb {
+      opacity: 1;
+    }
+
+    .probe-pin {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 2.5px solid #ffffff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: none;
+      box-shadow: 0 0 18px var(--theme-accent, #6fd4b2), inset 0 0 6px var(--theme-accent, #6fd4b2);
+      z-index: 5;
+    }
+
+    .probe-pin::before {
+      content: attr(data-Readout);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      background: rgba(4, 11, 16, 0.88);
+      border: 1px solid var(--theme-accent, #6fd4b2);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Calibrated Physical Scale Ramp */
+    .colormap-container {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 4px 6px;
+    }
+
+    .ramp-legend-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-family: var(--font-mono);
+      color: var(--mist);
+    }
+
+    .ramp-label {
+      font-size: 9px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0.8;
+    }
+
+    .ramp-track-outer {
+      position: relative;
+      width: 100%;
+      padding: 4px 0;
+    }
+
+    .ramp-track {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--theme-ramp, linear-gradient(90deg, #38bdf8, #22c55e, #eab308, #ef4444));
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 16px var(--theme-glow-soft, rgba(111, 212, 178, 0.15));
+    }
+
+    .ramp-pointer {
+      position: absolute;
+      top: 50%;
+      left: 38%;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px solid var(--void);
+      box-shadow: 0 0 12px #ffffff, 0 0 20px var(--theme-accent);
+      transform: translate(-50%, -50%);
+      transition: left 0.1s ease-out;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       STUDIO TRANSPORT DOCK
+       ========================================================================== */
+    .transport-dock {
+      background: rgba(6, 20, 32, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--theme-border, rgba(185, 206, 214, 0.2));
+      border-radius: 16px;
+      padding: 16px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .transport-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .play-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .studio-play-btn {
+      padding: 13px 26px;
+      font-size: 13px;
+      background: var(--theme-accent, var(--mint));
+      color: var(--theme-btn-text, var(--ocean));
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 20px var(--theme-glow, rgba(111, 212, 178, 0.3));
+      transition: all 0.2s ease;
+    }
+
+    .studio-play-btn:hover {
+      background: var(--theme-btn-hover, #94e5c9);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--theme-glow, rgba(111, 212, 178, 0.5));
+    }
+
+    .studio-btn-ghost {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--mist);
+      border: 1px solid rgba(185, 206, 214, 0.22);
+      padding: 12px 18px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .studio-btn-ghost:hover {
+      color: var(--cream);
+      border-color: var(--theme-accent, var(--mint));
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    .sweep-mode-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .sweep-tab {
+      background: transparent;
+      color: var(--mist);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 8px 15px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sweep-tab:hover {
+      color: var(--cream);
+    }
+
+    .sweep-tab.active {
+      background: var(--theme-tab-active-bg, rgba(111, 212, 178, 0.16));
+      border-color: var(--theme-accent, var(--mint));
+      color: var(--theme-accent, var(--mint));
+      box-shadow: 0 0 16px var(--theme-glow, rgba(111, 212, 178, 0.25));
+    }
+
+    .audio-tweak-group {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .slider-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: var(--mist);
+      font-weight: 500;
+    }
+
+    .slider-label span {
+      font-family: var(--font-mono);
+      color: var(--cream);
+      font-size: 10.5px;
+      min-width: 34px;
+    }
+
+    .slider-label input[type="range"] {
+      width: 74px;
+      accent-color: var(--theme-accent, var(--mint));
+      cursor: pointer;
+    }
+
+    .scrubber-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .scrub-time {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--mist);
+      width: 44px;
+    }
+
+    .scrub-track-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .scrub-track-wrapper input[type="range"] {
+      width: 100%;
+      accent-color: var(--theme-accent, var(--mint));
+      cursor: pointer;
+      height: 6px;
+    }
+
+    .studio-shortcuts {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 10px;
+      color: var(--mist);
+      letter-spacing: 0.4px;
+      font-family: var(--font-mono);
+    }
+
+    .studio-shortcuts kbd {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      color: var(--cream);
+      font-size: 9.5px;
+    }
+
+    .shortcut-binaural {
+      color: var(--theme-accent, var(--mint));
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Dynamic Sphere Themes for Studio */
+    .studio-page.theme-general {
+      --theme-accent: #6fd4b2;
+      --theme-glow: rgba(111, 212, 178, 0.35);
+      --theme-glow-soft: rgba(111, 212, 178, 0.15);
+      --theme-border: rgba(111, 212, 178, 0.24);
+      --theme-border-highlight: rgba(111, 212, 178, 0.5);
+      --theme-btn-text: #061824;
+      --theme-btn-hover: #94e5c9;
+      --theme-tab-active-bg: rgba(111, 212, 178, 0.16);
+      --studio-bg: radial-gradient(ellipse at 80% 10%, rgba(23, 78, 66, 0.5), transparent 60%), radial-gradient(ellipse at 20% 90%, rgba(15, 59, 51, 0.35), transparent 60%), #040b10;
+      --theme-ramp: linear-gradient(90deg, #0f172a, #0e7490, #06b6d4, #6fd4b2, #fde047, #ffffff);
+    }
+
+    .studio-page.theme-lithosphere {
+      --theme-accent: #dfc3a5;
+      --theme-glow: rgba(223, 195, 165, 0.35);
+      --theme-glow-soft: rgba(223, 195, 165, 0.15);
+      --theme-border: rgba(223, 195, 165, 0.24);
+      --theme-border-highlight: rgba(223, 195, 165, 0.5);
+      --theme-btn-text: #191611;
+      --theme-btn-hover: #ebd7c3;
+      --theme-tab-active-bg: rgba(223, 195, 165, 0.16);
+      --studio-bg: radial-gradient(ellipse at 80% 10%, rgba(140, 82, 48, 0.5), transparent 60%), radial-gradient(ellipse at 20% 90%, rgba(231, 193, 90, 0.2), transparent 60%), #120f0b;
+      --theme-ramp: linear-gradient(90deg, #1e3a8a, #38bdf8, #f8fafc, #fb923c, #dc2626, #7f1d1d);
+    }
+
+    .studio-page.theme-atmosphere {
+      --theme-accent: #b4a3f5;
+      --theme-glow: rgba(180, 163, 245, 0.35);
+      --theme-glow-soft: rgba(180, 163, 245, 0.15);
+      --theme-border: rgba(180, 163, 245, 0.24);
+      --theme-border-highlight: rgba(180, 163, 245, 0.5);
+      --theme-btn-text: #111827;
+      --theme-btn-hover: #cbbeff;
+      --theme-tab-active-bg: rgba(180, 163, 245, 0.16);
+      --studio-bg: radial-gradient(ellipse at 80% 10%, rgba(124, 102, 220, 0.45), transparent 60%), radial-gradient(ellipse at 20% 90%, rgba(212, 107, 168, 0.25), transparent 60%), #0b0e17;
+      --theme-ramp: linear-gradient(90deg, #0c192c, #38bdf8, #22c55e, #eab308, #ef4444, #a855f7);
+    }
+
+    .studio-page.theme-hydrosphere {
+      --theme-accent: #52b6d9;
+      --theme-glow: rgba(82, 182, 217, 0.35);
+      --theme-glow-soft: rgba(82, 182, 217, 0.15);
+      --theme-border: rgba(82, 182, 217, 0.24);
+      --theme-border-highlight: rgba(82, 182, 217, 0.5);
+      --theme-btn-text: #061824;
+      --theme-btn-hover: #7bd3ef;
+      --theme-tab-active-bg: rgba(82, 182, 217, 0.16);
+      --studio-bg: radial-gradient(ellipse at 80% 10%, rgba(29, 106, 150, 0.5), transparent 60%), radial-gradient(ellipse at 20% 90%, rgba(111, 212, 178, 0.2), transparent 60%), #040d15;
+      --theme-ramp: linear-gradient(90deg, #020617, #1d4ed8, #06b6d4, #22c55e, #eab308, #ef4444);
+    }
+
+    /* ==========================================================================
+       MODAL / INFO DIALOG
+       ========================================================================== */
+    dialog {
+      --dialog-accent: var(--mint);
+      --dialog-border: rgba(111, 212, 178, 0.32);
+      --dialog-bg: radial-gradient(ellipse at top right, rgba(36, 122, 94, 0.28), transparent 65%), #061824;
+      --dialog-shadow: 0 30px 100px rgba(0, 0, 0, 0.85);
+      width: min(560px, calc(100% - 32px));
+      max-height: calc(100svh - 48px);
+      overflow-y: auto;
+      background: var(--dialog-bg);
+      color: var(--cream);
+      border: 1px solid var(--dialog-border);
+      border-radius: 22px;
+      padding: 36px 34px 32px;
+      box-shadow: var(--dialog-shadow);
+    }
+
+    dialog[open] {
+      animation: dialog-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes dialog-in {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    dialog::backdrop {
+      background: rgba(4, 11, 16, 0.82);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .dialog-close {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--mist);
+      font-size: 22px;
+      line-height: 1;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.2s ease;
+    }
+
+    .dialog-close:hover {
+      color: var(--dialog-accent);
+      border-color: var(--dialog-accent);
+      transform: scale(1.08);
+    }
+
+    dialog h2 {
+      font-family: var(--font-display);
+      font-size: 32px;
+      line-height: 1.15;
+      font-weight: 600;
+      letter-spacing: -1px;
+      margin: 0 0 14px;
+    }
+
+    dialog > p:not(.eyebrow) {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--mist);
+      margin-bottom: 20px;
+    }
+
+    .team-roster {
+      background: rgba(4, 11, 16, 0.55);
+      border: 1px solid rgba(185, 206, 214, 0.14);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+    }
+
+    .team-roster-title {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      letter-spacing: 1.5px;
+      color: var(--mint);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .team-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .team-badge {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(111, 212, 178, 0.1);
+      border: 1px solid rgba(111, 212, 178, 0.25);
+      color: var(--cream);
+    }
+
+    .dialog-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .dialog-launch {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .dialog-ghost-btn {
+      background: transparent !important;
+      color: var(--mist) !important;
+      font-size: 12.5px;
+      padding: 8px 0;
+      text-align: center;
+    }
+
+    .dialog-ghost-btn:hover {
+      color: var(--cream) !important;
+    }
+
+    .page-enter {
+      animation: page-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes page-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 1240px) {
+      .header-worlds-bar { display: none; }
+      .hero-content { margin-left: 44%; padding-right: 4%; }
+      .tile-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .studio-stage-grid { grid-template-columns: 1fr; }
+      .telemetry-deck { position: static; display: grid; grid-template-columns: repeat(2, 1fr); }
+      .studio-intro-card { grid-column: 1 / -1; }
+      .telemetry-subgrid { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 820px) {
+      .color-wave-grid { grid-template-columns: 1fr; }
+      .map-viewport { min-height: 240px; }
+    }
+
+    @media (max-width: 720px) {
+      .site-header { height: 72px; padding: 0 4%; }
+      .brand { font-size: 22px; }
+      nav a, .nav-about { font-size: 11.5px; padding: 6px 11px; }
+      .home-page { align-items: flex-end; }
+      .home-shade {
+        background: linear-gradient(0deg, #040b10 4%, rgba(4, 11, 16, 0.72) 42%, rgba(4, 11, 16, 0.25) 75%, rgba(4, 11, 16, 0.55) 100%);
+      }
+      .hero-content { margin: 0; padding: 0 5% 110px; width: 100%; }
+      .bottom-coordinate { display: none; }
+      .tile-grid { grid-template-columns: 1fr; }
+      .telemetry-deck { grid-template-columns: 1fr; }
+      .telemetry-subgrid { grid-template-columns: 1fr; }
+      .transport-main-row { flex-direction: column; align-items: stretch; }
+      .sweep-mode-group { justify-content: space-between; }
+      .sweep-tab { padding: 8px 10px; font-size: 10.5px; flex: 1; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
+
+  <!-- FLOATING SITE HEADER (Navigation + 4 World Buttons Shifted Right) -->
   <header class="site-header">
-    <a class="brand" href="#home" aria-label="Jukebox home"><span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>jukebox<span class="brand-dot">.</span></a>
-    <nav aria-label="Main navigation">
-      <a href="#home" data-nav="home">Home</a>
-      <a href="#explore" data-nav="explore">Explore</a>
-      <button type="button" class="nav-about" data-about>About <span aria-hidden="true">↗</span></button>
-    </nav>
-    <span class="header-note"><span class="status-dot"></span> A different kind of discovery</span>
+    <a class="brand" href="#home" data-route-link="home" aria-label="Jukebox home">
+      <span class="brand-symbol" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      jukebox<span class="brand-dot">.</span>
+    </a>
+
+    <div class="header-right-cluster">
+      <!-- 4 Planetary Spheres Quick-Switch Buttons (Shifted Right) -->
+      <div class="header-worlds-bar" role="group" aria-label="Planetary Spheres Quick Switch">
+        <button type="button" class="world-pill-btn" data-world-switch="general" style="--pill-color: #6fd4b2;">
+          <i></i> 01 General
+        </button>
+        <button type="button" class="world-pill-btn" data-world-switch="lithosphere" style="--pill-color: #dfc3a5;">
+          <i></i> 02 Lithosphere
+        </button>
+        <button type="button" class="world-pill-btn active" data-world-switch="atmosphere" style="--pill-color: #b4a3f5;">
+          <i></i> 03 Atmosphere
+        </button>
+        <button type="button" class="world-pill-btn" data-world-switch="hydrosphere" style="--pill-color: #52b6d9;">
+          <i></i> 04 Hydrosphere
+        </button>
+      </div>
+
+      <!-- Main Navigation Tabs (Shifted Right) -->
+      <nav aria-label="Main navigation">
+        <a href="#home" data-nav="home" class="active" aria-current="page">Home</a>
+        <a href="#explore" data-nav="explore">Explore</a>
+        <a href="#studio" data-nav="studio">Studio</a>
+        <button type="button" class="nav-about" data-about>About <span aria-hidden="true">↗</span></button>
+      </nav>
+    </div>
   </header>
 
   <main>
+    <!-- ========================================================================
+         PAGE 1: HOME — EARTH VIDEO BACKGROUND & RIGHT-ALIGNED HERO STAGE
+         ======================================================================== -->
     <section id="home" class="home-page" aria-labelledby="home-heading">
       <div class="video-stage" aria-hidden="true">
-        <video id="background-video" autoplay muted loop playsinline poster="assets/homepage_background.jpg"><source src="assets/homepage_background_loop.mp4" type="video/mp4"></video>
+        <canvas id="earth-fallback-canvas"></canvas>
+        <video id="background-video" autoplay muted loop playsinline poster="assets/homepage_background.jpg">
+          <source src="assets/homepage_background_loop.mp4" type="video/mp4">
+        </video>
       </div>
+
       <div class="home-shade"></div>
+
       <div class="hero-content">
         <p class="eyebrow"><span></span> EARTH, IN A DIFFERENT FREQUENCY</p>
         <h1 id="home-heading">The planet<br>has a <em>rhythm.</em></h1>
-        <p class="hero-description">From the ground beneath us to the skies above.<br class="desktop-break"> Discover the extraordinary connections that<br class="desktop-break"> make our world come alive.</p>
-        <a class="primary-button" href="#explore">Explore the planet <span aria-hidden="true">↗</span></a>
-        <div class="hero-caption"><span class="mini-wave" aria-hidden="true">▂ ▅ █ ▃ ▆ ▂</span> ONE PLANET. ENDLESS WAYS TO EXPLORE.</div>
+        <p class="hero-description">
+          From tectonic thermal anomalies beneath us to aerosol plumes and ocean currents across the globe. Experience real NASA Earth observation data translated into living, binaural soundscapes.
+        </p>
+        <div class="hero-cta-group">
+          <a class="primary-button" href="#explore" data-route-link="explore">
+            Explore the planet <span aria-hidden="true">→</span>
+          </a>
+          <button type="button" id="home-quick-listen" class="secondary-listen-btn">
+            <span aria-hidden="true">♫</span> Open Sonifier Studio
+          </button>
+        </div>
+        <div class="hero-caption">
+          <span class="mini-wave" aria-hidden="true">∿∿∿</span> ONE PLANET. FOUR SPHERES. ENDLESS FREQUENCIES.
+        </div>
       </div>
-      <div class="home-bottom"><span>AN EXPLORATION OF EARTH & ITS ELEMENTS</span><span class="bottom-coordinate">LAND <i>·</i> AIR <i>·</i> WATER</span><button id="motion-toggle" class="motion-toggle" aria-label="Pause background video"><span aria-hidden="true">Ⅱ</span> Pause motion</button></div>
+
+      <div class="home-bottom">
+        <span>AN EXPLORATION OF EARTH &amp; ITS ACOUSTIC TELEMETRY</span>
+        <span class="bottom-coordinate">LAND <i>•</i> AIR <i>•</i> WATER <i>•</i> BIOSPHERE</span>
+        <button id="motion-toggle" class="motion-toggle" aria-label="Pause background motion">
+          <span aria-hidden="true">❚❚</span> Pause motion
+        </button>
+      </div>
     </section>
 
+    <!-- ========================================================================
+         PAGE 2: EXPLORE — 4 WORLDS COLLECTION
+         ======================================================================== -->
     <section id="explore" class="explore-page" aria-labelledby="explore-heading" hidden>
-      <div class="explore-intro"><div><p class="eyebrow"><span></span> FOLLOW YOUR CURIOSITY</p><h1 id="explore-heading" tabindex="-1">A world of <em>discovery.</em></h1></div><p>Every layer tells a story.<br>Choose where yours begins.</p></div>
-      <div class="collection-label"><span>EXPLORE THE COLLECTION</span><span>04 WORLDS TO DISCOVER <span aria-hidden="true">↙</span></span></div>
-      <div class="tile-grid">
-        <button class="explore-tile general" data-world="General"><span class="tile-top"><span>01 / THE BIG PICTURE</span><span class="tile-arrow">↗</span></span><span class="tile-art globe-art" aria-hidden="true"><span class="orbit orbit-one"></span><span class="orbit orbit-two"></span><span class="wire-globe"></span><span class="little-star">✦</span></span><span class="tile-copy"><span class="tile-kicker">EVERYTHING IS CONNECTED</span><span class="tile-title">General</span><span class="tile-description">Take a step back. See the whole planet in a new light.</span><span class="tile-link">Discover the connections <span>→</span></span></span></button>
-        <button class="explore-tile lithosphere" data-world="Lithosphere"><span class="tile-top"><span>02 / SOLID GROUND</span><span class="tile-arrow">↗</span></span><span class="tile-art" aria-hidden="true"><svg class="mountain-art" viewBox="0 0 360 260"><defs><linearGradient id="rock" x2="0.8" y2="1"><stop stop-color="#dfc3a5"/><stop offset="1" stop-color="#8c5230"/></linearGradient></defs><circle cx="258" cy="62" r="29" fill="#e7c15a" opacity=".8"/><path d="M-20 240 103 68 163 144 208 106 380 255Z" fill="url(#rock)"/><path d="m103 68 17 97 43-21-19 86 64-124 17 109 155 40H-20Z" fill="#8c5230"/><path d="m-20 250 142-72 61 49 72-52 125 80v20H-20" fill="#2b1d14"/><g fill="none" stroke="#dfc3a5" opacity=".25"><path d="m-20 267 145-73 56 47 76-50 123 77M-20 278l145-68 56 47 76-50 123 77"/></g></svg></span><span class="tile-copy"><span class="tile-kicker">BENEATH YOUR FEET</span><span class="tile-title">Lithosphere</span><span class="tile-description">Trace the textures, shifting landscapes, and stories of solid Earth.</span><span class="tile-link">Explore the land <span>→</span></span></span></button>
-        <button class="explore-tile atmosphere" data-world="Atmosphere"><span class="tile-top"><span>03 / ABOVE & BEYOND</span><span class="tile-arrow">↗</span></span><span class="tile-art sky-art" aria-hidden="true"><span class="sky-sun"></span><span class="air-ring r1"></span><span class="air-ring r2"></span><span class="air-ring r3"></span><span class="air-ring r4"></span><span class="air-ring r5"></span></span><span class="tile-copy"><span class="tile-kicker">SOMETHING IN THE AIR</span><span class="tile-title">Atmosphere</span><span class="tile-description">Follow the winds and the ever-changing sky that surrounds us.</span><span class="tile-link">Look to the skies <span>→</span></span></span></button>
-        <button class="explore-tile hydrosphere" data-world="Hydrosphere"><span class="tile-top"><span>04 / INTO THE BLUE</span><span class="tile-arrow">↗</span></span><span class="tile-art water-art" aria-hidden="true"><svg viewBox="0 0 360 260"><defs><linearGradient id="water" x2="0" y2="1"><stop stop-color="#52b6d9"/><stop offset="1" stop-color="#061824"/></linearGradient></defs><circle cx="180" cy="118" r="83" fill="url(#water)"/><g fill="none" stroke="#6fd4b2"><path d="M-30 148Q40 90 110 148t140 0 140 0M-30 161Q40 103 110 161t140 0 140 0M-30 174Q40 116 110 174t140 0 140 0M-30 187Q40 129 110 187t140 0 140 0M-30 200Q40 142 110 200t140 0 140 0M-30 213Q40 155 110 213t140 0 140 0M-30 226Q40 168 110 226t140 0 140 0M-30 239Q40 181 110 239t140 0 140 0"/></g></svg></span><span class="tile-copy"><span class="tile-kicker">A WORLD IN MOTION</span><span class="tile-title">Hydrosphere</span><span class="tile-description">Dive into the oceans, currents, and waters that connect our world.</span><span class="tile-link">Follow the water <span>→</span></span></span></button>
+      <div>
+        <div class="explore-intro">
+          <div>
+            <p class="eyebrow"><span></span> FOLLOW YOUR CURIOSITY</p>
+            <h1 id="explore-heading" tabindex="-1">A world of <em>discovery.</em></h1>
+          </div>
+          <p>Every planetary layer sings in its own harmonic scale.<br>Select a sphere to enter the Sonifier Studio.</p>
+        </div>
+
+        <div class="collection-label">
+          <span>EXPLORE THE COLLECTION</span>
+          <span>04 PLANETARY SPHERES TO SONIFY <span aria-hidden="true">↓</span></span>
+        </div>
+
+        <div class="tile-grid">
+          <!-- 01: GENERAL -->
+          <button class="explore-tile general" data-world="General">
+            <span class="tile-top">
+              <span>01 / THE BIG PICTURE</span>
+              <span class="tile-arrow">↗</span>
+            </span>
+            <span class="tile-art globe-art" aria-hidden="true">
+              <span class="orbit orbit-one"></span>
+              <span class="orbit orbit-two"></span>
+              <span class="wire-globe"></span>
+              <span class="little-star">✦</span>
+            </span>
+            <span class="tile-copy">
+              <span class="tile-kicker">EVERYTHING IS CONNECTED</span>
+              <span class="tile-title">General</span>
+              <span class="tile-description">Global precipitation, monsoon rain bands, and atmospheric moisture rivers connecting all continents.</span>
+              <span class="tile-dataset-badge"><i></i> GPM IMERG • 0–25 mm/day</span>
+              <span class="tile-link">Sonify global moisture <span>→</span></span>
+            </span>
+          </button>
+
+          <!-- 02: LITHOSPHERE -->
+          <button class="explore-tile lithosphere" data-world="Lithosphere">
+            <span class="tile-top">
+              <span>02 / SOLID GROUND</span>
+              <span class="tile-arrow">↗</span>
+            </span>
+            <span class="tile-art" aria-hidden="true">
+              <svg class="mountain-art" viewBox="0 0 360 260">
+                <defs>
+                  <linearGradient id="rock" x2="0.8" y2="1">
+                    <stop stop-color="#dfc3a5"/>
+                    <stop offset="1" stop-color="#8c5230"/>
+                  </linearGradient>
+                  <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fde047" stop-opacity="0.9"/>
+                    <stop offset="100%" stop-color="#e7c15a" stop-opacity="0"/>
+                  </radialGradient>
+                </defs>
+                <circle cx="258" cy="62" r="52" fill="url(#sunGlow)"/>
+                <circle cx="258" cy="62" r="26" fill="#e7c15a" opacity=".88"/>
+                <path d="M-20 240 103 68 163 144 208 106 380 255Z" fill="url(#rock)"/>
+                <path d="m103 68 17 97 43-21-19 86 64-124 17 109 155 40H-20Z" fill="#8c5230"/>
+                <path d="m-20 250 142-72 61 49 72-52 125 80v20H-20" fill="#2b1d14"/>
+                <g fill="none" stroke="#dfc3a5" stroke-width="1.2" opacity=".32">
+                  <path d="m-20 262 145-73 56 47 76-50 123 77"/>
+                  <path d="m-20 274 145-68 56 47 76-50 123 77"/>
+                </g>
+              </svg>
+            </span>
+            <span class="tile-copy">
+              <span class="tile-kicker">BENEATH YOUR FEET</span>
+              <span class="tile-title">Lithosphere</span>
+              <span class="tile-description">Trace surface temperature anomalies, continental heatwaves, and shifting crustal thermal patterns.</span>
+              <span class="tile-dataset-badge"><i></i> GISS / MODIS • -5°C to +5°C</span>
+              <span class="tile-link">Sonify land anomalies <span>→</span></span>
+            </span>
+          </button>
+
+          <!-- 03: ATMOSPHERE -->
+          <button class="explore-tile atmosphere" data-world="Atmosphere">
+            <span class="tile-top">
+              <span>03 / ABOVE &amp; BEYOND</span>
+              <span class="tile-arrow">↗</span>
+            </span>
+            <span class="tile-art sky-art" aria-hidden="true">
+              <span class="sky-sun"></span>
+              <span class="air-ring r1"></span>
+              <span class="air-ring r2"></span>
+              <span class="air-ring r3"></span>
+              <span class="air-ring r4"></span>
+              <span class="air-ring r5"></span>
+            </span>
+            <span class="tile-copy">
+              <span class="tile-kicker">SOMETHING IN THE AIR</span>
+              <span class="tile-title">Atmosphere</span>
+              <span class="tile-description">Follow Saharan dust plumes, wildfire smoke corridors, sea salt cyclones, and sulfate aerosols.</span>
+              <span class="tile-dataset-badge"><i></i> NASA GEOS / MODIS • 0–1.2 AOD</span>
+              <span class="tile-link">Sonify the skies <span>→</span></span>
+            </span>
+          </button>
+
+          <!-- 04: HYDROSPHERE -->
+          <button class="explore-tile hydrosphere" data-world="Hydrosphere">
+            <span class="tile-top">
+              <span>04 / INTO THE BLUE</span>
+              <span class="tile-arrow">↗</span>
+            </span>
+            <span class="tile-art water-art" aria-hidden="true">
+              <svg viewBox="0 0 360 260">
+                <defs>
+                  <linearGradient id="water" x2="0" y2="1">
+                    <stop stop-color="#52b6d9"/>
+                    <stop offset="1" stop-color="#061824"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="180" cy="118" r="83" fill="url(#water)"/>
+                <g fill="none" stroke="#6fd4b2" stroke-width="1.3">
+                  <path d="M-30 148Q40 90 110 148t140 0 140 0"/>
+                  <path d="M-30 161Q40 103 110 161t140 0 140 0" opacity="0.88"/>
+                  <path d="M-30 174Q40 116 110 174t140 0 140 0" opacity="0.75"/>
+                  <path d="M-30 187Q40 129 110 187t140 0 140 0" opacity="0.65"/>
+                  <path d="M-30 200Q40 142 110 200t140 0 140 0" opacity="0.55"/>
+                  <path d="M-30 213Q40 155 110 213t140 0 140 0" opacity="0.45"/>
+                  <path d="M-30 226Q40 168 110 226t140 0 140 0" opacity="0.35"/>
+                  <path d="M-30 239Q40 181 110 239t140 0 140 0" opacity="0.25"/>
+                </g>
+              </svg>
+            </span>
+            <span class="tile-copy">
+              <span class="tile-kicker">A WORLD IN MOTION</span>
+              <span class="tile-title">Hydrosphere</span>
+              <span class="tile-description">Dive into sea surface temperatures, the Gulf Stream, equatorial warm pools, and deep ocean currents.</span>
+              <span class="tile-dataset-badge"><i></i> NOAA SST • -2°C to 32°C</span>
+              <span class="tile-link">Sonify ocean currents <span>→</span></span>
+            </span>
+          </button>
+        </div>
       </div>
-      <footer class="explore-footer"><span class="footer-mark">A little curiosity goes a long way.</span><span>OUR PLANET. YOUR PERSPECTIVE.</span><a href="#home">Back to the surface ↑</a></footer>
+
+      <footer class="explore-footer">
+        <span class="footer-mark">A little curiosity goes a long way.</span>
+        <span>TEAM EVENT HORIZON • EARTH SONIFICATION ENGINE</span>
+        <a href="#home" data-route-link="home">↑ Back to Home</a>
+      </footer>
     </section>
 
-    <!-- PAGE 3: Interactive Sonification & Map Discovery Studio -->
-    <section id="studio" class="studio-page" aria-labelledby="studio-heading" hidden>
+    <!-- ========================================================================
+         PAGE 3: INTERACTIVE SONIFICATION & MAP DISCOVERY STUDIO
+         ======================================================================== -->
+    <section id="studio" class="studio-page theme-atmosphere" aria-labelledby="studio-heading" hidden>
       <div class="studio-container">
-        <!-- Studio Header -->
+
+        <!-- Studio Header Bar -->
         <div class="studio-header">
           <div class="studio-nav-left">
-            <a href="#explore" class="studio-back-btn" id="studio-back-btn"><span aria-hidden="true">←</span> Back to Explore</a>
+            <button type="button" class="studio-back-btn" id="studio-back-btn">
+              <span aria-hidden="true">←</span> Back to Explore
+            </button>
             <span class="studio-divider">/</span>
             <div class="sphere-pill">
               <span class="sphere-dot"></span>
@@ -63,21 +2246,35 @@
             </div>
           </div>
 
-          <div class="engine-status">
-            <span class="status-pulse"></span>
-            <span id="engine-status-text">Audio Engine Ready</span>
+          <div class="studio-controls-right">
+            <label class="dataset-select-wrapper" for="dataset-select">
+              <span class="dataset-select-label">NASA Layer:</span>
+              <select id="dataset-select" class="dataset-select" aria-label="Select satellite dataset">
+                <option value="atmosphere_aod">Atmosphere — Aerosol Optical Depth (AOD)</option>
+                <option value="lithosphere_temp">Lithosphere — Surface Temp Anomaly (°C)</option>
+                <option value="hydrosphere_sst">Hydrosphere — Sea Surface Temp (SST)</option>
+                <option value="general_precip">General — Global Precipitation (mm/day)</option>
+              </select>
+            </label>
+
+            <div class="engine-status">
+              <span class="status-pulse"></span>
+              <span id="engine-status-text">Web Audio Synthesizer Ready</span>
+            </div>
           </div>
         </div>
 
-        <!-- Studio Main Stage: Left = Information & Telemetry Deck, Right = Map & Soundstage Deck -->
+        <!-- Studio Main Stage: Left = Compact Telemetry Sidebar, Right = Large Map -> Transport/Timeline -> Color & Wave -->
         <div class="studio-stage-grid">
-          <!-- LEFT: Telemetry & Sonification Deck -->
+
+          <!-- LEFT SIDEBAR: Live Satellite Telemetry Readouts -->
           <aside class="telemetry-deck">
-            <!-- Editorial Sphere Header -->
             <div class="studio-intro-card">
               <p class="eyebrow"><span></span> REALTIME SATELLITE SONIFICATION</p>
-              <h2 class="studio-hero-title">Listening to <em id="studio-sphere-display">Atmosphere</em></h2>
-              <p class="studio-hero-desc" id="studio-narrative">Atmospheric smoke, dust plumes & airborne clean-air visibility translated into continuous 12-voice acoustic frequencies.</p>
+              <h2 id="studio-heading" class="studio-hero-title">Listening to <em id="studio-sphere-display">Atmosphere</em></h2>
+              <p class="studio-hero-desc" id="studio-narrative">
+                Atmospheric smoke, Saharan dust plumes &amp; sea salt cyclones translated into continuous polyphonic acoustic frequencies.
+              </p>
             </div>
 
             <!-- Primary Satellite Measurement Card -->
@@ -86,143 +2283,1805 @@
                 <span class="tile-tag"><span class="radar-dot"></span> SATELLITE MEASUREMENT</span>
                 <span class="sensor-pill" id="studio-layer-tag">Aerosol Optical Depth (AOD)</span>
               </div>
-              <div class="telemetry-big"><span id="tel-phys-val">0.45</span> <span class="unit" id="tel-unit">AOD</span></div>
+              <div class="telemetry-big-row">
+                <div class="telemetry-big">
+                  <span id="tel-phys-val">0.45</span><span class="unit" id="tel-unit">AOD</span>
+                </div>
+              </div>
               <div class="telemetry-meta" id="tel-anomaly">Nominal Atmospheric Range</div>
             </div>
 
-            <!-- Dual Coordinates & Synth Voice Cards -->
+            <!-- Coordinates & Synth Voice Cards -->
             <div class="telemetry-subgrid">
               <div class="telemetry-tile">
                 <span class="tile-tag">SPATIAL POSITION</span>
-                <div class="telemetry-medium" id="tel-coords">28.6° N, 77.2° E</div>
-                <div class="telemetry-meta" id="tel-region">Central & East Asia</div>
+                <div class="telemetry-medium" id="tel-coords">23.4° N, 15.0° E</div>
+                <div class="telemetry-meta" id="tel-region">Saharan Dust Corridor</div>
               </div>
-
               <div class="telemetry-tile">
                 <span class="tile-tag">ACOUSTIC SYNTHESIS</span>
-                <div class="telemetry-medium" id="tel-voice">Low Cello (Red / Low)</div>
-                <div class="telemetry-meta" id="tel-freq">Pitch: 147 Hz · Stereo: 18% R</div>
-              </div>
-            </div>
-
-            <!-- Hue-Wheel Spectrum Equalizer Card -->
-            <div class="equalizer-card">
-              <div class="eq-header">
-                <span class="tile-tag">HUE-WHEEL COLOR REGISTERS</span>
-                <span class="eq-status-badge"><span class="mini-eq-dot"></span> 8 SPECTRAL VOICES</span>
-              </div>
-              <div class="hue-meter-grid" id="hue-meter-grid">
-                <!-- Injected via JavaScript -->
+                <div class="telemetry-medium" id="tel-voice">Warm Harp (Yellow)</div>
+                <div class="telemetry-meta" id="tel-freq">Pitch: 275 Hz • Stereo: Center</div>
               </div>
             </div>
           </aside>
 
-          <!-- RIGHT: Map Canvas & Soundstage Deck -->
-          <div class="map-deck">
-            <div class="map-viewport" id="map-viewport">
-              <div class="map-hud-top">
-                <span class="hud-status"><span class="hud-pulse"></span> GLOBAL SATELLITE RASTER</span>
-                <span class="hud-hint"><span class="hud-cursor-icon">✦</span> Click map to probe coordinates</span>
+          <!-- RIGHT MAIN STAGE: 1) Large Image Area, 2) Play/Pause & Timeline Under Image, 3) Color & Wave Area Below That -->
+          <div class="studio-right-stack">
+
+            <!-- 1. LARGE SATELLITE IMAGE STAGE + CALIBRATED SCALE RAMP -->
+            <div class="map-deck">
+              <div class="map-viewport" id="map-viewport" title="Click or drag anywhere on the satellite map to sonify that coordinate">
+                <div class="map-hud-top">
+                  <span class="hud-status"><span class="hud-pulse"></span> GLOBAL SATELLITE RASTER (1024×512)</span>
+                  <span class="hud-hint"><span class="hud-cursor-icon">⌖</span> Click or drag map to probe coordinates</span>
+                </div>
+
+                <canvas id="studio-map-canvas"></canvas>
+
+                <!-- Scanline & Cyclone Spiral Overlays -->
+                <div id="scanline-v" class="scanline scanline-v"></div>
+                <div id="scanline-h" class="scanline scanline-h" style="display:none;"></div>
+                <div id="scan-target-orb" class="scan-target-orb" style="display:none;"></div>
+                <div id="probe-pin" class="probe-pin" data-Readout="0.0°, 0.0°"></div>
+
+                <!-- Corner Telemetry Brackets -->
+                <span class="map-bracket tl"></span>
+                <span class="map-bracket tr"></span>
+                <span class="map-bracket bl"></span>
+                <span class="map-bracket br"></span>
               </div>
-              <canvas id="studio-map-canvas"></canvas>
-              <!-- Scanline overlays -->
-              <div id="scanline-v" class="scanline scanline-v"></div>
-              <div id="scanline-h" class="scanline scanline-h"></div>
-              <div id="scan-target-orb" class="scan-target-orb"></div>
-              <div id="probe-pin" class="probe-pin"></div>
-              
-              <!-- Corner telemetry brackets -->
-              <span class="map-bracket tl"></span>
-              <span class="map-bracket tr"></span>
-              <span class="map-bracket bl"></span>
-              <span class="map-bracket br"></span>
+
+              <!-- Calibrated Physical Ramp with Live Pointer -->
+              <div class="colormap-container">
+                <div class="ramp-legend-row">
+                  <span class="ramp-bound min" id="ramp-min">0.0 AOD (Pristine Air)</span>
+                  <span class="ramp-label">Calibrated Planetary Observation Scale</span>
+                  <span class="ramp-bound max" id="ramp-max">1.2+ AOD (Dense Plume)</span>
+                </div>
+                <div class="ramp-track-outer">
+                  <div class="ramp-track" id="ramp-track"></div>
+                  <div class="ramp-pointer" id="ramp-pointer" title="Current physical reading position"></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Calibrated Physical Ramp -->
-            <div class="colormap-container">
-              <div class="ramp-legend-row">
-                <span class="ramp-bound min" id="ramp-min">0.0 AOD</span>
-                <span class="ramp-label">Calibrated Planetary Observation Scale</span>
-                <span class="ramp-bound max" id="ramp-max">1.2+ AOD</span>
+            <!-- 2. PLAY/PAUSE & TIMELINE AREA (DIRECTLY UNDER IMAGE) -->
+            <div class="transport-dock">
+              <div class="transport-main-row">
+                <div class="play-controls">
+                  <button id="studio-play-btn" class="primary-button studio-play-btn">
+                    <span id="studio-play-symbol" aria-hidden="true">▶</span>
+                    <span id="studio-play-text">Play Sonifier</span>
+                  </button>
+                  <button id="studio-reset-btn" class="studio-btn-ghost" title="Reset scanline to start">↺ Reset</button>
+                </div>
+
+                <!-- Sweep Mode Toggles -->
+                <div class="sweep-mode-group" role="group" aria-label="Scanning Sweep Mode">
+                  <button class="sweep-tab active" data-sweep="we" title="West to East Longitudinal Sweep (Key: 1)">
+                    <span class="sweep-icon">↔</span> W → E Sweep
+                  </button>
+                  <button class="sweep-tab" data-sweep="ns" title="North to South Latitudinal Sweep (Key: 2)">
+                    <span class="sweep-icon">↕</span> N → S Sweep
+                  </button>
+                  <button class="sweep-tab" data-sweep="spiral" title="Radial Cyclone Spiral Mode (Key: 3)">
+                    <span class="sweep-icon">◎</span> Cyclone Spiral
+                  </button>
+                </div>
+
+                <!-- Audio Parameter Sliders -->
+                <div class="audio-tweak-group">
+                  <label class="slider-label">
+                    Speed <span id="speed-indicator">1.00x</span>
+                    <input type="range" id="studio-speed-slider" min="0.5" max="2.5" step="0.25" value="1.0">
+                  </label>
+                  <label class="slider-label">
+                    Drone <span id="drone-indicator">35%</span>
+                    <input type="range" id="studio-drone-slider" min="0" max="1" step="0.05" value="0.35">
+                  </label>
+                  <label class="slider-label">
+                    Vol <span id="vol-indicator">85%</span>
+                    <input type="range" id="studio-vol-slider" min="0" max="1" step="0.05" value="0.85">
+                  </label>
+                </div>
               </div>
-              <div class="ramp-track" id="ramp-track"></div>
+
+              <!-- Timeline Scrubber -->
+              <div class="scrubber-bar">
+                <span class="scrub-time" id="scrub-curr-time">00:00</span>
+                <div class="scrub-track-wrapper">
+                  <input type="range" id="studio-scrubber" min="0" max="1000" value="0" aria-label="Playback timeline scrubber">
+                </div>
+                <span class="scrub-time" id="scrub-total-time">00:36</span>
+              </div>
+
+              <!-- Accessible Keyboard & Audio Beacon Strip -->
+              <div class="studio-shortcuts">
+                <span><kbd>Space</kbd> Play / Pause</span>
+                <span><kbd>←</kbd> <kbd>→</kbd> Scrub Timeline</span>
+                <span><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Sweep Modes</span>
+                <span><kbd>Click / Drag Map</kbd> Point &amp; Probe</span>
+                <span class="shortcut-binaural">🎧 Binaural Stereo Panning Active</span>
+              </div>
             </div>
+
+            <!-- 3. COLOR & WAVE AREA (DIRECTLY BELOW PLAY/PAUSE & TIMELINE AREA) -->
+            <div class="color-wave-grid">
+              <!-- Left: Hue-Wheel Color Registers -->
+              <div class="equalizer-card">
+                <div class="eq-header">
+                  <span class="tile-tag">COLOR SPECTRUM &amp; HUE REGISTERS</span>
+                  <span class="eq-status-badge"><span class="mini-eq-dot"></span> 8 SPECTRAL VOICES</span>
+                </div>
+                <div class="hue-meter-grid" id="hue-meter-grid">
+                  <!-- Populated dynamically -->
+                </div>
+              </div>
+
+              <!-- Right: Live Acoustic Waveform Visualizer -->
+              <div class="waveform-card">
+                <div class="eq-header">
+                  <span class="tile-tag">LIVE ACOUSTIC WAVEFORM</span>
+                  <span class="eq-status-badge" id="wave-live-readout">275 Hz • STEREO FIELD</span>
+                </div>
+                <canvas id="studio-osc-canvas" width="520" height="82" aria-label="Realtime audio waveform visualizer"></canvas>
+              </div>
+            </div>
+
           </div>
+
         </div>
 
-        <!-- Studio Bottom: Transport Controls & Scrubber -->
-        <div class="transport-dock">
-          <div class="transport-main-row">
-            <div class="play-controls">
-              <button id="studio-play-btn" class="primary-button studio-play-btn">
-                <span id="studio-play-symbol" aria-hidden="true">▶</span>
-                <span id="studio-play-text">Play Sonifier</span>
-              </button>
-              <button id="studio-reset-btn" class="studio-btn-ghost">↺ Reset</button>
-            </div>
-
-            <!-- Sweep Mode Toggles -->
-            <div class="sweep-mode-group" role="group" aria-label="Scanning Sweep Mode">
-              <button class="sweep-tab active" data-sweep="we" title="West to East Longitudinal Sweep">
-                <span class="sweep-icon">⇄</span> W → E Sweep
-              </button>
-              <button class="sweep-tab" data-sweep="ns" title="North to South Latitudinal Sweep">
-                <span class="sweep-icon">⇅</span> N → S Sweep
-              </button>
-              <button class="sweep-tab" data-sweep="spiral" title="Radial Cyclone Spiral Mode">
-                <span class="sweep-icon">◎</span> Cyclone Spiral
-              </button>
-            </div>
-
-            <!-- Sliders -->
-            <div class="audio-tweak-group">
-              <label class="slider-label">
-                Speed <span id="speed-indicator">1.0x</span>
-                <input type="range" id="studio-speed-slider" min="0.5" max="2.5" step="0.25" value="1.0">
-              </label>
-              <label class="slider-label">
-                Drone <span id="drone-indicator">35%</span>
-                <input type="range" id="studio-drone-slider" min="0" max="1" step="0.05" value="0.35">
-              </label>
-              <label class="slider-label">
-                Vol <span id="vol-indicator">85%</span>
-                <input type="range" id="studio-vol-slider" min="0" max="1" step="0.05" value="0.85">
-              </label>
-            </div>
-          </div>
-
-          <!-- Timeline Scrubber -->
-          <div class="scrubber-bar">
-            <span class="scrub-time" id="scrub-curr-time">00:00</span>
-            <div class="scrub-track-wrapper">
-              <input type="range" id="studio-scrubber" min="0" max="1000" value="0" aria-label="Playback timeline scrubber">
-            </div>
-            <span class="scrub-time" id="scrub-total-time">00:36</span>
-          </div>
-
-          <!-- Accessible Keyboard & Audio Beacon Strip -->
-          <div class="studio-shortcuts">
-            <span><kbd>Space</kbd> Play / Pause</span>
-            <span><kbd>←</kbd> <kbd>→</kbd> Scrub Timeline</span>
-            <span><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Sweep Modes</span>
-            <span><kbd>Click Map</kbd> Point & Probe</span>
-            <span class="shortcut-binaural">🎧 Binaural Stereo Panning</span>
-          </div>
-        </div>
       </div>
     </section>
   </main>
 
+  <!-- ==========================================================================
+       INFO / ABOUT MODAL DIALOG
+       ========================================================================== -->
   <dialog id="info-dialog" aria-labelledby="dialog-title">
     <button class="dialog-close" aria-label="Close dialog">×</button>
     <div class="dialog-art" id="dialog-art" aria-hidden="true" hidden></div>
-    <p class="eyebrow" id="dialog-eyebrow">THE JUKEBOX PROJECT</p>
-    <h2 id="dialog-title">A new perspective<br>on our planet.</h2>
-    <p id="dialog-description">Jukebox brings Earth observation and discovery together. Explore the land, air, and water that shape our world — and find the connections in between.</p>
+    <p class="eyebrow" id="dialog-eyebrow"><span></span> THE JUKEBOX PROJECT</p>
+    <h2 id="dialog-title">A new perspective on our planet.</h2>
+    <p id="dialog-description">
+      Jukebox is a real-time satellite sonification engine that converts NASA Earth observation imagery into harmonic, spatial music. Built for blind and low-vision explorers, perceptive researchers, and curious minds to hear how Earth’s land, air, and oceans connect.
+    </p>
+
+    <div class="team-roster">
+      <span class="team-roster-title">Created by Team Event Horizon</span>
+      <div class="team-badges">
+        <span class="team-badge">Ishan Khatri</span>
+        <span class="team-badge">Nahar Kumar</span>
+        <span class="team-badge">Aneeka Karan</span>
+        <span class="team-badge">Tiyasha Singha</span>
+        <span class="team-badge">Karan Kutty</span>
+      </div>
+    </div>
+
     <div class="dialog-actions">
-      <button class="primary-button dialog-launch" id="dialog-launch-btn">Explore in Sonifier Studio <span aria-hidden="true">↗</span></button>
-      <button class="dialog-done dialog-ghost-btn">Keep exploring cards</button>
+      <button class="primary-button dialog-launch" id="dialog-launch-btn">
+        Explore in Sonifier Studio <span aria-hidden="true">→</span>
+      </button>
+      <button class="dialog-done dialog-ghost-btn">Continue exploring</button>
     </div>
   </dialog>
+
+  <!-- ==========================================================================
+       EARTH SONIFIER ENGINE & APPLICATION CONTROLLER
+       ========================================================================== -->
+  <script>
+    /**
+     * Helper: Realistic Procedural Continental Landmask & Coastline Function
+     * Returns value > 0 for Land, < 0 for Ocean, near 0 for Coastlines.
+     */
+    function getProceduralLandElevation(lonNorm, latNorm) {
+      const lon = (lonNorm - 0.5) * 360; // -180 to 180
+      const lat = (0.5 - latNorm) * 180; // 90 (N) to -90 (S)
+
+      const gaussian = ( lon0, lat0, sx, sy, amp ) => {
+        const dx = (lon - lon0) / sx;
+        const dy = (lat - lat0) / sy;
+        return amp * Math.exp(-(dx * dx + dy * dy));
+      };
+
+      let elev = -0.42; // Ocean baseline
+
+      // North America
+      elev += gaussian(-105, 48, 28, 18, 0.85);
+      elev += gaussian(-95, 35, 20, 14, 0.65);
+      elev += gaussian(-135, 62, 18, 8, 0.55);
+      elev += gaussian(-90, 20, 10, 8, 0.45);
+      // Greenland
+      elev += gaussian(-42, 72, 14, 9, 0.78);
+      // South America
+      elev += gaussian(-62, -12, 16, 16, 0.88);
+      elev += gaussian(-46, -15, 11, 11, 0.52);
+      elev += gaussian(-68, -36, 8, 18, 0.68);
+      // Africa
+      elev += gaussian(16, 14, 24, 15, 0.92);
+      elev += gaussian(26, -12, 14, 18, 0.85);
+      elev += gaussian(46, -19, 4, 6, 0.45); // Madagascar
+      // Europe
+      elev += gaussian(15, 50, 20, 9, 0.68);
+      elev += gaussian(20, 62, 14, 7, 0.55);
+      // Asia
+      elev += gaussian(88, 52, 46, 18, 0.95);
+      elev += gaussian(105, 34, 24, 14, 0.85);
+      elev += gaussian(78, 22, 11, 12, 0.68); // India
+      elev += gaussian(46, 26, 12, 10, 0.62); // Arabian Peninsula
+      elev += gaussian(140, 38, 6, 9, 0.44);  // Japan
+      elev += gaussian(115, 2, 14, 10, 0.48); // Maritime SE Asia
+      // Australia
+      elev += gaussian(134, -25, 18, 11, 0.82);
+      elev += gaussian(172, -41, 5, 5, 0.42); // New Zealand
+      // Antarctica
+      if (lat < -64) {
+        elev += ((-62 - lat) / 22) * 0.95;
+      }
+
+      // Multi-octave harmonic fractal detail for natural coastlines
+      const rLon = lonNorm * Math.PI * 2;
+      const rLat = latNorm * Math.PI;
+      elev += 0.11 * Math.sin(rLon * 7 + 0.5) * Math.cos(rLat * 6 - 0.3);
+      elev += 0.065 * Math.sin(rLon * 15 - rLat * 11) * Math.sin(rLat * 9);
+      elev += 0.035 * Math.cos(rLon * 29 + rLat * 23);
+      elev += 0.018 * Math.sin(rLon * 53 - rLat * 41);
+
+      return elev;
+    }
+
+    /**
+     * Compute calibrated scientific value [0..1] and RGB color for a given dataset and (lonNorm, latNorm)
+     */
+    function sampleScientificRaster(lonNorm, latNorm, theme) {
+      const lon = (lonNorm - 0.5) * 360;
+      const lat = (0.5 - latNorm) * 180;
+      const elev = getProceduralLandElevation(lonNorm, latNorm);
+      const isLand = elev > 0;
+      const isCoast = Math.abs(elev) < 0.022;
+
+      const plume = (lon0, lat0, sx, sy, amp) => {
+        const dx = (lon - lon0) / sx;
+        const dy = (lat - lat0) / sy;
+        return amp * Math.exp(-(dx * dx + dy * dy));
+      };
+
+      const wave = Math.sin(lonNorm * Math.PI * 6 + latNorm * 4) * 0.08 +
+                   Math.cos(lonNorm * Math.PI * 14 - latNorm * 9) * 0.04;
+
+      let val = 0.2;
+      let r = 10, g = 25, b = 45;
+
+      if (theme === 'atmosphere') {
+        // NASA GEOS-5 Aerosol Optical Depth: Dust (Orange/Red), Smoke (Green/Yellow), Sea Salt (Cyan/Blue), Sulfate (Purple)
+        const saharaDust = plume(-12, 19, 36, 11, 0.92) + plume(20, 22, 25, 10, 0.75) + plume(50, 22, 18, 9, 0.65);
+        const biomassSmoke = plume(-58, -10, 16, 11, 0.82) + plume(18, -8, 16, 11, 0.86) + plume(-115, 52, 20, 8, 0.6);
+        const asiaSulfate = plume(114, 31, 18, 12, 0.78) + plume(80, 25, 14, 8, 0.68);
+        const southernSalt = Math.exp(-Math.pow((lat + 52) / 11, 2)) * (0.48 + 0.22 * Math.sin(lonNorm * Math.PI * 8));
+        const typhoonSalt = plume(138, 22, 9, 8, 0.72) + plume(-65, 28, 8, 7, 0.62);
+
+        val = Math.min(1, Math.max(0.02, saharaDust + biomassSmoke + asiaSulfate + southernSalt + typhoonSalt + wave * 0.5));
+
+        // Base dark Earth / Ocean
+        r = isLand ? 22 : 8;
+        g = isLand ? 28 : 18;
+        b = isLand ? 38 : 34;
+
+        // Blend specific aerosol species colors
+        r += saharaDust * 245 + biomassSmoke * 160 + asiaSulfate * 195 + southernSalt * 25;
+        g += saharaDust * 115 + biomassSmoke * 230 + asiaSulfate * 70  + (southernSalt + typhoonSalt) * 190;
+        b += saharaDust * 35  + biomassSmoke * 65  + asiaSulfate * 235 + (southernSalt + typhoonSalt) * 245;
+
+      } else if (theme === 'lithosphere') {
+        // Surface Temperature Anomaly (-5°C to +5°C)
+        const arcticWarming = Math.max(0, (lat - 50) / 40) * 0.45;
+        const landHeat = isLand ? 0.22 : -0.12;
+        const hotspots = plume(95, 62, 28, 12, 0.42) + plume(-105, 42, 22, 12, 0.35) +
+                         plume(22, 25, 25, 14, 0.32) + plume(135, -25, 18, 10, 0.32) -
+                         plume(-35, 52, 18, 10, 0.28) - plume(-120, -55, 35, 14, 0.25);
+
+        val = Math.min(1, Math.max(0, 0.48 + landHeat + arcticWarming + hotspots + wave));
+
+        // Diverging Blue -> White -> Orange -> Deep Red colormap
+        if (val < 0.45) {
+          const t = val / 0.45;
+          r = 20 + t * 180;
+          g = 55 + t * 175;
+          b = 145 + t * 100;
+        } else {
+          const t = (val - 0.45) / 0.55;
+          r = 215 + t * 40;
+          g = 220 * (1 - t * 0.78);
+          b = 220 * (1 - t * 0.92);
+        }
+        if (!isLand) {
+          r *= 0.65; g *= 0.72; b *= 0.82;
+        }
+
+      } else if (theme === 'hydrosphere') {
+        // Sea Surface Temperature (SST) & Western Boundary Currents
+        const cosLat = Math.cos((lat * Math.PI) / 180);
+        const eqWarmPool = Math.pow(Math.max(0, cosLat), 1.7) * 0.78;
+        const gulfStream = plume(-62, 36, 22, 6, 0.28);
+        const kuroshio = plume(148, 34, 22, 6, 0.26);
+        const indoPacificPool = plume(140, 0, 45, 16, 0.22);
+
+        val = Math.min(1, Math.max(0, eqWarmPool + gulfStream + kuroshio + indoPacificPool + wave * 0.6));
+
+        if (isLand) {
+          // Dark continents so ocean currents pop vividly
+          r = 14 + elev * 22;
+          g = 24 + elev * 28;
+          b = 34 + elev * 25;
+          val *= 0.35;
+        } else {
+          // Thermal Ocean Colormap: Deep Navy -> Cyan -> Emerald -> Gold -> Coral Red
+          if (val < 0.35) {
+            const t = val / 0.35;
+            r = 8 + t * 15;
+            g = 24 + t * 145;
+            b = 75 + t * 155;
+          } else if (val < 0.7) {
+            const t = (val - 0.35) / 0.35;
+            r = 23 + t * 215;
+            g = 169 + t * 55;
+            b = 230 * (1 - t * 0.75);
+          } else {
+            const t = (val - 0.7) / 0.3;
+            r = 238 + t * 17;
+            g = 224 * (1 - t * 0.65);
+            b = 57 * (1 - t * 0.5);
+          }
+        }
+
+      } else {
+        // General: Global Precipitation & Planetary Moisture (GPM IMERG)
+        const itczLat = 5 * Math.sin(lonNorm * Math.PI * 2 - 0.8);
+        const itczBand = Math.exp(-Math.pow((lat - itczLat) / 7.5, 2)) * 0.78;
+        const monsoon = plume(88, 18, 22, 12, 0.75) + plume(120, 8, 28, 12, 0.65) +
+                        plume(-62, -4, 18, 11, 0.72);
+        const stormTracks = Math.exp(-Math.pow((Math.abs(lat) - 46) / 9, 2)) *
+                            Math.max(0, Math.sin(lonNorm * Math.PI * 10 + latNorm * 6)) * 0.62;
+
+        val = Math.min(1, Math.max(0.02, itczBand + monsoon + stormTracks + wave * 0.5));
+
+        r = isLand ? 16 : 6;
+        g = isLand ? 38 : 20;
+        b = isLand ? 34 : 32;
+
+        r += val * val * 220;
+        g += val * 235;
+        b += Math.sqrt(val) * 195;
+      }
+
+      // Highlight continental coastlines subtly
+      if (isCoast) {
+        r = Math.min(255, r + 48);
+        g = Math.min(255, g + 58);
+        b = Math.min(255, b + 58);
+      }
+
+      return {
+        val,
+        r: Math.min(255, Math.max(0, Math.round(r))),
+        g: Math.min(255, Math.max(0, Math.round(g))),
+        b: Math.min(255, Math.max(0, Math.round(b)))
+      };
+    }
+
+    /**
+     * Earth Jukebox - Realtime Map Sonification Engine
+     */
+    class EarthSonifier {
+      constructor() {
+        this.audioCtx = null;
+        this.masterGain = null;
+        this.droneGain = null;
+        this.panner = null;
+        this.filter = null;
+        this.analyser = null;
+
+        this.carrierOsc = null;
+        this.harmOsc = null;
+        this.droneOsc = null;
+        this.carrierGain = null;
+        this.harmGain = null;
+
+        this.isPlaying = false;
+        this.mode = 'we'; // 'we' | 'ns' | 'spiral'
+        this.progress = 0; // 0 to 1
+        this.speed = 1.0;
+        this.volume = 0.85;
+        this.droneLevel = 0.35;
+        this.durationSec = 36;
+        this.lastFrameTime = 0;
+        this.animId = null;
+
+        this.canvas = null;
+        this.ctx = null;
+        this.imageData = null;
+        this.imgWidth = 512;
+        this.imgHeight = 256;
+        this.imgSource = null;
+
+        this.activeTheme = 'atmosphere';
+        this.activeDatasetKey = 'atmosphere_aod';
+
+        // Base harmonic scales per sphere theme
+        this.themeRoots = {
+          atmosphere:  { rootFreq: 110.0, scale: [110, 137.5, 165, 220, 275, 330, 440, 550, 660] },
+          lithosphere: { rootFreq: 98.0,  scale: [98, 122.5, 147, 196, 245, 294, 392, 490, 588] },
+          hydrosphere: { rootFreq: 82.4,  scale: [82.4, 110, 123.5, 164.8, 220, 246.9, 329.6, 440, 523.2] },
+          general:     { rootFreq: 98.0,  scale: [98, 110, 130.8, 146.8, 164.8, 196, 220, 261.6, 293.6] }
+        };
+
+        this.datasets = {
+          atmosphere_aod: {
+            sphere: 'Atmosphere',
+            theme: 'atmosphere',
+            title: 'Aerosol Optical Depth (AOD)',
+            sub: 'Saharan dust plumes, wildfire smoke corridors & sea salt cyclones translated into polyphonic frequencies.',
+            file: 'assets/maps/atmosphere_aod.png',
+            unit: 'AOD',
+            minVal: 0.0,
+            maxVal: 1.2,
+            rampMin: '0.0 AOD (Pristine Air)',
+            rampMax: '1.2+ AOD (Dense Plume)',
+            anomalyThreshold: 0.72,
+            anomalyLabel: 'High Aerosol Plume Detected'
+          },
+          lithosphere_temp: {
+            sphere: 'Lithosphere',
+            theme: 'lithosphere',
+            title: 'Surface Temperature Anomaly',
+            sub: 'Solid ground thermal variance, continental heatwaves & crustal flux translated into warm resonant strings.',
+            file: 'assets/maps/lithosphere_temp.png',
+            unit: '°C anomaly',
+            minVal: -5.0,
+            maxVal: 5.0,
+            rampMin: '-5.0 °C (Cold Anomaly)',
+            rampMax: '+5.0 °C (Extreme Heat)',
+            anomalyThreshold: 2.4,
+            anomalyLabel: 'Severe Thermal Heat Anomaly'
+          },
+          hydrosphere_sst: {
+            sphere: 'Hydrosphere',
+            theme: 'hydrosphere',
+            title: 'Sea Surface Temperature & Currents',
+            sub: 'Global marine thermal layers, Gulf Stream eddies & equatorial warm pools in fluid binaural synthesis.',
+            file: 'assets/maps/hydrosphere_sst.png',
+            unit: '°C',
+            minVal: -2.0,
+            maxVal: 32.0,
+            rampMin: '-2.0 °C (Polar Ice Margin)',
+            rampMax: '32.0 °C (Equatorial Pool)',
+            anomalyThreshold: 26.5,
+            anomalyLabel: 'Tropical Warm Current Core'
+          },
+          general_precip: {
+            sphere: 'General',
+            theme: 'general',
+            title: 'Global Precipitation & Planetary Moisture',
+            sub: 'Connected Earth moisture flux, monsoon rainbands & atmospheric rivers across all continents.',
+            file: 'assets/maps/general_precip.png',
+            unit: 'mm/day',
+            minVal: 0.0,
+            maxVal: 25.0,
+            rampMin: '0 mm/day (Arid / Clear)',
+            rampMax: '25+ mm/day (Monsoon Band)',
+            anomalyThreshold: 15.5,
+            anomalyLabel: 'Intense Convective Rain Band'
+          }
+        };
+
+        this.listeners = new Set();
+      }
+
+      onUpdate(callback) {
+        this.listeners.add(callback);
+      }
+
+      notifyUpdate(state) {
+        for (const cb of this.listeners) {
+          cb(state);
+        }
+      }
+
+      async initAudio() {
+        if (this.audioCtx && this.audioCtx.state !== 'closed') {
+          if (this.audioCtx.state === 'suspended') {
+            await this.audioCtx.resume();
+          }
+          return;
+        }
+
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        this.audioCtx = new AudioCtor({ latencyHint: 'interactive' });
+        if (this.audioCtx.state === 'suspended') {
+          await this.audioCtx.resume();
+        }
+
+        const ctx = this.audioCtx;
+
+        // Master Gain
+        this.masterGain = ctx.createGain();
+        this.masterGain.gain.setValueAtTime(this.volume, ctx.currentTime);
+
+        // AnalyserNode for live waveform oscilloscope
+        this.analyser = ctx.createAnalyser();
+        this.analyser.fftSize = 256;
+        this.analyser.smoothingTimeConstant = 0.82;
+
+        // Dynamics Limiter
+        const limiter = ctx.createDynamicsCompressor();
+        limiter.threshold.setValueAtTime(-3, ctx.currentTime);
+        limiter.knee.setValueAtTime(6, ctx.currentTime);
+        limiter.ratio.setValueAtTime(12, ctx.currentTime);
+        limiter.attack.setValueAtTime(0.003, ctx.currentTime);
+        limiter.release.setValueAtTime(0.12, ctx.currentTime);
+
+        // Stereo Panner (Binaural placement)
+        if (ctx.createStereoPanner) {
+          this.panner = ctx.createStereoPanner();
+          this.panner.pan.setValueAtTime(0, ctx.currentTime);
+        } else {
+          this.panner = ctx.createGain();
+        }
+
+        // Dynamic Lowpass Filter
+        this.filter = ctx.createBiquadFilter();
+        this.filter.type = 'lowpass';
+        this.filter.frequency.setValueAtTime(950, ctx.currentTime);
+        this.filter.Q.setValueAtTime(1.8, ctx.currentTime);
+
+        // Primary Voice Carrier
+        this.carrierOsc = ctx.createOscillator();
+        this.carrierOsc.type = 'triangle';
+        this.carrierOsc.frequency.setValueAtTime(146.8, ctx.currentTime);
+        this.carrierGain = ctx.createGain();
+        this.carrierGain.gain.setValueAtTime(0, ctx.currentTime);
+        this.carrierOsc.connect(this.carrierGain);
+
+        // Harmonic Richness Overtone
+        this.harmOsc = ctx.createOscillator();
+        this.harmOsc.type = 'sine';
+        this.harmOsc.frequency.setValueAtTime(220, ctx.currentTime);
+        this.harmGain = ctx.createGain();
+        this.harmGain.gain.setValueAtTime(0, ctx.currentTime);
+        this.harmOsc.connect(this.harmGain);
+
+        // Sub-bass Foundation Drone
+        this.droneOsc = ctx.createOscillator();
+        this.droneOsc.type = 'sine';
+        this.droneOsc.frequency.setValueAtTime(82.5, ctx.currentTime);
+        this.droneGain = ctx.createGain();
+        this.droneGain.gain.setValueAtTime(0, ctx.currentTime);
+        this.droneOsc.connect(this.droneGain);
+
+        // Spatial feedback delay
+        const delay = ctx.createDelay();
+        delay.delayTime.setValueAtTime(0.24, ctx.currentTime);
+        const delayFeedback = ctx.createGain();
+        delayFeedback.gain.setValueAtTime(0.32, ctx.currentTime);
+        delay.connect(delayFeedback);
+        delayFeedback.connect(delay);
+
+        // Connect Voice Network
+        this.carrierGain.connect(this.filter);
+        this.harmGain.connect(this.filter);
+        this.droneGain.connect(this.filter);
+
+        this.filter.connect(this.panner);
+        this.panner.connect(this.masterGain);
+
+        this.filter.connect(delay);
+        delay.connect(this.panner);
+
+        this.masterGain.connect(limiter);
+        limiter.connect(this.analyser);
+        this.analyser.connect(ctx.destination);
+
+        // Start oscillators
+        this.carrierOsc.start();
+        this.harmOsc.start();
+        this.droneOsc.start();
+      }
+
+      // Play a brief harmonic chime when probing the map or hovering cards
+      playProbeChime(freq = 330, pan = 0) {
+        if (!this.audioCtx || this.audioCtx.state !== 'running') return;
+        const ctx = this.audioCtx;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * 2, now);
+        osc.frequency.exponentialRampToValueAtTime(freq, now + 0.35);
+
+        gain.gain.setValueAtTime(0.14 * this.volume, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + 0.46);
+      }
+
+      generateFallbackRaster(width, height, ds) {
+        const imgData = new ImageData(width, height);
+        const data = imgData.data;
+
+        for (let y = 0; y < height; y++) {
+          const latNorm = y / height;
+          for (let x = 0; x < width; x++) {
+            const lonNorm = x / width;
+            const idx = (y * width + x) * 4;
+            const sample = sampleScientificRaster(lonNorm, latNorm, ds.theme);
+            data[idx] = sample.r;
+            data[idx + 1] = sample.g;
+            data[idx + 2] = sample.b;
+            data[idx + 3] = 255;
+          }
+        }
+        return imgData;
+      }
+
+      async loadDataset(datasetKey) {
+        const ds = this.datasets[datasetKey] || this.datasets.atmosphere_aod;
+        this.activeDatasetKey = datasetKey;
+        this.activeTheme = ds.theme;
+
+        return new Promise((resolve) => {
+          const img = new Image();
+          if (window.location.protocol !== 'file:') {
+            img.crossOrigin = 'anonymous';
+          }
+
+          const buildProcedural = () => {
+            this.imgWidth = 512;
+            this.imgHeight = 256;
+            this.imageData = this.generateFallbackRaster(512, 256, ds);
+            this.imgSource = null;
+            this.updateRootFreq();
+            this.evaluateSonification(this.progress);
+            resolve(ds);
+          };
+
+          img.onload = () => {
+            if (!this.canvas) {
+              this.canvas = document.createElement('canvas');
+              this.ctx = this.canvas.getContext('2d', { willReadFrequently: true });
+            }
+            const w = 512;
+            const h = 256;
+            this.canvas.width = w;
+            this.canvas.height = h;
+            try {
+              this.ctx.drawImage(img, 0, 0, w, h);
+              this.imageData = this.ctx.getImageData(0, 0, w, h);
+              this.imgSource = img;
+            } catch (e) {
+              this.imageData = this.generateFallbackRaster(w, h, ds);
+              this.imgSource = null;
+            }
+            this.imgWidth = w;
+            this.imgHeight = h;
+            this.updateRootFreq();
+            this.evaluateSonification(this.progress);
+            resolve(ds);
+          };
+
+          img.onerror = buildProcedural;
+          img.src = ds.file;
+        });
+      }
+
+      updateRootFreq() {
+        if (!this.droneOsc || !this.audioCtx) return;
+        const config = this.themeRoots[this.activeTheme] || this.themeRoots.atmosphere;
+        const now = this.audioCtx.currentTime;
+        this.droneOsc.frequency.setTargetAtTime(config.rootFreq * 0.75, now, 0.2);
+      }
+
+      setTheme(theme) {
+        if (this.themeRoots[theme]) {
+          this.activeTheme = theme;
+          this.updateRootFreq();
+        }
+      }
+
+      setMode(mode) {
+        if (['we', 'ns', 'spiral'].includes(mode)) {
+          this.mode = mode;
+          this.evaluateSonification(this.progress);
+        }
+      }
+
+      setSpeed(val) {
+        this.speed = Math.max(0.2, Math.min(3.0, Number(val) || 1.0));
+      }
+
+      setVolume(val) {
+        this.volume = Math.max(0, Math.min(1, Number(val) || 0.85));
+        if (this.masterGain && this.audioCtx) {
+          this.masterGain.gain.setTargetAtTime(this.volume, this.audioCtx.currentTime, 0.05);
+        }
+      }
+
+      setDroneLevel(val) {
+        this.droneLevel = Math.max(0, Math.min(1, Number(val) || 0.35));
+        if (this.droneGain && this.audioCtx && this.isPlaying) {
+          this.droneGain.gain.setTargetAtTime(this.droneLevel, this.audioCtx.currentTime, 0.05);
+        }
+      }
+
+      seek(progress) {
+        this.progress = Math.max(0, Math.min(1, progress));
+        this.evaluateSonification(this.progress);
+      }
+
+      async play() {
+        await this.initAudio();
+        this.isPlaying = true;
+        document.body.classList.add('audio-active');
+        this.lastFrameTime = performance.now();
+
+        const now = this.audioCtx.currentTime;
+        this.carrierGain.gain.setTargetAtTime(0.45, now, 0.1);
+        this.harmGain.gain.setTargetAtTime(0.22, now, 0.1);
+        this.droneGain.gain.setTargetAtTime(this.droneLevel, now, 0.15);
+
+        const step = (time) => {
+          if (!this.isPlaying) return;
+          const dt = (time - this.lastFrameTime) / 1000;
+          this.lastFrameTime = time;
+
+          const increment = (dt / this.durationSec) * this.speed;
+          this.progress += increment;
+          if (this.progress > 1.0) {
+            this.progress = 0;
+          }
+
+          this.evaluateSonification(this.progress);
+          this.animId = requestAnimationFrame(step);
+        };
+
+        this.animId = requestAnimationFrame(step);
+        this.notifyUpdate({ isPlaying: true, progress: this.progress, mode: this.mode });
+      }
+
+      pause() {
+        this.isPlaying = false;
+        document.body.classList.remove('audio-active');
+        if (this.animId) {
+          cancelAnimationFrame(this.animId);
+          this.animId = null;
+        }
+        if (this.carrierGain && this.audioCtx) {
+          const now = this.audioCtx.currentTime;
+          this.carrierGain.gain.setTargetAtTime(0, now, 0.08);
+          this.harmGain.gain.setTargetAtTime(0, now, 0.08);
+          this.droneGain.gain.setTargetAtTime(0, now, 0.12);
+        }
+        this.evaluateSonification(this.progress);
+      }
+
+      togglePlay() {
+        if (this.isPlaying) this.pause();
+        else this.play();
+      }
+
+      getPixel(xNorm, yNorm) {
+        if (!this.imageData) return { r: 128, g: 128, b: 128, a: 255 };
+        const x = Math.max(0, Math.min(this.imgWidth - 1, Math.floor(xNorm * this.imgWidth)));
+        const y = Math.max(0, Math.min(this.imgHeight - 1, Math.floor(yNorm * this.imgHeight)));
+        const idx = (y * this.imgWidth + x) * 4;
+        const d = this.imageData.data;
+        return { r: d[idx], g: d[idx + 1], b: d[idx + 2], a: d[idx + 3] };
+      }
+
+      evaluateSonification(t) {
+        if (!this.imageData) return;
+
+        let scanX = 0.5;
+        let scanY = 0.5;
+        let panVal = 0.0;
+        let samplePixels = [];
+
+        if (this.mode === 'we') {
+          scanX = t;
+          panVal = (scanX - 0.5) * 1.8;
+          for (let s = 0; s < 16; s++) {
+            const yNorm = (s + 0.5) / 16;
+            samplePixels.push({ ...this.getPixel(scanX, yNorm), yNorm });
+          }
+          scanY = 0.5;
+        } else if (this.mode === 'ns') {
+          scanY = t;
+          for (let s = 0; s < 16; s++) {
+            const xNorm = (s + 0.5) / 16;
+            samplePixels.push({ ...this.getPixel(xNorm, scanY), yNorm: scanY, xNorm });
+          }
+          scanX = 0.5;
+          panVal = Math.sin(t * Math.PI * 4) * 0.45;
+        } else if (this.mode === 'spiral') {
+          const centerX = 0.50;
+          const centerY = 0.50;
+          const turns = 3.0;
+          const theta = t * turns * Math.PI * 2;
+          const r = 0.04 + t * 0.42;
+          scanX = Math.max(0, Math.min(1, centerX + r * Math.cos(theta)));
+          scanY = Math.max(0, Math.min(1, centerY + r * Math.sin(theta)));
+          panVal = Math.cos(theta) * 0.92;
+          samplePixels.push({ ...this.getPixel(scanX, scanY), yNorm: scanY });
+        }
+
+        let sumL = 0;
+        let sumC = 0;
+        let sumVal = 0;
+        let focalY = 0;
+        let hueDist = { red: 0, orange: 0, yellow: 0, green: 0, cyan: 0, blue: 0, purple: 0, magenta: 0 };
+
+        for (const p of samplePixels) {
+          const r = p.r / 255;
+          const g = p.g / 255;
+          const b = p.b / 255;
+          const max = Math.max(r, g, b);
+          const min = Math.min(r, g, b);
+          const delta = max - min;
+          const lum = (max + min) / 2;
+          const sat = lum > 0.5 ? delta / (2 - max - min || 1) : delta / (max + min || 1);
+
+          let h = 0;
+          if (delta > 0.01) {
+            if (max === r) h = ((g - b) / delta + (g < b ? 6 : 0)) * 60;
+            else if (max === g) h = ((b - r) / delta + 2) * 60;
+            else h = ((r - g) / delta + 4) * 60;
+          }
+
+          if (h < 20 || h >= 340) hueDist.red += 1;
+          else if (h < 45) hueDist.orange += 1;
+          else if (h < 70) hueDist.yellow += 1;
+          else if (h < 160) hueDist.green += 1;
+          else if (h < 200) hueDist.cyan += 1;
+          else if (h < 260) hueDist.blue += 1;
+          else if (h < 300) hueDist.purple += 1;
+          else hueDist.magenta += 1;
+
+          sumL += lum;
+          sumC += sat;
+          sumVal += (lum * 0.65 + sat * 0.35);
+          if (p.yNorm !== undefined) {
+            focalY += (1.0 - p.yNorm) * lum;
+          }
+        }
+
+        const n = Math.max(1, samplePixels.length);
+        const meanL = sumL / n;
+        const meanC = sumC / n;
+        const meanNorm = Math.max(0, Math.min(1, sumVal / n));
+        const normFocal = focalY / (sumL || 1);
+
+        const ds = this.datasets[this.activeDatasetKey] || this.datasets.atmosphere_aod;
+        const physVal = ds.minVal + meanNorm * (ds.maxVal - ds.minVal);
+
+        const themeScale = (this.themeRoots[this.activeTheme] || this.themeRoots.atmosphere).scale;
+        const octaveShift = meanL > 0.62 ? 1.5 : meanL < 0.3 ? 0.75 : 1.0;
+        const scaleIndex = Math.floor(Math.max(0, Math.min(themeScale.length - 1, normFocal * themeScale.length)));
+        const targetFreq = (themeScale[scaleIndex] || 220) * octaveShift;
+
+        if (this.audioCtx && this.carrierOsc && this.isPlaying) {
+          const now = this.audioCtx.currentTime;
+          this.carrierOsc.frequency.setTargetAtTime(targetFreq, now, 0.06);
+          this.harmOsc.frequency.setTargetAtTime(targetFreq * 1.498, now, 0.06);
+          const cutoff = 280 + meanC * 2600 + meanL * 1400;
+          this.filter.frequency.setTargetAtTime(cutoff, now, 0.08);
+          if (this.panner && this.panner.pan) {
+            this.panner.pan.setTargetAtTime(Math.max(-1, Math.min(1, panVal)), now, 0.05);
+          }
+        }
+
+        let leadHue = 'cyan';
+        let maxH = -1;
+        for (const [k, count] of Object.entries(hueDist)) {
+          if (count > maxH) {
+            maxH = count;
+            leadHue = k;
+          }
+        }
+
+        const leadNames = {
+          red: 'Low Cello (Red / Thermal)',
+          orange: 'French Horn (Orange / Dust)',
+          yellow: 'Warm Harp (Yellow / Solar)',
+          green: 'Woodwinds (Green / Biomass)',
+          cyan: 'Water Harp (Cyan / Marine)',
+          blue: 'Deep Flute (Blue / Oceanic)',
+          purple: 'Celestial Strings (Violet)',
+          magenta: 'Ethereal Synth (Magenta)'
+        };
+
+        const lat = (0.5 - scanY) * 180;
+        const lon = (scanX - 0.5) * 360;
+        const latStr = `${Math.abs(lat).toFixed(1)}° ${lat >= 0 ? 'N' : 'S'}`;
+        const lonStr = `${Math.abs(lon).toFixed(1)}° ${lon >= 0 ? 'E' : 'W'}`;
+
+        let regionStr = 'Global Meridian';
+        if (lat > 60) regionStr = 'Arctic Polar Basin';
+        else if (lat < -60) regionStr = 'Antarctic Southern Ocean';
+        else if (Math.abs(lat) < 24) {
+          if (lon >= -180 && lon < -80) regionStr = 'Equatorial Pacific Basin';
+          else if (lon >= -80 && lon < -30) regionStr = 'Amazonia & Tropical Atlantic';
+          else if (lon >= -30 && lon < 45) regionStr = 'Sahara & Congo Basin';
+          else if (lon >= 45 && lon < 110) regionStr = 'Indian Ocean Monsoon Zone';
+          else regionStr = 'Indo-Pacific Warm Pool';
+        } else {
+          if (lon >= -140 && lon < -50) regionStr = 'North American Continent';
+          else if (lon >= -25 && lon < 55) regionStr = 'Europe & Mediterranean';
+          else if (lon >= 55 && lon < 150) regionStr = 'Central & East Asia';
+          else regionStr = 'Mid-Latitude Ocean Gyre';
+        }
+
+        const state = {
+          isPlaying: this.isPlaying,
+          progress: t,
+          normVal: meanNorm,
+          scanX,
+          scanY,
+          pan: panVal,
+          mode: this.mode,
+          latStr,
+          lonStr,
+          regionStr,
+          physVal: physVal.toFixed(2),
+          unit: ds.unit,
+          targetFreq: Math.round(targetFreq),
+          leadVoice: leadNames[leadHue] || 'Polyphonic Synth',
+          leadHue,
+          hueDist,
+          isAnomaly: physVal >= ds.anomalyThreshold,
+          anomalyText: physVal >= ds.anomalyThreshold ? `⚠ ${ds.anomalyLabel}` : `Nominal ${ds.sphere} Range`
+        };
+
+        this.notifyUpdate(state);
+      }
+    }
+
+    window.earthSonifier = new EarthSonifier();
+
+    // ============================================================================
+    // UI APPLICATION CONTROLLER (app.js logic + visual enhancements)
+    // ============================================================================
+    const home = document.querySelector('#home');
+    const explore = document.querySelector('#explore');
+    const studio = document.querySelector('#studio');
+    const video = document.querySelector('#background-video');
+    const motionButton = document.querySelector('#motion-toggle');
+    const dialog = document.querySelector('#info-dialog');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let motionPaused = reducedMotion.matches;
+
+    function updateMotionButton() {
+      const paused = motionPaused;
+      motionButton.innerHTML = `<span aria-hidden="true">${paused ? '▶' : '❚❚'}</span> ${paused ? 'Play motion' : 'Pause motion'}`;
+      motionButton.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} background motion`);
+    }
+
+    function syncVideo() {
+      if (!video) return;
+      if (home.hidden || motionPaused || document.hidden) video.pause();
+      else video.play().catch(() => {});
+    }
+
+    const validWorlds = ['general', 'lithosphere', 'atmosphere', 'hydrosphere'];
+    const worldToDataset = {
+      general: 'general_precip',
+      lithosphere: 'lithosphere_temp',
+      atmosphere: 'atmosphere_aod',
+      hydrosphere: 'hydrosphere_sst'
+    };
+
+    let currentModalWorld = 'atmosphere';
+
+    function openInfo(eyebrow, title, description, theme = 'general', artHtml = '') {
+      currentModalWorld = theme.toLowerCase();
+      dialog.classList.remove('theme-general', 'theme-lithosphere', 'theme-atmosphere', 'theme-hydrosphere');
+      dialog.classList.add(`theme-${currentModalWorld}`);
+      dialog.setAttribute('data-theme', currentModalWorld);
+      document.querySelector('#dialog-eyebrow').innerHTML = `<span></span> ${eyebrow}`;
+      document.querySelector('#dialog-title').textContent = title;
+      document.querySelector('#dialog-description').textContent = description;
+
+      const artContainer = document.querySelector('#dialog-art');
+      if (artContainer) {
+        if (artHtml) {
+          artContainer.innerHTML = artHtml;
+          artContainer.hidden = false;
+        } else {
+          artContainer.innerHTML = '';
+          artContainer.hidden = true;
+        }
+      }
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+    }
+
+    function closeDialog() {
+      if (dialog.open) dialog.close();
+    }
+
+    // ============================================================================
+    // PAGE 1: PHOTOREALISTIC CINEMATIC EARTH HORIZON FALLBACK behind <video>
+    // ( Ensures the Home page looks like a real orbital Earth video even if
+    //   assets/homepage_background_loop.mp4 is not mounted in a web preview )
+    // ============================================================================
+    const earthFallbackCanvas = document.querySelector('#earth-fallback-canvas');
+    if (earthFallbackCanvas) {
+      const fCtx = earthFallbackCanvas.getContext('2d');
+      let fTime = 0;
+
+      const resizeFallback = () => {
+        earthFallbackCanvas.width = window.innerWidth;
+        earthFallbackCanvas.height = window.innerHeight;
+      };
+      window.addEventListener('resize', resizeFallback);
+      resizeFallback();
+
+      function renderEarthHorizonFallback() {
+        requestAnimationFrame(renderEarthHorizonFallback);
+        if (home.hidden) return;
+        // If actual video has loaded frames and is playing, skip drawing fallback
+        if (video && video.readyState >= 2 && video.videoWidth > 0) return;
+
+        const w = earthFallbackCanvas.width;
+        const h = earthFallbackCanvas.height;
+        if (!motionPaused) fTime += 0.004;
+
+        fCtx.fillStyle = '#03080d';
+        fCtx.fillRect(0, 0, w, h);
+
+        const cx = w * 0.44;
+        const cy = h * 0.52;
+        const R = Math.min(w, h) * 0.52;
+
+        // Atmospheric limb glow
+        const limb = fCtx.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.28);
+        limb.addColorStop(0, 'rgba(20, 110, 150, 0.45)');
+        limb.addColorStop(0.55, 'rgba(111, 212, 178, 0.22)');
+        limb.addColorStop(1, 'rgba(4, 11, 16, 0)');
+        fCtx.fillStyle = limb;
+        fCtx.beginPath();
+        fCtx.arc(cx, cy, R * 1.28, 0, Math.PI * 2);
+        fCtx.fill();
+
+        // Clipped planetary body with swirling clouds and oceans
+        fCtx.save();
+        fCtx.beginPath();
+        fCtx.arc(cx, cy, R, 0, Math.PI * 2);
+        fCtx.clip();
+
+        const oceanGrad = fCtx.createRadialGradient(cx - R * 0.28, cy - R * 0.25, R * 0.08, cx, cy, R);
+        oceanGrad.addColorStop(0, '#165b7d');
+        oceanGrad.addColorStop(0.5, '#092e46');
+        oceanGrad.addColorStop(0.85, '#041320');
+        oceanGrad.addColorStop(1, '#02070c');
+        fCtx.fillStyle = oceanGrad;
+        fCtx.fillRect(cx - R, cy - R, R * 2, R * 2);
+
+        // Moving atmospheric cloud bands & continental glow
+        for (let i = 0; i < 28; i++) {
+          const angle = (i / 28) * Math.PI * 2 + fTime;
+          const latY = cy + Math.sin(i * 1.7) * R * 0.72;
+          const lonX = cx + Math.cos(angle) * R * 0.68;
+          const rad = R * (0.14 + (i % 5) * 0.04);
+          const cloud = fCtx.createRadialGradient(lonX, latY, 2, lonX, latY, rad);
+          if (i % 3 === 0) {
+            cloud.addColorStop(0, 'rgba(111, 212, 178, 0.22)');
+            cloud.addColorStop(1, 'rgba(111, 212, 178, 0)');
+          } else {
+            cloud.addColorStop(0, 'rgba(225, 242, 250, 0.18)');
+            cloud.addColorStop(1, 'rgba(225, 242, 250, 0)');
+          }
+          fCtx.fillStyle = cloud;
+          fCtx.beginPath();
+          fCtx.arc(lonX, latY, rad, 0, Math.PI * 2);
+          fCtx.fill();
+        }
+
+        // Day/Night terminator shadow
+        const nightShadow = fCtx.createLinearGradient(cx - R * 0.5, cy - R * 0.4, cx + R * 0.85, cy + R * 0.65);
+        nightShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        nightShadow.addColorStop(0.58, 'rgba(2, 8, 14, 0.45)');
+        nightShadow.addColorStop(1, 'rgba(2, 6, 10, 0.94)');
+        fCtx.fillStyle = nightShadow;
+        fCtx.fillRect(cx - R, cy - R, R * 2, R * 2);
+        fCtx.restore();
+      }
+      renderEarthHorizonFallback();
+    }
+
+    // ============================================================================
+    // STUDIO STATE, SATELLITE MAP RENDERING & LIVE OSCILLOSCOPE
+    // ============================================================================
+    const mapCanvas = document.querySelector('#studio-map-canvas');
+    const mapViewport = document.querySelector('#map-viewport');
+    const scanlineV = document.querySelector('#scanline-v');
+    const scanlineH = document.querySelector('#scanline-h');
+    const scanOrb = document.querySelector('#scan-target-orb');
+    const probePin = document.querySelector('#probe-pin');
+
+    const playBtn = document.querySelector('#studio-play-btn');
+    const playSymbol = document.querySelector('#studio-play-symbol');
+    const playText = document.querySelector('#studio-play-text');
+    const resetBtn = document.querySelector('#studio-reset-btn');
+    const scrubber = document.querySelector('#studio-scrubber');
+    const scrubCurrTime = document.querySelector('#scrub-curr-time');
+    const speedSlider = document.querySelector('#studio-speed-slider');
+    const speedIndicator = document.querySelector('#speed-indicator');
+    const droneSlider = document.querySelector('#studio-drone-slider');
+    const droneIndicator = document.querySelector('#drone-indicator');
+    const volSlider = document.querySelector('#studio-vol-slider');
+    const volIndicator = document.querySelector('#vol-indicator');
+    const datasetSelect = document.querySelector('#dataset-select');
+
+    const sphereNameBadge = document.querySelector('#studio-sphere-name');
+    const studioSphereDisplay = document.querySelector('#studio-sphere-display');
+    const studioNarrative = document.querySelector('#studio-narrative');
+    const studioLayerTag = document.querySelector('#studio-layer-tag');
+    const rampMin = document.querySelector('#ramp-min');
+    const rampMax = document.querySelector('#ramp-max');
+    const rampPointer = document.querySelector('#ramp-pointer');
+
+    // Telemetry Elements
+    const telPhysVal = document.querySelector('#tel-phys-val');
+    const telUnit = document.querySelector('#tel-unit');
+    const telAnomaly = document.querySelector('#tel-anomaly');
+    const telCoords = document.querySelector('#tel-coords');
+    const telRegion = document.querySelector('#tel-region');
+    const telVoice = document.querySelector('#tel-voice');
+    const telFreq = document.querySelector('#tel-freq');
+    const hueMeterGrid = document.querySelector('#hue-meter-grid');
+
+    // Build 8 Hue Meters
+    const hueKeys = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple', 'magenta'];
+    const hueColors = {
+      red: '#ef4444',
+      orange: '#f97316',
+      yellow: '#eab308',
+      green: '#22c55e',
+      cyan: '#06b6d4',
+      blue: '#3b82f6',
+      purple: '#a855f7',
+      magenta: '#ec4899'
+    };
+    const hueBarFills = {};
+    if (hueMeterGrid) {
+      hueMeterGrid.innerHTML = '';
+      hueKeys.forEach(k => {
+        const item = document.createElement('div');
+        item.className = 'hue-bar-item';
+        item.innerHTML = `
+          <span class="hue-bar-name">${k.slice(0, 3)}</span>
+          <div class="hue-bar-track">
+            <div class="hue-bar-fill" style="background:${hueColors[k]}; height:12%;"></div>
+          </div>
+        `;
+        hueMeterGrid.appendChild(item);
+        hueBarFills[k] = item.querySelector('.hue-bar-fill');
+      });
+    }
+
+    /**
+     * Draw High-Res Procedural NASA Satellite Map + Graticule Grid
+     */
+    function drawProceduralMap(ctx, width, height, ds) {
+      const imgData = ctx.createImageData(width, height);
+      const data = imgData.data;
+
+      for (let y = 0; y < height; y++) {
+        const latNorm = y / height;
+        for (let x = 0; x < width; x++) {
+          const lonNorm = x / width;
+          const idx = (y * width + x) * 4;
+          const sample = sampleScientificRaster(lonNorm, latNorm, ds.theme);
+          data[idx] = sample.r;
+          data[idx + 1] = sample.g;
+          data[idx + 2] = sample.b;
+          data[idx + 3] = 255;
+        }
+      }
+      ctx.putImageData(imgData, 0, 0);
+
+      // Overlay scientific graticule grid lines & coordinate labels
+      ctx.save();
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.11)';
+      ctx.lineWidth = 1;
+      ctx.font = '500 11px "JetBrains Mono", monospace';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.42)';
+
+      // Latitude lines (60N, 30N, EQ, 30S, 60S)
+      const lats = [
+        { y: height * (30 / 180), label: '60°N' },
+        { y: height * (60 / 180), label: '30°N' },
+        { y: height * 0.5,        label: '0° EQ' },
+        { y: height * (120 / 180), label: '30°S' },
+        { y: height * (150 / 180), label: '60°S' }
+      ];
+      lats.forEach(l => {
+        ctx.beginPath();
+        ctx.moveTo(0, l.y);
+        ctx.lineTo(width, l.y);
+        ctx.stroke();
+        ctx.fillText(l.label, 12, l.y - 5);
+      });
+
+      // Longitude lines
+      for (let i = 1; i < 6; i++) {
+        const x = (width / 6) * i;
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function applyStudioTheme(themeName) {
+      if (!studio) return;
+      const theme = (themeName || 'atmosphere').toLowerCase();
+      studio.classList.remove('theme-general', 'theme-lithosphere', 'theme-atmosphere', 'theme-hydrosphere');
+      studio.classList.add(`theme-${theme}`);
+      studio.setAttribute('data-theme', theme);
+
+      // Highlight matching world button in top header
+      document.querySelectorAll('[data-world-switch]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.worldSwitch === theme);
+      });
+
+      const sphereCapitalized = theme.charAt(0).toUpperCase() + theme.slice(1);
+      if (sphereNameBadge) sphereNameBadge.textContent = sphereCapitalized;
+      if (studioSphereDisplay) studioSphereDisplay.textContent = sphereCapitalized;
+
+      const dsKey = worldToDataset[theme];
+      const ds = window.earthSonifier?.datasets?.[dsKey];
+      if (ds) {
+        if (studioNarrative) studioNarrative.textContent = ds.sub;
+        if (studioLayerTag) studioLayerTag.textContent = ds.title;
+        if (rampMin) rampMin.textContent = ds.rampMin;
+        if (rampMax) rampMax.textContent = ds.rampMax;
+      }
+    }
+
+    async function mountStudioWorld(sphereKey) {
+      const normKey = (sphereKey || 'atmosphere').toLowerCase();
+      const dsKey = worldToDataset[normKey] || 'atmosphere_aod';
+
+      applyStudioTheme(normKey);
+      if (datasetSelect) datasetSelect.value = dsKey;
+      await mountStudioDataset(dsKey);
+    }
+
+    async function mountStudioDataset(dsKey) {
+      if (!window.earthSonifier) return;
+
+      const syncDs = window.earthSonifier.datasets?.[dsKey];
+      if (syncDs) {
+        applyStudioTheme(syncDs.theme);
+        if (datasetSelect) datasetSelect.value = dsKey;
+        if (studioSphereDisplay) studioSphereDisplay.textContent = syncDs.sphere;
+        if (studioNarrative) studioNarrative.textContent = syncDs.sub;
+        if (studioLayerTag) studioLayerTag.textContent = syncDs.title;
+        if (rampMin) rampMin.textContent = syncDs.rampMin;
+        if (rampMax) rampMax.textContent = syncDs.rampMax;
+        if (telUnit) telUnit.textContent = syncDs.unit;
+      }
+
+      const ds = await window.earthSonifier.loadDataset(dsKey);
+
+      applyStudioTheme(ds.theme);
+      if (sphereNameBadge) sphereNameBadge.textContent = ds.sphere;
+      if (studioSphereDisplay) studioSphereDisplay.textContent = ds.sphere;
+      if (studioNarrative) studioNarrative.textContent = ds.sub;
+      if (studioLayerTag) studioLayerTag.textContent = ds.title;
+      if (rampMin) rampMin.textContent = ds.rampMin;
+      if (rampMax) rampMax.textContent = ds.rampMax;
+      if (telUnit) telUnit.textContent = ds.unit;
+
+      if (mapCanvas) {
+        mapCanvas.width = 1024;
+        mapCanvas.height = 512;
+        const ctx = mapCanvas.getContext('2d');
+        if (window.earthSonifier.imgSource && window.earthSonifier.imgSource.complete && window.earthSonifier.imgSource.naturalWidth > 0) {
+          try {
+            ctx.drawImage(window.earthSonifier.imgSource, 0, 0, 1024, 512);
+          } catch (e) {
+            drawProceduralMap(ctx, 1024, 512, ds);
+          }
+        } else {
+          drawProceduralMap(ctx, 1024, 512, ds);
+        }
+      }
+
+      updateScanlineMode(window.earthSonifier.mode);
+    }
+
+    function updateScanlineMode(mode) {
+      if (!scanlineV || !scanlineH || !scanOrb) return;
+      if (mode === 'we') {
+        scanlineV.style.display = 'block';
+        scanlineH.style.display = 'none';
+        scanOrb.style.display = 'none';
+      } else if (mode === 'ns') {
+        scanlineV.style.display = 'none';
+        scanlineH.style.display = 'block';
+        scanOrb.style.display = 'none';
+      } else if (mode === 'spiral') {
+        scanlineV.style.display = 'none';
+        scanlineH.style.display = 'none';
+        scanOrb.style.display = 'block';
+      }
+    }
+
+    // Live Oscilloscope Visualizer Loop in Studio
+    const oscCanvas = document.querySelector('#studio-osc-canvas');
+    if (oscCanvas) {
+      const oCtx = oscCanvas.getContext('2d');
+      const freqData = new Uint8Array(128);
+      let idleWavePhase = 0;
+
+      function renderOscilloscope() {
+        requestAnimationFrame(renderOscilloscope);
+        if (studio.hidden) return;
+
+        const w = oscCanvas.width;
+        const h = oscCanvas.height;
+        oCtx.clearRect(0, 0, w, h);
+
+        const accent = getComputedStyle(studio).getPropertyValue('--theme-accent').trim() || '#6fd4b2';
+        oCtx.strokeStyle = accent;
+        oCtx.lineWidth = 2;
+        oCtx.beginPath();
+
+        if (window.earthSonifier && window.earthSonifier.isPlaying && window.earthSonifier.analyser) {
+          window.earthSonifier.analyser.getByteTimeDomainData(freqData);
+          const sliceWidth = w / freqData.length;
+          let x = 0;
+          for (let i = 0; i < freqData.length; i++) {
+            const v = freqData[i] / 128.0;
+            const y = (v * h) / 2;
+            if (i === 0) oCtx.moveTo(x, y);
+            else oCtx.lineTo(x, y);
+            x += sliceWidth;
+          }
+        } else {
+          idleWavePhase += 0.04;
+          for (let x = 0; x < w; x += 4) {
+            const y = h / 2 + Math.sin(x * 0.04 + idleWavePhase) * 4 * Math.sin((x / w) * Math.PI);
+            if (x === 0) oCtx.moveTo(x, y);
+            else oCtx.lineTo(x, y);
+          }
+        }
+        oCtx.stroke();
+      }
+      renderOscilloscope();
+    }
+
+    // Connect Sonifier Engine Callbacks
+    if (window.earthSonifier) {
+      window.earthSonifier.onUpdate(state => {
+        // 1. Position Scanline
+        if (state.mode === 'we' && scanlineV) {
+          scanlineV.style.left = `${(state.scanX * 100).toFixed(2)}%`;
+        } else if (state.mode === 'ns' && scanlineH) {
+          scanlineH.style.top = `${(state.scanY * 100).toFixed(2)}%`;
+        } else if (state.mode === 'spiral' && scanOrb) {
+          scanOrb.style.left = `${(state.scanX * 100).toFixed(2)}%`;
+          scanOrb.style.top = `${(state.scanY * 100).toFixed(2)}%`;
+        }
+
+        // 2. Telemetry Values
+        if (telPhysVal && state.physVal !== undefined) telPhysVal.textContent = state.physVal;
+        if (telUnit && state.unit) telUnit.textContent = state.unit;
+        if (telAnomaly && state.anomalyText) {
+          telAnomaly.textContent = state.anomalyText;
+          telAnomaly.style.color = state.isAnomaly ? 'var(--theme-accent)' : 'var(--mist)';
+        }
+        if (telCoords && state.latStr) telCoords.textContent = `${state.latStr}, ${state.lonStr}`;
+        if (telRegion && state.regionStr) telRegion.textContent = state.regionStr;
+        if (telVoice && state.leadVoice) telVoice.textContent = state.leadVoice;
+        if (telFreq && state.targetFreq) {
+          const panPct = Math.round(Math.abs(state.pan || 0) * 100);
+          const panDir = state.pan < -0.05 ? `${panPct}% L` : state.pan > 0.05 ? `${panPct}% R` : 'Center';
+          telFreq.textContent = `Pitch: ${state.targetFreq} Hz • Stereo: ${panDir}`;
+          const waveReadout = document.querySelector('#wave-live-readout');
+          if (waveReadout) {
+            waveReadout.textContent = `${state.targetFreq} Hz • PAN ${panDir.toUpperCase()}`;
+          }
+        }
+
+        // Update Calibrated Ramp Pointer
+        if (rampPointer && state.normVal !== undefined) {
+          const clampedPct = Math.max(2, Math.min(98, state.normVal * 100));
+          rampPointer.style.left = `${clampedPct.toFixed(1)}%`;
+        }
+
+        // 3. Hue-Wheel Meters
+        if (state.hueDist) {
+          const maxCount = Math.max(1, ...Object.values(state.hueDist));
+          for (const [k, count] of Object.entries(state.hueDist)) {
+            if (hueBarFills[k]) {
+              const pct = Math.max(8, Math.round((count / maxCount) * 100));
+              hueBarFills[k].style.height = `${pct}%`;
+            }
+          }
+        }
+
+        // 4. Scrubber & Time
+        if (scrubber && !scrubber.matches(':active') && state.progress !== undefined) {
+          scrubber.value = Math.round(state.progress * 1000);
+        }
+        if (scrubCurrTime && state.progress !== undefined) {
+          const totalSec = window.earthSonifier.durationSec || 36;
+          const curSec = Math.floor(state.progress * totalSec);
+          const m = Math.floor(curSec / 60).toString().padStart(2, '0');
+          const s = (curSec % 60).toString().padStart(2, '0');
+          scrubCurrTime.textContent = `${m}:${s}`;
+        }
+
+        // 5. Playing state class
+        const engineStatusText = document.querySelector('#engine-status-text');
+        if (state.isPlaying) {
+          studio.classList.add('playing');
+          if (playSymbol) playSymbol.textContent = '❚❚';
+          if (playText) playText.textContent = 'Pause Sonifier';
+          if (engineStatusText) engineStatusText.textContent = 'Synthesizing Live Telemetry';
+        } else {
+          studio.classList.remove('playing');
+          if (playSymbol) playSymbol.textContent = '▶';
+          if (playText) playText.textContent = 'Play Sonifier';
+          if (engineStatusText) engineStatusText.textContent = 'Web Audio Synthesizer Ready';
+        }
+      });
+    }
+
+    // Setup Transport Buttons
+    if (playBtn) {
+      playBtn.addEventListener('click', () => {
+        if (window.earthSonifier) window.earthSonifier.togglePlay();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if ( probePin ) probePin.style.display = 'none';
+        if (window.earthSonifier) window.earthSonifier.seek(0);
+      });
+    }
+
+    if (scrubber) {
+      scrubber.addEventListener('input', e => {
+        if (window.earthSonifier) {
+          window.earthSonifier.seek(Number(e.target.value) / 1000);
+        }
+      });
+    }
+
+    // Sweep Mode Tabs
+    document.querySelectorAll('[data-sweep]').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('[data-sweep]').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const mode = tab.dataset.sweep;
+        if (window.earthSonifier) {
+          window.earthSonifier.setMode(mode);
+          updateScanlineMode(mode);
+        }
+      });
+    });
+
+    // Audio Sliders
+    if (speedSlider) {
+      speedSlider.addEventListener('input', e => {
+        const val = Number(e.target.value);
+        if (speedIndicator) speedIndicator.textContent = `${val.toFixed(2)}x`;
+        if (window.earthSonifier) window.earthSonifier.setSpeed(val);
+      });
+    }
+
+    if (droneSlider) {
+      droneSlider.addEventListener('input', e => {
+        const val = Number(e.target.value);
+        if (droneIndicator) droneIndicator.textContent = `${Math.round(val * 100)}%`;
+        if (window.earthSonifier) window.earthSonifier.setDroneLevel(val);
+      });
+    }
+
+    if (volSlider) {
+      volSlider.addEventListener('input', e => {
+        const val = Number(e.target.value);
+        if (volIndicator) volIndicator.textContent = `${Math.round(val * 100)}%`;
+        if (window.earthSonifier) window.earthSonifier.setVolume(val);
+      });
+    }
+
+    // Dataset Switcher
+    if (datasetSelect) {
+      datasetSelect.addEventListener('change', e => {
+        mountStudioDataset(e.target.value);
+      });
+    }
+
+    // Map Viewport Interactive Point & Drag Probe
+    let isProbingMap = false;
+    function probeMapAtEvent(e, triggerPlay = false) {
+      if (!mapViewport) return;
+      const rect = mapViewport.getBoundingClientRect();
+      const xNorm = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      const yNorm = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
+
+      const lat = ((0.5 - yNorm) * 180).toFixed(1);
+      const lon = ((xNorm - 0.5) * 360).toFixed(1);
+
+      if (probePin) {
+        probePin.style.display = 'block';
+        probePin.style.left = `${(xNorm * 100).toFixed(1)}%`;
+        probePin.style.top = `${(yNorm * 100).toFixed(1)}%`;
+        probePin.setAttribute('data-Readout', `${Math.abs(lat)}°${lat >= 0 ? 'N' : 'S'}, ${Math.abs(lon)}°${lon >= 0 ? 'E' : 'W'}`);
+      }
+
+      if (window.earthSonifier) {
+        if (window.earthSonifier.mode === 'we') window.earthSonifier.seek(xNorm);
+        else if (window.earthSonifier.mode === 'ns') window.earthSonifier.seek(yNorm);
+        else window.earthSonifier.seek(xNorm);
+
+        if (triggerPlay && !window.earthSonifier.isPlaying) {
+          window.earthSonifier.play();
+        }
+      }
+    }
+
+    if (mapViewport) {
+      mapViewport.addEventListener('pointerdown', e => {
+        isProbingMap = true;
+        probeMapAtEvent(e, true);
+      });
+      window.addEventListener('pointermove', e => {
+        if (isProbingMap) probeMapAtEvent(e, false);
+      });
+      window.addEventListener('pointerup', () => {
+        isProbingMap = false;
+      });
+    }
+
+    // Card Spotlight Effect on Explore Tiles
+    document.querySelectorAll('.explore-tile').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+        card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+      });
+    });
+
+    // Keyboard shortcuts for studio
+    window.addEventListener('keydown', e => {
+      if (studio.hidden) return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (window.earthSonifier) window.earthSonifier.togglePlay();
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault();
+        if (window.earthSonifier) {
+          window.earthSonifier.seek(window.earthSonifier.progress + 0.02);
+        }
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault();
+        if (window.earthSonifier) {
+          window.earthSonifier.seek(window.earthSonifier.progress - 0.02);
+        }
+      } else if (e.key === '1') {
+        document.querySelector('[data-sweep="we"]')?.click();
+      } else if (e.key === '2') {
+        document.querySelector('[data-sweep="ns"]')?.click();
+      } else if (e.key === '3') {
+        document.querySelector('[data-sweep="spiral"]')?.click();
+      }
+    });
+
+    // ============================================================================
+    // DIRECT & RELIABLE ROUTING ENGINE (3 Pages: #home, #explore, #studio)
+    // ============================================================================
+    let currentActivePage = 'home';
+    let currentSphereTarget = 'atmosphere';
+
+    function navigateToPage(targetPage, sphereKey = '', focusHeading = false) {
+      const cleanPage = (targetPage || 'home').toLowerCase();
+      if (validWorlds.includes(cleanPage)) {
+        currentActivePage = 'studio';
+        currentSphereTarget = cleanPage;
+      } else if (cleanPage === 'studio') {
+        currentActivePage = 'studio';
+        if (sphereKey && validWorlds.includes(sphereKey.toLowerCase())) {
+          currentSphereTarget = sphereKey.toLowerCase();
+        }
+      } else if (cleanPage === 'explore') {
+        currentActivePage = 'explore';
+      } else {
+        currentActivePage = 'home';
+      }
+
+      // Sync URL hash without getting blocked in sandboxed iframes
+      const desiredHash = currentActivePage === 'studio'
+        ? `#studio/${currentSphereTarget}`
+        : `#${currentActivePage}`;
+      try {
+        if (window.location.hash !== desiredHash) {
+          history.replaceState(null, '', desiredHash);
+        }
+      } catch (err) {
+        // Ignore security error in restricted iframe environments
+      }
+
+      // Show active section and hide others immediately
+      home.hidden = currentActivePage !== 'home';
+      explore.hidden = currentActivePage !== 'explore';
+      studio.hidden = currentActivePage !== 'studio';
+
+      // Update top navigation active pills
+      document.querySelectorAll('[data-nav]').forEach(link => {
+        const navVal = link.dataset.nav;
+        const active = navVal === currentActivePage;
+        link.classList.toggle('active', active);
+        if (active) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+
+      if (currentActivePage === 'studio') {
+        document.title = 'Sonifier Studio — Jukebox Earth in Sound';
+        mountStudioWorld(currentSphereTarget);
+        if (dialog.open) dialog.close();
+      } else if (currentActivePage === 'explore') {
+        document.title = 'Explore our planet — Jukebox';
+        if (window.earthSonifier && window.earthSonifier.isPlaying) {
+          window.earthSonifier.pause();
+        }
+        if (dialog.open) dialog.close();
+        if (focusHeading) document.querySelector('#explore-heading')?.focus({ preventScroll: true });
+      } else {
+        document.title = 'Jukebox — The planet has a rhythm.';
+        if (dialog.open) dialog.close();
+        if (window.earthSonifier && window.earthSonifier.isPlaying) {
+          window.earthSonifier.pause();
+        }
+      }
+
+      const section = currentActivePage === 'home' ? home : currentActivePage === 'explore' ? explore : studio;
+      section.classList.remove('page-enter');
+      requestAnimationFrame(() => section.classList.add('page-enter'));
+      window.scrollTo(0, 0);
+      syncVideo();
+    }
+
+    function routeFromHash(focusHeading = false) {
+      const hash = window.location.hash.toLowerCase().replace('#', '');
+      const parts = hash.split('/');
+      const routeName = parts[0] || 'home';
+      const subTarget = parts[1] || '';
+      navigateToPage(routeName, subTarget, focusHeading);
+    }
+
+    // Bind explicit click handlers on all nav links so Home / Explore / Studio always open reliably
+    document.querySelectorAll('[data-nav]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        navigateToPage(link.dataset.nav, currentSphereTarget, true);
+      });
+    });
+
+    // Bind explicit click handlers on brand and route links
+    document.querySelectorAll('[data-route-link]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        navigateToPage(link.dataset.routeLink, '', true);
+      });
+    });
+
+    // Bind explicit click handlers on the 4 World Quick-Switch buttons in the header
+    document.querySelectorAll('[data-world-switch]').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        const worldKey = btn.dataset.worldSwitch;
+        navigateToPage('studio', worldKey, false);
+      });
+    });
+
+    // Studio "Back to Explore" button
+    const studioBackBtn = document.querySelector('#studio-back-btn');
+    if (studioBackBtn) {
+      studioBackBtn.addEventListener('click', e => {
+        e.preventDefault();
+        navigateToPage('explore', '', true);
+      });
+    }
+
+    // Quick Listen button on Home Page
+    const quickListenBtn = document.querySelector('#home-quick-listen');
+    if (quickListenBtn) {
+      quickListenBtn.addEventListener('click', e => {
+        e.preventDefault();
+        navigateToPage('studio', 'atmosphere', false);
+        setTimeout(() => {
+          if (window.earthSonifier && !window.earthSonifier.isPlaying) {
+            window.earthSonifier.play();
+          }
+        }, 120);
+      });
+    }
+
+    // Launch button inside info dialog
+    const dialogLaunchBtn = document.querySelector('#dialog-launch-btn');
+    if (dialogLaunchBtn) {
+      dialogLaunchBtn.addEventListener('click', e => {
+        e.preventDefault();
+        if (dialog.open) dialog.close();
+        navigateToPage('studio', currentModalWorld, false);
+      });
+    }
+
+    motionButton.addEventListener('click', () => {
+      motionPaused = !motionPaused;
+      syncVideo();
+      updateMotionButton();
+    });
+
+    if (video) {
+      video.addEventListener('play', updateMotionButton);
+      video.addEventListener('pause', updateMotionButton);
+    }
+    document.addEventListener('visibilitychange', syncVideo);
+    reducedMotion.addEventListener('change', event => {
+      motionPaused = event.matches;
+      syncVideo();
+      updateMotionButton();
+    });
+
+    window.addEventListener('hashchange', () => routeFromHash(true));
+
+    document.querySelector('[data-about]').addEventListener('click', () => {
+      openInfo(
+        'THE JUKEBOX PROJECT',
+        'A new perspective on our planet.',
+        'Jukebox is a real-time sonification engine that converts NASA Earth observation imagery into spatial music. Built for blind and low-vision users, perceptive scientists, and curious explorers to experience the rhythms of our changing planet.',
+        'general'
+      );
+    });
+
+    // Click any sphere card on Page 2 -> directly opens the Studio page in that sphere's theme
+    document.querySelectorAll('[data-world]').forEach(tile => {
+      tile.addEventListener('click', e => {
+        e.preventDefault();
+        const world = tile.dataset.world;
+        const theme = world.toLowerCase();
+        navigateToPage('studio', theme, false);
+      });
+    });
+
+    document.querySelector('.dialog-close').addEventListener('click', closeDialog);
+    document.querySelector('.dialog-done').addEventListener('click', closeDialog);
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) {
+        const rect = dialog.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
+          closeDialog();
+        }
+      }
+    });
+
+    routeFromHash();
+    updateMotionButton();
+  </script>
 </body>
 </html>
