@@ -498,6 +498,14 @@ function route(focusHeading = false) {
   explore.hidden = activePage !== 'explore';
   studio.hidden = activePage !== 'studio';
 
+  // Ensure worlds bar is hidden on home and explore pages
+  document.body.classList.toggle('is-home', activePage === 'home');
+  document.body.classList.toggle('is-explore', activePage === 'explore');
+  const worldsBar = document.querySelector('.header-worlds-bar');
+  if (worldsBar) {
+    worldsBar.style.display = (activePage === 'home' || activePage === 'explore') ? 'none' : '';
+  }
+
   document.querySelectorAll('[data-nav]').forEach(link => {
     const navVal = link.dataset.nav;
     const active = navVal === activePage;
