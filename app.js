@@ -1,581 +1,349 @@
-const home = document.querySelector('#home');
-const explore = document.querySelector('#explore');
-const studio = document.querySelector('#studio');
-const video = document.querySelector('#background-video');
-const motionButton = document.querySelector('#motion-toggle');
-const dialog = document.querySelector('#info-dialog');
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let motionPaused = reducedMotion.matches;
+(function () {
+  "use strict";
+  const $ = selector => document.querySelector(selector);
+  const home = $("#home"), explore = $("#explore"), studio = $("#studio");
+  const video = $("#background-video"), motionButton = $("#motion-toggle"), dialog = $("#info-dialog");
+  const libraryDialog = $("#studio-image-library");
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+  let motionPaused = reducedMotion.matches, sphere = "atmosphere", page = "home";
+  let manifest, selected, scan, selectionRevision = 0, stripsRendered = false, positionEditing = false;
+  const validWorlds = ["general", "lithosphere", "atmosphere", "hydrosphere"];
+  const payloads = new Map();
+  const defaults = { atmosphere: "atmosphere/wildfire_smoke.png", lithosphere: "lithosphere/active_fires_robinson.png",
+    hydrosphere: "hydrosphere/sea_surface_temperature_global.jpg", general: "general/global_precipitation_rate.png" };
+  const titles = { atmosphere: "Atmosphere", lithosphere: "Lithosphere", hydrosphere: "Hydrosphere", general: "General" };
+  const player = new StudioPlayer(updatePlayback);
+  window.studioPlayer = player;
 
-function updateMotionButton() {
-  const paused = motionPaused || video.paused;
-  motionButton.innerHTML = `<span aria-hidden="true">${paused ? '▷' : 'Ⅱ'}</span> ${paused ? 'Play motion' : 'Pause motion'}`;
-  motionButton.setAttribute('aria-label', `${paused ? 'Play' : 'Pause'} background video`);
-}
-
-function syncVideo() {
-  if (home.hidden || motionPaused || document.hidden) video.pause();
-  else video.play().catch(updateMotionButton);
-}
-
-const worldDescriptions = {
-  General: 'The big picture: a place to discover how Earth’s systems connect.',
-  Lithosphere: 'Solid ground: a place to explore Earth’s landscapes and geological patterns.',
-  Atmosphere: 'Above and beyond: a place to discover the air, weather, and sky around us.',
-  Hydrosphere: 'Into the blue: a place to explore Earth’s oceans, currents, and water.'
-};
-
-const validWorlds = ['general', 'lithosphere', 'atmosphere', 'hydrosphere'];
-
-const worldToDataset = {
-  general: 'general_precip',
-  lithosphere: 'lithosphere_temp',
-  atmosphere: 'atmosphere_aod',
-  hydrosphere: 'hydrosphere_sst'
-};
-
-let currentModalWorld = 'atmosphere';
-
-function openInfo(eyebrow, title, description, theme = 'general', artHtml = '') {
-  currentModalWorld = theme.toLowerCase();
-  dialog.classList.remove('theme-general', 'theme-lithosphere', 'theme-atmosphere', 'theme-hydrosphere');
-  dialog.classList.add(`theme-${currentModalWorld}`);
-  dialog.setAttribute('data-theme', currentModalWorld);
-
-  document.querySelector('#dialog-eyebrow').textContent = eyebrow;
-  document.querySelector('#dialog-title').textContent = title;
-  document.querySelector('#dialog-description').textContent = description;
-
-  const artContainer = document.querySelector('#dialog-art');
-  if (artContainer) {
-    if (artHtml) {
-      artContainer.innerHTML = artHtml;
-      artContainer.hidden = false;
-    } else {
-      artContainer.innerHTML = '';
-      artContainer.hidden = true;
-    }
+  function syncVideo() {
+    if (page !== "home" || motionPaused || document.hidden) video.pause();
+    else video.play().catch(() => {});
+    motionButton.innerHTML = `<span aria-hidden="true">${motionPaused ? "▶" : "❚❚"}</span> ${motionPaused ? "Play" : "Pause"} motion`;
   }
+    const earthFallbackCanvas = document.querySelector('#earth-fallback-canvas');
+    if (earthFallbackCanvas) {
+      const fCtx = earthFallbackCanvas.getContext('2d');
+      let fTime = 0;
 
-  if (!dialog.open) {
-    dialog.showModal();
-  }
-}
+      const resizeFallback = () => {
+        earthFallbackCanvas.width = window.innerWidth;
+        earthFallbackCanvas.height = window.innerHeight;
+      };
+      window.addEventListener('resize', resizeFallback);
+      resizeFallback();
 
-function closeDialog() {
-  if (dialog.open) dialog.close();
-}
+      function renderEarthHorizonFallback() {
+        requestAnimationFrame(renderEarthHorizonFallback);
+        if (home.hidden) return;
+        // If actual video has loaded frames and is playing, skip drawing fallback
+        if (video && video.readyState >= 2 && video.videoWidth > 0) return;
 
-// ============================================================================
-// STUDIO STATE & RENDERING ENGINE
-// ============================================================================
+        const w = earthFallbackCanvas.width;
+        const h = earthFallbackCanvas.height;
+        if (!motionPaused) fTime += 0.004;
 
-const mapCanvas = document.querySelector('#studio-map-canvas');
-const mapViewport = document.querySelector('#map-viewport');
-const scanlineV = document.querySelector('#scanline-v');
-const scanlineH = document.querySelector('#scanline-h');
-const scanOrb = document.querySelector('#scan-target-orb');
-const probePin = document.querySelector('#probe-pin');
-const playBtn = document.querySelector('#studio-play-btn');
-const playSymbol = document.querySelector('#studio-play-symbol');
-const playText = document.querySelector('#studio-play-text');
-const resetBtn = document.querySelector('#studio-reset-btn');
-const scrubber = document.querySelector('#studio-scrubber');
-const scrubCurrTime = document.querySelector('#scrub-curr-time');
-const scrubTotalTime = document.querySelector('#scrub-total-time');
-const speedSlider = document.querySelector('#studio-speed-slider');
-const speedIndicator = document.querySelector('#speed-indicator');
-const droneSlider = document.querySelector('#studio-drone-slider');
-const droneIndicator = document.querySelector('#drone-indicator');
-const volSlider = document.querySelector('#studio-vol-slider');
-const volIndicator = document.querySelector('#vol-indicator');
-const datasetSelect = document.querySelector('#dataset-select');
-const sphereNameBadge = document.querySelector('#studio-sphere-name');
-const studioSphereDisplay = document.querySelector('#studio-sphere-display');
-const studioNarrative = document.querySelector('#studio-narrative');
-const studioLayerTag = document.querySelector('#studio-layer-tag');
-const rampMin = document.querySelector('#ramp-min');
-const rampMax = document.querySelector('#ramp-max');
+        fCtx.fillStyle = '#03080d';
+        fCtx.fillRect(0, 0, w, h);
 
-// Telemetry Elements
-const telPhysVal = document.querySelector('#tel-phys-val');
-const telUnit = document.querySelector('#tel-unit');
-const telAnomaly = document.querySelector('#tel-anomaly');
-const telCoords = document.querySelector('#tel-coords');
-const telRegion = document.querySelector('#tel-region');
-const telVoice = document.querySelector('#tel-voice');
-const telFreq = document.querySelector('#tel-freq');
-const hueMeterGrid = document.querySelector('#hue-meter-grid');
+        const cx = w * 0.44;
+        const cy = h * 0.52;
+        const R = Math.min(w, h) * 0.52;
 
-// Build 8 Hue Meters
-const hueKeys = ['red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple', 'magenta'];
-const hueColors = {
-  red: '#ef4444',
-  orange: '#f97316',
-  yellow: '#eab308',
-  green: '#22c55e',
-  cyan: '#06b6d4',
-  blue: '#3b82f6',
-  purple: '#a855f7',
-  magenta: '#ec4899'
-};
+        // Atmospheric limb glow
+        const limb = fCtx.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.28);
+        limb.addColorStop(0, 'rgba(20, 110, 150, 0.45)');
+        limb.addColorStop(0.55, 'rgba(111, 212, 178, 0.22)');
+        limb.addColorStop(1, 'rgba(4, 11, 16, 0)');
+        fCtx.fillStyle = limb;
+        fCtx.beginPath();
+        fCtx.arc(cx, cy, R * 1.28, 0, Math.PI * 2);
+        fCtx.fill();
 
-const hueBarFills = {};
-if (hueMeterGrid) {
-  hueMeterGrid.innerHTML = '';
-  hueKeys.forEach(k => {
-    const item = document.createElement('div');
-    item.className = 'hue-bar-item';
-    item.innerHTML = `
-      <span class="hue-bar-name">${k.slice(0, 3)}</span>
-      <div class="hue-bar-track">
-        <div class="hue-bar-fill" style="background:${hueColors[k]}; height:0%;"></div>
-      </div>
-    `;
-    hueMeterGrid.appendChild(item);
-    hueBarFills[k] = item.querySelector('.hue-bar-fill');
-  });
-}
+        // Clipped planetary body with swirling clouds and oceans
+        fCtx.save();
+        fCtx.beginPath();
+        fCtx.arc(cx, cy, R, 0, Math.PI * 2);
+        fCtx.clip();
 
-function drawProceduralMap(ctx, width, height, ds) {
-  const imgData = ctx.createImageData(width, height);
-  const data = imgData.data;
+        const oceanGrad = fCtx.createRadialGradient(cx - R * 0.28, cy - R * 0.25, R * 0.08, cx, cy, R);
+        oceanGrad.addColorStop(0, '#165b7d');
+        oceanGrad.addColorStop(0.5, '#092e46');
+        oceanGrad.addColorStop(0.85, '#041320');
+        oceanGrad.addColorStop(1, '#02070c');
+        fCtx.fillStyle = oceanGrad;
+        fCtx.fillRect(cx - R, cy - R, R * 2, R * 2);
 
-  for (let y = 0; y < height; y++) {
-    const latNorm = y / height;
-    const latAngle = (0.5 - latNorm) * Math.PI;
-    const cosLat = Math.cos(latAngle);
+        // Moving atmospheric cloud bands & continental glow
+        for (let i = 0; i < 28; i++) {
+          const angle = (i / 28) * Math.PI * 2 + fTime;
+          const latY = cy + Math.sin(i * 1.7) * R * 0.72;
+          const lonX = cx + Math.cos(angle) * R * 0.68;
+          const rad = R * (0.14 + (i % 5) * 0.04);
+          const cloud = fCtx.createRadialGradient(lonX, latY, 2, lonX, latY, rad);
+          if (i % 3 === 0) {
+            cloud.addColorStop(0, 'rgba(111, 212, 178, 0.22)');
+            cloud.addColorStop(1, 'rgba(111, 212, 178, 0)');
+          } else {
+            cloud.addColorStop(0, 'rgba(225, 242, 250, 0.18)');
+            cloud.addColorStop(1, 'rgba(225, 242, 250, 0)');
+          }
+          fCtx.fillStyle = cloud;
+          fCtx.beginPath();
+          fCtx.arc(lonX, latY, rad, 0, Math.PI * 2);
+          fCtx.fill();
+        }
 
-    for (let x = 0; x < width; x++) {
-      const lonNorm = x / width;
-      const idx = (y * width + x) * 4;
-
-      let val = 0.5 + 0.35 * Math.sin(lonNorm * Math.PI * 4) * cosLat;
-      if (ds.theme === 'atmosphere') {
-        val = 0.15 + 0.75 * Math.exp(-Math.pow((latNorm - 0.42) * 4, 2)) * Math.max(0, Math.sin(lonNorm * Math.PI * 2.2));
-      } else if (ds.theme === 'hydrosphere') {
-        val = 0.05 + 0.9 * cosLat + 0.15 * Math.sin(lonNorm * 10);
-      } else if (ds.theme === 'lithosphere') {
-        val = 0.2 + 0.6 * Math.sin(lonNorm * 8) * Math.cos(latNorm * 5);
+        // Day/Night terminator shadow
+        const nightShadow = fCtx.createLinearGradient(cx - R * 0.5, cy - R * 0.4, cx + R * 0.85, cy + R * 0.65);
+        nightShadow.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        nightShadow.addColorStop(0.58, 'rgba(2, 8, 14, 0.45)');
+        nightShadow.addColorStop(1, 'rgba(2, 6, 10, 0.94)');
+        fCtx.fillStyle = nightShadow;
+        fCtx.fillRect(cx - R, cy - R, R * 2, R * 2);
+        fCtx.restore();
       }
-
-      val = Math.max(0, Math.min(1, val));
-      if (ds.theme === 'lithosphere') {
-        data[idx] = Math.round(val * 240 + 15);
-        data[idx + 1] = Math.round(val * 180 + 20);
-        data[idx + 2] = Math.round((1 - val) * 160 + 20);
-      } else if (ds.theme === 'atmosphere') {
-        data[idx] = Math.round(val * 200 + 40);
-        data[idx + 1] = Math.round((1 - val) * 160 + 50);
-        data[idx + 2] = Math.round(245 - val * 60);
-      } else if (ds.theme === 'hydrosphere') {
-        data[idx] = Math.round(15 + val * 60);
-        data[idx + 1] = Math.round(50 + val * 180);
-        data[idx + 2] = Math.round(120 + val * 135);
-      } else {
-        data[idx] = Math.round(20 + val * 160);
-        data[idx + 1] = Math.round(80 + val * 175);
-        data[idx + 2] = Math.round(60 + val * 140);
-      }
-      data[idx + 3] = 255;
-    }
-  }
-  ctx.putImageData(imgData, 0, 0);
-}
-
-function applyStudioTheme(themeName) {
-  if (!studio) return;
-  const theme = (themeName || 'atmosphere').toLowerCase();
-  studio.classList.remove('theme-general', 'theme-lithosphere', 'theme-atmosphere', 'theme-hydrosphere');
-  studio.classList.add(`theme-${theme}`);
-  studio.setAttribute('data-theme', theme);
-  const sphereCapitalized = theme.charAt(0).toUpperCase() + theme.slice(1);
-  if (sphereNameBadge) {
-    sphereNameBadge.textContent = sphereCapitalized;
-  }
-  if (studioSphereDisplay) {
-    studioSphereDisplay.textContent = sphereCapitalized;
-  }
-  const dsKey = worldToDataset[theme];
-  const ds = window.earthSonifier?.datasets?.[dsKey];
-  if (ds) {
-    if (studioNarrative) studioNarrative.textContent = ds.sub;
-    if (studioLayerTag) studioLayerTag.textContent = ds.title;
-    if (rampMin) rampMin.textContent = ds.rampMin;
-    if (rampMax) rampMax.textContent = ds.rampMax;
-  }
-}
-
-async function mountStudioWorld(sphereKey) {
-  const normKey = (sphereKey || 'atmosphere').toLowerCase();
-  const dsKey = worldToDataset[normKey] || 'atmosphere_aod';
-  
-  // Synchronously set theme and badge immediately to eliminate any lag or color mismatch
-  applyStudioTheme(normKey);
-
-  if (datasetSelect) datasetSelect.value = dsKey;
-  await mountStudioDataset(dsKey);
-}
-
-async function mountStudioDataset(dsKey) {
-  if (!window.earthSonifier) return;
-  
-  // Pre-apply metadata if dataset definition exists synchronously
-  const syncDs = window.earthSonifier.datasets?.[dsKey];
-  if (syncDs) {
-    applyStudioTheme(syncDs.theme);
-    if (studioSphereDisplay) studioSphereDisplay.textContent = syncDs.sphere;
-    if (studioNarrative) studioNarrative.textContent = syncDs.sub;
-    if (studioLayerTag) studioLayerTag.textContent = syncDs.title;
-    if (rampMin) rampMin.textContent = syncDs.rampMin;
-    if (rampMax) rampMax.textContent = syncDs.rampMax;
-    if (telUnit) telUnit.textContent = syncDs.unit;
-    if (telPhysVal) telPhysVal.textContent = ((syncDs.minVal + syncDs.maxVal) / 2).toFixed(1);
-    if (telAnomaly) telAnomaly.textContent = `Nominal ${syncDs.sphere} Range`;
-  }
-
-  const ds = await window.earthSonifier.loadDataset(dsKey);
-  
-  // Apply theme to Studio Page
-  applyStudioTheme(ds.theme);
-
-  if (sphereNameBadge) sphereNameBadge.textContent = ds.sphere;
-  if (studioSphereDisplay) studioSphereDisplay.textContent = ds.sphere;
-  if (studioNarrative) studioNarrative.textContent = ds.sub;
-  if (studioLayerTag) studioLayerTag.textContent = ds.title;
-  if (rampMin) rampMin.textContent = ds.rampMin;
-  if (rampMax) rampMax.textContent = ds.rampMax;
-  if (telUnit) telUnit.textContent = ds.unit;
-  if (telPhysVal) telPhysVal.textContent = ((ds.minVal + ds.maxVal) / 2).toFixed(1);
-  if (telAnomaly) telAnomaly.textContent = `Nominal ${ds.sphere} Range`;
-
-  // Draw base map image onto canvas
-  if (mapCanvas) {
-    mapCanvas.width = 1024;
-    mapCanvas.height = 512;
-    const ctx = mapCanvas.getContext('2d');
-    if (window.earthSonifier.imgSource && window.earthSonifier.imgSource.complete && window.earthSonifier.imgSource.naturalWidth > 0) {
-      try {
-        ctx.drawImage(window.earthSonifier.imgSource, 0, 0, 1024, 512);
-      } catch (e) {
-        drawProceduralMap(ctx, 1024, 512, ds);
-      }
-    } else {
-      drawProceduralMap(ctx, 1024, 512, ds);
-    }
-  }
-
-  // Set visual mode display
-  updateScanlineMode(window.earthSonifier.mode);
-}
-
-function updateScanlineMode(mode) {
-  if (!scanlineV || !scanlineH || !scanOrb) return;
-  if (mode === 'we') {
-    scanlineV.style.display = 'block';
-    scanlineH.style.display = 'none';
-    scanOrb.style.display = 'none';
-  } else if (mode === 'ns') {
-    scanlineV.style.display = 'none';
-    scanlineH.style.display = 'block';
-    scanOrb.style.display = 'none';
-  } else if (mode === 'spiral') {
-    scanlineV.style.display = 'none';
-    scanlineH.style.display = 'none';
-    scanOrb.style.display = 'block';
-  }
-}
-
-// Connect Sonifier Engine Callbacks
-if (window.earthSonifier) {
-  window.earthSonifier.onUpdate(state => {
-    // 1. Position Scanline
-    if (state.mode === 'we') {
-      scanlineV.style.left = `${(state.scanX * 100).toFixed(2)}%`;
-    } else if (state.mode === 'ns') {
-      scanlineH.style.top = `${(state.scanY * 100).toFixed(2)}%`;
-    } else if (state.mode === 'spiral') {
-      scanOrb.style.left = `${(state.scanX * 100).toFixed(2)}%`;
-      scanOrb.style.top = `${(state.scanY * 100).toFixed(2)}%`;
+      renderEarthHorizonFallback();
     }
 
-    // 2. Telemetry Values
-    if (telPhysVal) telPhysVal.textContent = state.physVal;
-    if (telUnit) telUnit.textContent = state.unit;
-    if (telAnomaly) {
-      telAnomaly.textContent = state.anomalyText;
-      telAnomaly.style.color = state.isAnomaly ? 'var(--theme-accent)' : 'var(--mist)';
-    }
-    if (telCoords) telCoords.textContent = `${state.latStr}, ${state.lonStr}`;
-    if (telRegion) telRegion.textContent = state.regionStr;
-    if (telVoice) telVoice.textContent = state.leadVoice;
-    if (telFreq) {
-      const panPct = Math.round(Math.abs(state.pan) * 100);
-      const panDir = state.pan < -0.05 ? `${panPct}% L` : state.pan > 0.05 ? `${panPct}% R` : 'Center';
-      telFreq.textContent = `Pitch: ${state.targetFreq} Hz · Stereo: ${panDir}`;
-    }
 
-    // 3. Hue-Wheel Meters
-    if (state.hueDist) {
-      const maxCount = Math.max(1, ...Object.values(state.hueDist));
-      for (const [k, count] of Object.entries(state.hueDist)) {
-        if (hueBarFills[k]) {
-          const pct = Math.round((count / maxCount) * 100);
-          hueBarFills[k].style.height = `${pct}%`;
+
+  function applyTheme(value) {
+    sphere = validWorlds.includes(value) ? value : "atmosphere";
+    studio.className = `studio-page theme-${sphere}${player.state === "playing" ? " playing" : ""}`;
+    $("#studio-sphere-name").textContent = titles[sphere];
+    document.querySelectorAll("[data-world-switch]").forEach(button => {
+      const active = button.dataset.worldSwitch === sphere;
+      button.classList.toggle("active", active); button.setAttribute("aria-pressed", String(active));
+    });
+  }
+  function route(target = "home", world = sphere, push = true) {
+    if (validWorlds.includes(target)) { world = target; target = "studio"; }
+    page = ["home", "explore", "studio"].includes(target) ? target : "home";
+    home.hidden = page !== "home"; explore.hidden = page !== "explore"; studio.hidden = page !== "studio";
+    document.body.classList.toggle("is-home", page === "home");
+    document.body.classList.toggle("is-explore", page === "explore");
+    $(".header-worlds-bar").style.display = page === "studio" ? "" : "none";
+    document.querySelectorAll("[data-nav]").forEach(link => {
+      link.classList.toggle("active", link.dataset.nav === page);
+      if (link.dataset.nav === page) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current");
+    });
+    applyTheme(world);
+    if (page !== "studio" && player.state === "playing") player.pause();
+    if (dialog.open) dialog.close();
+    const hash = page === "studio" ? `#studio/${sphere}` : `#${page}`;
+    if (push && location.hash !== hash) history.pushState(null, "", hash);
+    document.title = page === "studio" ? "Sonifier Studio — Jukebox" : "Jukebox — The planet has a rhythm.";
+    if (page === "studio" && manifest && (!selected || selected.sphere !== sphere)) selectEntry(defaultEntry(sphere));
+    window.scrollTo(0, 0); syncVideo();
+  }
+  function routeHash() {
+    const [target, world] = location.hash.slice(1).split("/");
+    route(target || "home", world || sphere, false);
+  }
+  function defaultEntry(world) {
+    return manifest.entries.find(entry => entry.source === defaults[world]) || manifest.entries.find(entry => entry.sphere === world && entry.kind === "observation");
+  }
+  async function getData(entry) {
+    if (!payloads.has(entry.data)) {
+      const request = (async () => {
+        const cached = "caches" in window ? await caches.match(new URL(entry.data, document.baseURI)).catch(() => null) : null;
+        const response = cached || await fetch(entry.data);
+        if (!response.ok) throw new Error(`Could not load ${entry.name}. Please reload the page.`);
+        return response.json();
+      })().catch(error => { payloads.delete(entry.data); throw error; });
+      payloads.set(entry.data, request);
+      if (payloads.size > 6) payloads.delete(payloads.keys().next().value);
+    }
+    return payloads.get(entry.data);
+  }
+  async function selectEntry(entry) {
+    if (!entry) return;
+    const revision = ++selectionRevision;
+    player.stop(); player.state = "loading"; player.notify("Loading prepared image…");
+    selected = entry; scan = null; applyTheme(entry.sphere);
+    if (page === "studio") history.replaceState(null, "", `#studio/${sphere}`);
+    $("#studio-heading").textContent = entry.name;
+    $("#studio-narrative").textContent = entry.explanation || entry.description;
+    const keyText = entry.source.startsWith("atmosphere/air_quality_labels") ?
+      "CO: 40–500 ppbv · PM2.5: 0.4–409.6 µg/m³ · NOₓ: 10⁻³–10¹ ppbv · O₃: 5–60 ppbv" : entry.legend?.text;
+    $("#studio-legend").hidden = !keyText;
+    $("#studio-legend").textContent = keyText ? `Legend · ${keyText}` : "";
+    $("#studio-map-image").src = entry.image;
+    $("#studio-map-image").alt = `${entry.name}. ${entry.description}.`;
+    $("#colour-strips").open = false; stripsRendered = false;
+    $("#colour-strips-list").replaceChildren(); $("#colour-count").textContent = "";
+    $("#studio-background-note").textContent = "";
+    document.querySelectorAll("[data-image-id]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.imageId === entry.id)));
+    try {
+      const data = await getData(entry);
+      if (revision !== selectionRevision) return;
+      scan = data;
+      const background = scan.basemap_extraction;
+      const bases = ["ocean", "land"].filter(region => background?.[`${region}_rgb_255`]);
+      $("#studio-background-note").textContent = background?.measurement_layer?.policy ?
+        "Sound follows the extracted measurement layer. Physical map context and annotations are suppressed." :
+        background?.applied ? `Identified ${bases.join(" and ") || "map"} base colours are excluded from the sound.` : "Sound follows extracted colour and position.";
+      if (!keyText) {
+        const legend = scan.cleanup?.legend_reading;
+        if (legend?.value_range?.length === 2) {
+          $("#studio-legend").textContent = `Legend · ${legend.value_range.join(" to ")}${legend.units ? " " + legend.units : ""}`;
+          $("#studio-legend").hidden = false;
         }
       }
+      $("#colour-count").textContent = `${data.color_sheets.active_sheet_order.length} colours`;
+      updateFocus();
+      await player.load(data, entry);
+      if (revision === selectionRevision) prefetchNeighbours(entry);
+    } catch (error) {
+      if (revision === selectionRevision) { player.state = "error"; player.notify(error.message); }
     }
-
-    // 4. Scrubber & Time
-    if (scrubber && !scrubber.matches(':active')) {
-      scrubber.value = Math.round(state.progress * 1000);
+  }
+  function updatePlayback({ state, progress, solo, message }) {
+    const playing = state === "playing";
+    studio.classList.toggle("playing", playing);
+    $("#studio-play-btn").disabled = player.busy || !["ready", "playing", "paused", "ended"].includes(state);
+    $("#studio-play-text").textContent = playing ? "Pause" : state === "paused" ? "Resume" : "Play";
+    $("#studio-play-symbol").textContent = playing ? "❚❚" : "▶";
+    $("#studio-play-btn").setAttribute("aria-label", `${playing ? "Pause" : state === "paused" ? "Resume" : "Play"} ${solo ? solo + " colour" : "full image"}`);
+    if (!positionEditing) $("#studio-progress").value = progress;
+    $("#studio-time").textContent = `00:${String(Math.floor(progress * player.duration)).padStart(2, "0")}`;
+    $("#full-image-btn").hidden = !solo;
+    if (message) {
+      $("#engine-status-text").textContent = message;
+      $("#studio-status").textContent = `${message}${["ready", "playing", "paused", "ended"].includes(state) ? ` · ${solo ? solo + " colour" : "Full image"}` : ""}`;
     }
-    if (scrubCurrTime) {
-      const totalSec = window.earthSonifier.durationSec || 36;
-      const curSec = Math.floor(state.progress * totalSec);
-      const m = Math.floor(curSec / 60).toString().padStart(2, '0');
-      const s = (curSec % 60).toString().padStart(2, '0');
-      scrubCurrTime.textContent = `${m}:${s}`;
+    const cursor = $("#studio-scanline"); cursor.hidden = !["playing", "paused", "seeking"].includes(state);
+    if (scan) {
+      const dimensions = scan.source.dimensions, box = scan.source.map_crop_box?.pixels || [0, 0, dimensions.width, dimensions.height];
+      const duration = scanDuration();
+      const x = Math.min(1, progress * player.duration / duration);
+      cursor.style.left = `${100 * (box[0] + x * (box[2] - box[0])) / dimensions.width}%`;
     }
-
-    // 5. Playing state class
-    if (state.isPlaying) {
-      studio.classList.add('playing');
-      if (playSymbol) playSymbol.textContent = '⏸';
-      if (playText) playText.textContent = 'Pause Sonifier';
-    } else {
-      studio.classList.remove('playing');
-      if (playSymbol) playSymbol.textContent = '▶';
-      if (playText) playText.textContent = 'Play Sonifier';
+    document.querySelectorAll("[data-colour]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.colour === solo)));
+  }
+  function updateFocus() {
+    const windowElement = $("#studio-focus-window"), focus = $("#studio-focus").value;
+    windowElement.hidden = focus === "all" || !scan;
+    if (!scan) return;
+    const height = scan.source.dimensions.height, box = scan.source.map_crop_box?.pixels || [0, 0, scan.source.dimensions.width, height];
+    const third = { upper: 0, middle: 1, lower: 2 }[focus] || 0;
+    windowElement.style.top = `${100 * (box[1] + third * (box[3] - box[1]) / 3) / height}%`;
+    windowElement.style.height = `${100 * (box[3] - box[1]) / height / 3}%`;
+  }
+  function renderStrips() {
+    if (stripsRendered || !scan) return;
+    stripsRendered = true;
+    const list = $("#colour-strips-list"), dimensions = scan.color_sheets.grid_dimensions;
+    const colours = { red:[239,68,68], orange:[249,115,22], yellow:[234,179,8], green:[34,197,94], cyan:[6,182,212], blue:[59,130,246], purple:[168,85,247], violet:[168,85,247], magenta:[236,72,153], brown:[180,110,70], neutral:[203,213,225] };
+    if (!scan.color_sheets.active_sheet_order.length) {
+      const note = document.createElement("p"); note.className = "studio-status"; note.textContent = "No measurement colour strips for this image."; list.append(note); return;
     }
-  });
-}
-
-// Setup Transport Buttons
-if (playBtn) {
-  playBtn.addEventListener('click', () => {
-    if (window.earthSonifier) window.earthSonifier.togglePlay();
-  });
-}
-
-if (resetBtn) {
-  resetBtn.addEventListener('click', () => {
-    if (window.earthSonifier) window.earthSonifier.seek(0);
-  });
-}
-
-if (scrubber) {
-  scrubber.addEventListener('input', e => {
-    if (window.earthSonifier) {
-      window.earthSonifier.seek(Number(e.target.value) / 1000);
-    }
-  });
-}
-
-// Sweep Mode Tabs
-document.querySelectorAll('[data-sweep]').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('[data-sweep]').forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
-    const mode = tab.dataset.sweep;
-    if (window.earthSonifier) {
-      window.earthSonifier.setMode(mode);
-      updateScanlineMode(mode);
-    }
-  });
-});
-
-// Audio Sliders
-if (speedSlider) {
-  speedSlider.addEventListener('input', e => {
-    const val = Number(e.target.value);
-    if (speedIndicator) speedIndicator.textContent = `${val.toFixed(2)}x`;
-    if (window.earthSonifier) window.earthSonifier.setSpeed(val);
-  });
-}
-if (droneSlider) {
-  droneSlider.addEventListener('input', e => {
-    const val = Number(e.target.value);
-    if (droneIndicator) droneIndicator.textContent = `${Math.round(val * 100)}%`;
-    if (window.earthSonifier) window.earthSonifier.setDroneLevel(val);
-  });
-}
-if (volSlider) {
-  volSlider.addEventListener('input', e => {
-    const val = Number(e.target.value);
-    if (volIndicator) volIndicator.textContent = `${Math.round(val * 100)}%`;
-    if (window.earthSonifier) window.earthSonifier.setVolume(val);
-  });
-}
-
-// Dataset Switcher
-if (datasetSelect) {
-  datasetSelect.addEventListener('change', e => {
-    mountStudioDataset(e.target.value);
-  });
-}
-
-// Map Viewport Interactive Point Probe
-if (mapViewport) {
-  mapViewport.addEventListener('click', e => {
-    const rect = mapViewport.getBoundingClientRect();
-    const xNorm = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    const yNorm = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height));
-
-    if (probePin) {
-      probePin.style.display = 'block';
-      probePin.style.left = `${(xNorm * 100).toFixed(1)}%`;
-      probePin.style.top = `${(yNorm * 100).toFixed(1)}%`;
-    }
-
-    if (window.earthSonifier) {
-      if (window.earthSonifier.mode === 'we') window.earthSonifier.seek(xNorm);
-      else if (window.earthSonifier.mode === 'ns') window.earthSonifier.seek(yNorm);
-      else window.earthSonifier.seek(xNorm);
-
-      if (!window.earthSonifier.isPlaying) {
-        window.earthSonifier.play();
+    for (const name of scan.color_sheets.active_sheet_order) {
+      const button = document.createElement("button"); button.type = "button"; button.className = "colour-strip"; button.dataset.colour = name;
+      button.setAttribute("aria-label", `Play ${name} colour strip`); button.setAttribute("aria-pressed", String(player.solo === name));
+      const label = document.createElement("span"); label.className = "colour-strip-name"; label.textContent = name;
+      const voice = document.createElement("small"); voice.textContent = (EarthSceneScore.VOICES[name] || EarthSceneScore.VOICES.neutral).name; label.append(voice);
+      const canvas = document.createElement("canvas"); canvas.width = dimensions.width; canvas.height = dimensions.height; canvas.setAttribute("aria-hidden", "true");
+      const context = canvas.getContext("2d"), pixels = context.createImageData(canvas.width, canvas.height);
+      for (const [row, col, alpha] of scan.color_sheets.sheets[name].cells || []) {
+        const i = (row * canvas.width + col) * 4; pixels.data.set([...(colours[name] || colours.neutral), Math.round(alpha * 255)], i);
       }
-    }
-  });
-}
-
-// Keyboard shortcuts for studio
-window.addEventListener('keydown', e => {
-  if (studio.hidden) return;
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
-
-  if (e.code === 'Space') {
-    e.preventDefault();
-    if (window.earthSonifier) window.earthSonifier.togglePlay();
-  } else if (e.code === 'ArrowRight') {
-    e.preventDefault();
-    if (window.earthSonifier) {
-      window.earthSonifier.seek(window.earthSonifier.progress + 0.02);
-    }
-  } else if (e.code === 'ArrowLeft') {
-    e.preventDefault();
-    if (window.earthSonifier) {
-      window.earthSonifier.seek(window.earthSonifier.progress - 0.02);
-    }
-  } else if (e.key === '1') {
-    document.querySelector('[data-sweep="we"]')?.click();
-  } else if (e.key === '2') {
-    document.querySelector('[data-sweep="ns"]')?.click();
-  } else if (e.key === '3') {
-    document.querySelector('[data-sweep="spiral"]')?.click();
-  }
-});
-
-// Launch button inside info dialog (if opened from about)
-const dialogLaunchBtn = document.querySelector('#dialog-launch-btn');
-if (dialogLaunchBtn) {
-  dialogLaunchBtn.addEventListener('click', () => {
-    if (dialog.open) dialog.close();
-    window.location.hash = `studio/${currentModalWorld}`;
-  });
-}
-
-// ============================================================================
-// ROUTING ENGINE (3 Pages: #home, #explore, #studio)
-// ============================================================================
-
-function route(focusHeading = false) {
-  const hash = window.location.hash.toLowerCase().replace('#', '');
-  const parts = hash.split('/');
-  const routeName = parts[0] || 'home';
-  const subTarget = parts[1] || '';
-
-  const isWorld = validWorlds.includes(routeName);
-  const isStudio = routeName === 'studio' || isWorld;
-  const isExplore = routeName === 'explore';
-
-  let activePage = 'home';
-  if (isStudio) activePage = 'studio';
-  else if (isExplore) activePage = 'explore';
-
-  home.hidden = activePage !== 'home';
-  explore.hidden = activePage !== 'explore';
-  studio.hidden = activePage !== 'studio';
-
-  // Ensure worlds bar is hidden on home and explore pages
-  document.body.classList.toggle('is-home', activePage === 'home');
-  document.body.classList.toggle('is-explore', activePage === 'explore');
-  const worldsBar = document.querySelector('.header-worlds-bar');
-  if (worldsBar) {
-    worldsBar.style.display = (activePage === 'home' || activePage === 'explore') ? 'none' : '';
-  }
-
-  document.querySelectorAll('[data-nav]').forEach(link => {
-    const navVal = link.dataset.nav;
-    const active = navVal === activePage;
-    link.classList.toggle('active', active);
-    if (active) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
-  });
-
-  if (activePage === 'studio') {
-    document.title = 'Sonifier Studio — Earth in Sound';
-    const sphereTarget = isWorld ? routeName : (subTarget || currentModalWorld || 'atmosphere');
-    mountStudioWorld(sphereTarget);
-    if (dialog.open) dialog.close();
-  } else if (activePage === 'explore') {
-    document.title = 'Explore our planet — Jukebox';
-    if (window.earthSonifier && window.earthSonifier.isPlaying) {
-      window.earthSonifier.pause();
-    }
-    if (dialog.open) dialog.close();
-    if (focusHeading) document.querySelector('#explore-heading').focus({ preventScroll: true });
-  } else {
-    document.title = 'Jukebox — The planet has a rhythm.';
-    if (dialog.open) dialog.close();
-    if (window.earthSonifier && window.earthSonifier.isPlaying) {
-      window.earthSonifier.pause();
+      context.putImageData(pixels, 0, 0);
+      const icon = document.createElement("span"); icon.textContent = "▶"; icon.setAttribute("aria-hidden", "true");
+      button.append(label, canvas, icon);
+      button.addEventListener("click", () => { EarthJukeboxEngine.unlockAudio(); player.configure({}, name, true); });
+      list.append(button);
     }
   }
-
-  const section = activePage === 'home' ? home : activePage === 'explore' ? explore : studio;
-  section.classList.remove('page-enter');
-  requestAnimationFrame(() => section.classList.add('page-enter'));
-
-  window.scrollTo(0, 0);
-  syncVideo();
-}
-
-motionButton.addEventListener('click', () => {
-  motionPaused = !motionPaused;
-  syncVideo();
-  updateMotionButton();
-});
-video.addEventListener('play', updateMotionButton);
-video.addEventListener('pause', updateMotionButton);
-document.addEventListener('visibilitychange', syncVideo);
-reducedMotion.addEventListener('change', event => { motionPaused = event.matches; syncVideo(); });
-window.addEventListener('hashchange', () => route(true));
-
-document.querySelector('[data-about]').addEventListener('click', () => {
-  openInfo('THE JUKEBOX PROJECT', 'A new perspective on our planet.', 'Jukebox brings Earth observation and discovery together. Explore the land, air, and water that shape our world — and find the connections in between.', 'general');
-});
-
-// Click ANY tab card on Page 2: DIRECTLY opens the Studio page in that tab's theme (NO POPUP)
-document.querySelectorAll('[data-world]').forEach(tile => {
-  tile.addEventListener('click', () => {
-    const world = tile.dataset.world;
-    const theme = world.toLowerCase();
-    window.location.hash = `studio/${theme}`;
-  });
-});
-
-document.querySelector('.dialog-close').addEventListener('click', closeDialog);
-document.querySelector('.dialog-done').addEventListener('click', closeDialog);
-dialog.addEventListener('click', event => {
-  if (event.target === dialog) {
-    const rect = dialog.getBoundingClientRect();
-    if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) {
-      closeDialog();
+  function renderLibrary() {
+    const grid = $("#studio-library-grid");
+    const observations = manifest.entries.filter(entry => entry.kind === "observation");
+    $("#library-count").textContent = `${observations.length} observation images`;
+    for (const entry of observations) {
+      const button = document.createElement("button"); button.type = "button"; button.className = "studio-library-tile"; button.dataset.imageId = entry.id;
+      button.setAttribute("aria-pressed", "false");
+      const image = document.createElement("img"); image.src = entry.thumbnail; image.alt = ""; image.loading = "lazy"; image.width = 480; image.height = 240;
+      const caption = document.createElement("span"); caption.className = "studio-library-caption";
+      const name = document.createElement("strong"); name.textContent = entry.name;
+      const description = document.createElement("small"); description.textContent = entry.description;
+      const category = document.createElement("small"); category.className = "library-sphere"; category.textContent = `${titles[entry.sphere]}${entry.kind === "reference" ? " · Reference" : ""}`;
+      caption.append(name, description, category); button.append(image, caption);
+      button.addEventListener("pointerenter", () => getData(entry).catch(() => {}));
+      button.addEventListener("focus", () => getData(entry).catch(() => {}));
+      button.addEventListener("click", () => { libraryDialog.close(); selectEntry(entry); studio.scrollIntoView({ behavior: "instant", block: "start" }); });
+      grid.append(button);
     }
   }
-});
-
-route();
-updateMotionButton();
+  function prefetchNeighbours(entry) {
+    const observations = manifest.entries.filter(item => item.kind === "observation"), index = observations.indexOf(entry);
+    observations.slice(index + 1, index + 3).forEach(next => getData(next).catch(() => {}));
+  }
+  async function warmLibrary() {
+    if (!("caches" in window)) return;
+    const cache = await caches.open("jukebox-library-v1");
+    const queue = manifest.entries.filter(entry => entry.kind === "observation");
+    await Promise.all([0, 1].map(async () => {
+      while (queue.length) {
+        const entry = queue.shift(), url = new URL(entry.data, document.baseURI);
+        try { if (!await cache.match(url)) { const response = await fetch(url, { priority: "low" }); if (response.ok) await cache.put(url, response); } } catch (_) { /* Normal selection still uses the network. */ }
+      }
+    }));
+  }
+  $("#studio-play-btn").addEventListener("click", () => player.toggle());
+  $("#full-image-btn").addEventListener("click", () => player.configure({}, null));
+  for (const [id, key] of [["#studio-scale", "scaleMode"], ["#studio-mode", "preset"], ["#studio-focus", "focusBand"]]) {
+    $(id).addEventListener("change", event => { updateFocus(); player.configure({ [key]: event.target.value }); });
+  }
+  $("#colour-strips").addEventListener("toggle", () => { if ($("#colour-strips").open) renderStrips(); });
+  function openLibrary() { if (!libraryDialog.open) libraryDialog.showModal(); }
+  function scanDuration() { return player.engine?.sceneScore?.scanDuration || (player.options.preset === "pixel_128" ? player.duration - .6 : player.duration); }
+  $("#studio-header-library-btn").addEventListener("click", openLibrary);
+  $("#studio-library-close").addEventListener("click", () => libraryDialog.close());
+  libraryDialog.addEventListener("click", event => {
+    const rect = libraryDialog.getBoundingClientRect();
+    if (event.target === libraryDialog && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) libraryDialog.close();
+  });
+  $("#map-viewport").addEventListener("click", event => {
+    if (!scan) return;
+    EarthJukeboxEngine.unlockAudio();
+    const rect = $("#studio-map-image").getBoundingClientRect();
+    const width = scan.source.dimensions.width, box = scan.source.map_crop_box?.pixels || [0, 0, width, scan.source.dimensions.height];
+    const imageX = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width)) * width;
+    const scanX = Math.max(0, Math.min(1, (imageX - box[0]) / (box[2] - box[0])));
+    player.seek(scanX * scanDuration() / player.duration);
+  });
+  $("#studio-progress").addEventListener("input", () => { positionEditing = true; });
+  $("#studio-progress").addEventListener("blur", () => { positionEditing = false; });
+  $("#studio-progress").addEventListener("pointercancel", () => { positionEditing = false; });
+  $("#studio-progress").addEventListener("change", event => { positionEditing = false; EarthJukeboxEngine.unlockAudio(); player.seek(Number(event.target.value)); });
+  $("#studio-back-btn").addEventListener("click", () => route("explore"));
+  document.querySelectorAll("[data-nav], [data-route-link]").forEach(link => link.addEventListener("click", event => { event.preventDefault(); route(link.dataset.nav || link.dataset.routeLink); }));
+  document.querySelectorAll("[data-world-switch]").forEach(button => button.addEventListener("click", () => route("studio", button.dataset.worldSwitch)));
+  document.querySelectorAll("[data-world]").forEach(button => button.addEventListener("click", event => { event.preventDefault(); route("studio", button.dataset.world.toLowerCase()); }));
+  document.querySelectorAll("[data-open-library]").forEach(button => {
+    const open = event => { event.preventDefault(); event.stopPropagation(); route("studio", button.dataset.openLibrary.toLowerCase()); openLibrary(); };
+    button.addEventListener("click", open); button.addEventListener("keydown", event => { if (["Enter", " "].includes(event.key)) open(event); });
+  });
+  $("#home-quick-listen").addEventListener("click", () => route("studio"));
+  $("[data-about]").addEventListener("click", () => dialog.showModal());
+  $(".dialog-close").addEventListener("click", () => dialog.close());
+  $(".dialog-done").addEventListener("click", () => dialog.close());
+  $("#dialog-launch-btn").addEventListener("click", () => route("studio"));
+  motionButton.addEventListener("click", () => { motionPaused = !motionPaused; syncVideo(); });
+  reducedMotion.addEventListener("change", event => { motionPaused = event.matches; syncVideo(); });
+  document.addEventListener("visibilitychange", () => { syncVideo(); if (document.hidden && player.state === "playing") player.pause(); });
+  window.addEventListener("hashchange", routeHash); window.addEventListener("popstate", routeHash);
+  window.addEventListener("pagehide", () => player.stop());
+  document.addEventListener("keydown", event => {
+    if (studio.hidden || libraryDialog.open || dialog.open || event.target.closest("input,select,textarea,button,a,summary")) return;
+    if (event.code === "Space") { event.preventDefault(); player.toggle(); }
+  });
+  routeHash();
+  fetch("assets/data/manifest.json").then(response => {
+    if (!response.ok) throw new Error("The image library could not load. Serve the website over HTTP and reload.");
+    return response.json();
+  }).then(async data => {
+    manifest = data; renderLibrary(); await selectEntry(defaultEntry(sphere));
+    (window.requestIdleCallback || (callback => setTimeout(callback, 200)))(() => warmLibrary().catch(() => {}));
+  }).catch(error => { player.state = "error"; player.notify(error.message); });
+})();

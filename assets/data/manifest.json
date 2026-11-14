@@ -1,0 +1,1885 @@
+{
+  "version": 2,
+  "scanner_signature": "mixed",
+  "last_build_signature": "609ae3057035",
+  "grid": {
+    "width": 256,
+    "height": 128
+  },
+  "analysis_max_side": 2048,
+  "entries": [
+    {
+      "id": "atmosphere--air_quality_labels_6k",
+      "name": "Air Quality Labels 6K",
+      "description": "Air quality observations across regions",
+      "sphere": "atmosphere",
+      "source": "atmosphere/air_quality_labels_6k.png",
+      "kind": "observation",
+      "explanation": "Air quality observations across regions. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": null,
+      "scanner_signature": "609ae3057035",
+      "data": "assets/data/atmosphere--air_quality_labels_6k-4063f9cce5-609ae3057035.json",
+      "image": "assets/images/atmosphere--air_quality_labels_6k-4063f9cce5.webp",
+      "thumbnail": "assets/images/atmosphere--air_quality_labels_6k-4063f9cce5-thumb.webp",
+      "sha256": "4063f9cce52e2ec0915f52e0c815f8db952deecc252dd69c9b16012a0241a31f",
+      "colours": [
+        "yellow",
+        "green",
+        "purple",
+        "orange",
+        "neutral",
+        "red"
+      ],
+      "bytes": 2839583
+    },
+    {
+      "id": "atmosphere--air_quality_labels_8k",
+      "name": "Air Quality Labels 8K",
+      "description": "Air quality observations across regions",
+      "sphere": "atmosphere",
+      "source": "atmosphere/air_quality_labels_8k.png",
+      "kind": "observation",
+      "explanation": "Air quality observations across regions. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": null,
+      "scanner_signature": "609ae3057035",
+      "data": "assets/data/atmosphere--air_quality_labels_8k-cd601e1df6-609ae3057035.json",
+      "image": "assets/images/atmosphere--air_quality_labels_8k-cd601e1df6.webp",
+      "thumbnail": "assets/images/atmosphere--air_quality_labels_8k-cd601e1df6-thumb.webp",
+      "sha256": "cd601e1df6052cce063e8826691f52d79c17279290d5edab46a880fce68267cb",
+      "colours": [
+        "yellow",
+        "green",
+        "purple",
+        "neutral",
+        "orange",
+        "blue",
+        "red"
+      ],
+      "bytes": 2953541
+    },
+    {
+      "id": "atmosphere--biomass_burning_emissions",
+      "name": "Biomass Burning Emissions",
+      "description": "Emissions released by burning vegetation",
+      "sphere": "atmosphere",
+      "source": "atmosphere/biomass_burning_emissions.jpg",
+      "kind": "observation",
+      "explanation": "Emissions released by burning vegetation. Listen to the coloured field over the ocean. Physical continent texture and polar ice are excluded.",
+      "legend": null,
+      "data": "assets/data/atmosphere--biomass_burning_emissions-60ec81cef3-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--biomass_burning_emissions-60ec81cef3.webp",
+      "thumbnail": "assets/images/atmosphere--biomass_burning_emissions-60ec81cef3-thumb.webp",
+      "sha256": "60ec81cef3c1f2c47e3d006edb8373f80b46a76c5352a424e52308622ebeddc8",
+      "colours": [
+        "blue",
+        "cyan",
+        "purple",
+        "green",
+        "yellow"
+      ],
+      "bytes": 2972223
+    },
+    {
+      "id": "atmosphere--carbon_monoxide",
+      "name": "Carbon Monoxide",
+      "description": "Atmospheric carbon monoxide across regions",
+      "sphere": "atmosphere",
+      "source": "atmosphere/carbon_monoxide.jpg",
+      "kind": "observation",
+      "explanation": "Atmospheric carbon monoxide across regions. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "40 · 100 · 130 · 200 · 500 ppbv — carbon monoxide",
+        "sources": [
+          "atmosphere/carbon_monoxide_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/atmosphere--carbon_monoxide-3763d947ff-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--carbon_monoxide-3763d947ff.webp",
+      "thumbnail": "assets/images/atmosphere--carbon_monoxide-3763d947ff-thumb.webp",
+      "sha256": "3763d947ff5807ca9326421d05d82c39c159464fcbf97e2f7d437fd4a991761a",
+      "colours": [
+        "yellow",
+        "orange",
+        "red"
+      ],
+      "bytes": 2813089
+    },
+    {
+      "id": "atmosphere--carbon_monoxide_legend",
+      "name": "Carbon Monoxide Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/carbon_monoxide_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--carbon_monoxide_legend-b9608dd4d6-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--carbon_monoxide_legend-b9608dd4d6.webp",
+      "thumbnail": "assets/images/atmosphere--carbon_monoxide_legend-b9608dd4d6-thumb.webp",
+      "sha256": "b9608dd4d6645d65d909726aa38a24a5abacb2de1e6ff978b044a5a2a4f83044",
+      "colours": [],
+      "bytes": 8454
+    },
+    {
+      "id": "atmosphere--hurricane_wind_speed",
+      "name": "Hurricane Wind Speed",
+      "description": "Winds swirling around a hurricane",
+      "sphere": "atmosphere",
+      "source": "atmosphere/hurricane_wind_speed.jpg",
+      "kind": "observation",
+      "explanation": "Winds swirling around a hurricane. Listen to the bright wind-colour bands around the storm. Muted physical terrain is excluded.",
+      "legend": {
+        "text": "0–100 mph — wind speed at 850 hPa",
+        "sources": [
+          "atmosphere/hurricane_wind_speed.jpg"
+        ],
+        "embedded": true
+      },
+      "data": "assets/data/atmosphere--hurricane_wind_speed-963908da83-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--hurricane_wind_speed-963908da83.webp",
+      "thumbnail": "assets/images/atmosphere--hurricane_wind_speed-963908da83-thumb.webp",
+      "sha256": "963908da83cc9b8fb3949de729d601139bc2d8b8f9c5e0010939cc969ed255e0",
+      "colours": [
+        "cyan",
+        "blue",
+        "yellow",
+        "orange",
+        "red",
+        "green"
+      ],
+      "bytes": 1439987
+    },
+    {
+      "id": "atmosphere--iss_lightning",
+      "name": "ISS Lightning",
+      "description": "Lightning observed from the ISS",
+      "sphere": "atmosphere",
+      "source": "atmosphere/iss_lightning.jpg",
+      "kind": "observation",
+      "explanation": "Lightning observed from the ISS. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/atmosphere--iss_lightning-8426100617-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--iss_lightning-8426100617.webp",
+      "thumbnail": "assets/images/atmosphere--iss_lightning-8426100617-thumb.webp",
+      "sha256": "84261006173cbe9e569eee83cab6e70739e99a695e050c11ad3f43ffd01b9531",
+      "colours": [
+        "yellow",
+        "neutral",
+        "green"
+      ],
+      "bytes": 315424
+    },
+    {
+      "id": "atmosphere--near_surface_humidity",
+      "name": "Near Surface Humidity",
+      "description": "Moisture near the Earth's surface",
+      "sphere": "atmosphere",
+      "source": "atmosphere/near_surface_humidity.png",
+      "kind": "observation",
+      "explanation": "Moisture near the Earth's surface. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "0–22 g/kg — water vapour; dry → humid",
+        "sources": [
+          "atmosphere/near_surface_humidity_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/atmosphere--near_surface_humidity-5fa02ff908-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--near_surface_humidity-5fa02ff908.webp",
+      "thumbnail": "assets/images/atmosphere--near_surface_humidity-5fa02ff908-thumb.webp",
+      "sha256": "5fa02ff90833bbbf339bb810b24d8cce917f8a6fd49563c885342c96de4b8ed3",
+      "colours": [
+        "orange",
+        "yellow",
+        "cyan",
+        "neutral",
+        "blue",
+        "green"
+      ],
+      "bytes": 4277919
+    },
+    {
+      "id": "atmosphere--near_surface_humidity_legend",
+      "name": "Near Surface Humidity Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/near_surface_humidity_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--near_surface_humidity_legend-ddbd17ae63-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--near_surface_humidity_legend-ddbd17ae63.webp",
+      "thumbnail": "assets/images/atmosphere--near_surface_humidity_legend-ddbd17ae63-thumb.webp",
+      "sha256": "ddbd17ae63a9f9c86ca729c2803c4434f865eb4154db524c8d62c5abbec01ffe",
+      "colours": [],
+      "bytes": 11580
+    },
+    {
+      "id": "atmosphere--near_surface_wind",
+      "name": "Near Surface Wind",
+      "description": "Wind patterns near Earth's surface",
+      "sphere": "atmosphere",
+      "source": "atmosphere/near_surface_wind.jpg",
+      "kind": "observation",
+      "explanation": "Wind patterns near Earth's surface. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "0 · 5 · 10 · 15 · 20 · 25 · 30 · 35 · 40 m/s — wind speed",
+        "sources": [
+          "atmosphere/near_surface_wind_legend.png"
+        ],
+        "embedded": false
+      },
+      "scanner_signature": "609ae3057035",
+      "data": "assets/data/atmosphere--near_surface_wind-5f70dc9568-609ae3057035.json",
+      "image": "assets/images/atmosphere--near_surface_wind-5f70dc9568.webp",
+      "thumbnail": "assets/images/atmosphere--near_surface_wind-5f70dc9568-thumb.webp",
+      "sha256": "5f70dc9568e48239d3d20bd2f884ae6ef304dc96d8b7cd4b4f3bc85e7d1093e3",
+      "colours": [
+        "blue",
+        "purple",
+        "green",
+        "cyan",
+        "neutral",
+        "yellow",
+        "magenta",
+        "orange",
+        "red"
+      ],
+      "bytes": 6254751
+    },
+    {
+      "id": "atmosphere--near_surface_wind_legend",
+      "name": "Near Surface Wind Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/near_surface_wind_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--near_surface_wind_legend-335cf63fb8-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--near_surface_wind_legend-335cf63fb8.webp",
+      "thumbnail": "assets/images/atmosphere--near_surface_wind_legend-335cf63fb8-thumb.webp",
+      "sha256": "335cf63fb882c9c7c1a1daa194e68c02d5831b14c95201ec0d7d2fd4f43f1043",
+      "colours": [],
+      "bytes": 9760
+    },
+    {
+      "id": "atmosphere--nitrogen_dioxide",
+      "name": "Nitrogen Dioxide",
+      "description": "Nitrogen dioxide in the atmosphere",
+      "sphere": "atmosphere",
+      "source": "atmosphere/nitrogen_dioxide.jpg",
+      "kind": "observation",
+      "explanation": "Nitrogen dioxide in the atmosphere. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "10⁻³ · 10⁻² · 10⁻¹ · 10⁰ · 10¹ ppbv — nitrogen oxides; low → high",
+        "sources": [
+          "atmosphere/nitrogen_dioxide_legend.png"
+        ],
+        "embedded": false
+      },
+      "scanner_signature": "609ae3057035",
+      "data": "assets/data/atmosphere--nitrogen_dioxide-af1a21401f-609ae3057035.json",
+      "image": "assets/images/atmosphere--nitrogen_dioxide-af1a21401f.webp",
+      "thumbnail": "assets/images/atmosphere--nitrogen_dioxide-af1a21401f-thumb.webp",
+      "sha256": "af1a21401f46a67c43401665cca2b461d7654cb85e15919a452eb46db65844f3",
+      "colours": [
+        "green",
+        "neutral"
+      ],
+      "bytes": 1896985
+    },
+    {
+      "id": "atmosphere--nitrogen_dioxide_legend",
+      "name": "Nitrogen Dioxide Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/nitrogen_dioxide_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--nitrogen_dioxide_legend-b86e2160c1-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--nitrogen_dioxide_legend-b86e2160c1.webp",
+      "thumbnail": "assets/images/atmosphere--nitrogen_dioxide_legend-b86e2160c1-thumb.webp",
+      "sha256": "b86e2160c1cfc4d404f710d5daef4ee0a1406f3365b7c9f194fbd9e12f0cf188",
+      "colours": [],
+      "bytes": 8450
+    },
+    {
+      "id": "atmosphere--ozone",
+      "name": "Ozone",
+      "description": "Ozone distribution across the globe",
+      "sphere": "atmosphere",
+      "source": "atmosphere/ozone.jpg",
+      "kind": "observation",
+      "explanation": "Ozone distribution across the globe. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "5 · 20 · 40 · 60 ppbv — ozone",
+        "sources": [
+          "atmosphere/ozone_legend.png"
+        ],
+        "embedded": false
+      },
+      "scanner_signature": "609ae3057035",
+      "data": "assets/data/atmosphere--ozone-e6ea56ce06-609ae3057035.json",
+      "image": "assets/images/atmosphere--ozone-e6ea56ce06.webp",
+      "thumbnail": "assets/images/atmosphere--ozone-e6ea56ce06-thumb.webp",
+      "sha256": "e6ea56ce063f1d8da1e914a5b1eb1084ef487799efa8278daa0675f7057b87c2",
+      "colours": [
+        "purple",
+        "neutral",
+        "blue"
+      ],
+      "bytes": 3014978
+    },
+    {
+      "id": "atmosphere--ozone_legend",
+      "name": "Ozone Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/ozone_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--ozone_legend-40e9ed9f84-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--ozone_legend-40e9ed9f84.webp",
+      "thumbnail": "assets/images/atmosphere--ozone_legend-40e9ed9f84-thumb.webp",
+      "sha256": "40e9ed9f84b67af24a0d18e2ce272c84c9902c84092cdbb32b3710df2066385a",
+      "colours": [],
+      "bytes": 7434
+    },
+    {
+      "id": "atmosphere--pm25",
+      "name": "PM2.5",
+      "description": "Fine particles in the air",
+      "sphere": "atmosphere",
+      "source": "atmosphere/pm25.jpg",
+      "kind": "observation",
+      "explanation": "Fine particles in the air. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "0.4 · 1.6 · 6.4 · 25.6 · 102.4 · 409.6 µg/m³ — PM2.5",
+        "sources": [
+          "atmosphere/pm25_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/atmosphere--pm25-980f7ece99-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--pm25-980f7ece99.webp",
+      "thumbnail": "assets/images/atmosphere--pm25-980f7ece99-thumb.webp",
+      "sha256": "980f7ece993e9dfbf71680b53e39a5e32c908bc71bafd4f95171288c58eef929",
+      "colours": [
+        "yellow",
+        "orange",
+        "neutral",
+        "red"
+      ],
+      "bytes": 2972848
+    },
+    {
+      "id": "atmosphere--pm25_legend",
+      "name": "PM2.5 Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/pm25_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--pm25_legend-cf1c7b93d7-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--pm25_legend-cf1c7b93d7.webp",
+      "thumbnail": "assets/images/atmosphere--pm25_legend-cf1c7b93d7-thumb.webp",
+      "sha256": "cf1c7b93d78fecfb05e3a96121426170d3c54bb8a3f233b2dbb44c23a47e71f3",
+      "colours": [],
+      "bytes": 8859
+    },
+    {
+      "id": "atmosphere--wildfire_smoke",
+      "name": "Wildfire Smoke",
+      "description": "Smoke spreading through the atmosphere",
+      "sphere": "atmosphere",
+      "source": "atmosphere/wildfire_smoke.png",
+      "kind": "observation",
+      "explanation": "Smoke spreading through the atmosphere. Listen for visible offshore plumes and warm smoke highlights. Terrain and blue ocean context are suppressed; faint smoke mixed with terrain may be unresolved.",
+      "legend": {
+        "text": "0 · 0.2 · 0.5 · 0.8 · 1 — smoke intensity; no smoke → dense (Brown Carbon Aerosol Optical Depth estimate)",
+        "sources": [
+          "atmosphere/wildfire_smoke_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/atmosphere--wildfire_smoke-c9d459010c-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--wildfire_smoke-c9d459010c.webp",
+      "thumbnail": "assets/images/atmosphere--wildfire_smoke-c9d459010c-thumb.webp",
+      "sha256": "c9d459010c0a03c21dbb729ce9606da739e0e4d981149013e33d1a9801dd1546",
+      "colours": [
+        "neutral",
+        "cyan",
+        "orange",
+        "blue",
+        "yellow",
+        "green"
+      ],
+      "bytes": 886599
+    },
+    {
+      "id": "atmosphere--wildfire_smoke_legend",
+      "name": "Wildfire Smoke Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "atmosphere",
+      "source": "atmosphere/wildfire_smoke_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/atmosphere--wildfire_smoke_legend-062ed8bb59-5aab54e3ec66.json",
+      "image": "assets/images/atmosphere--wildfire_smoke_legend-062ed8bb59.webp",
+      "thumbnail": "assets/images/atmosphere--wildfire_smoke_legend-062ed8bb59-thumb.webp",
+      "sha256": "062ed8bb594034d1dbc534ec8f1d42dd44fda22f951dc085a4b0ae2d6961be58",
+      "colours": [],
+      "bytes": 9532
+    },
+    {
+      "id": "general--global_precipitation_composite",
+      "name": "Global Precipitation Composite",
+      "description": "Rainfall patterns around the world",
+      "sphere": "general",
+      "source": "general/global_precipitation_composite.png",
+      "kind": "observation",
+      "explanation": "Rainfall patterns around the world. Coloured rain and snow bands are the audible layer. Physical terrain, ocean and plain cloud backgrounds are excluded.",
+      "legend": {
+        "text": "Precipitation rate: green → red = increasing rain · cyan → purple = increasing snow",
+        "sources": [
+          "general/global_precipitation_rate_rain_legend.png",
+          "general/global_precipitation_rate_snow_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--global_precipitation_composite-9fa8bb416b-5aab54e3ec66.json",
+      "image": "assets/images/general--global_precipitation_composite-9fa8bb416b.webp",
+      "thumbnail": "assets/images/general--global_precipitation_composite-9fa8bb416b-thumb.webp",
+      "sha256": "9fa8bb416bd7abde615f5790a9c9345b25bca6da2c4ceb5ceda206b86b31028a",
+      "colours": [
+        "green",
+        "yellow",
+        "blue",
+        "cyan",
+        "orange",
+        "red"
+      ],
+      "bytes": 2021747
+    },
+    {
+      "id": "general--global_precipitation_imerg",
+      "name": "Global Precipitation IMERG",
+      "description": "Rainfall patterns around the world",
+      "sphere": "general",
+      "source": "general/global_precipitation_imerg.jpg",
+      "kind": "observation",
+      "explanation": "Rainfall patterns around the world. Coloured rain and snow bands are the audible layer. Physical terrain, ocean and plain cloud backgrounds are excluded.",
+      "legend": {
+        "text": "Precipitation rate: green → red = increasing rain · cyan → purple = increasing snow",
+        "sources": [
+          "general/global_precipitation_rate_rain_legend.png",
+          "general/global_precipitation_rate_snow_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--global_precipitation_imerg-f3a8ca6739-5aab54e3ec66.json",
+      "image": "assets/images/general--global_precipitation_imerg-f3a8ca6739.webp",
+      "thumbnail": "assets/images/general--global_precipitation_imerg-f3a8ca6739-thumb.webp",
+      "sha256": "f3a8ca67397187af074925b0d3d12cb522b25c4c1a9b88c4427758bca42ea585",
+      "colours": [
+        "green",
+        "yellow",
+        "blue",
+        "cyan",
+        "orange",
+        "red"
+      ],
+      "bytes": 1642451
+    },
+    {
+      "id": "general--global_precipitation_rate",
+      "name": "Global Precipitation Rate",
+      "description": "Rainfall patterns around the world",
+      "sphere": "general",
+      "source": "general/global_precipitation_rate.png",
+      "kind": "observation",
+      "explanation": "Rainfall patterns around the world. Coloured rain and snow bands are the audible layer. Physical terrain, ocean and plain cloud backgrounds are excluded.",
+      "legend": {
+        "text": "Precipitation rate: green → red = increasing rain · cyan → purple = increasing snow",
+        "sources": [
+          "general/global_precipitation_rate_rain_legend.png",
+          "general/global_precipitation_rate_snow_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--global_precipitation_rate-69842be656-5aab54e3ec66.json",
+      "image": "assets/images/general--global_precipitation_rate-69842be656.webp",
+      "thumbnail": "assets/images/general--global_precipitation_rate-69842be656-thumb.webp",
+      "sha256": "69842be65660d352845eaa4294a30e59c0c5625d2de873c5fa483f11bef577ec",
+      "colours": [
+        "green",
+        "yellow",
+        "blue",
+        "cyan",
+        "orange",
+        "red"
+      ],
+      "bytes": 1820961
+    },
+    {
+      "id": "general--global_precipitation_rate_rain_legend",
+      "name": "Global Precipitation Rate Rain Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "general",
+      "source": "general/global_precipitation_rate_rain_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/general--global_precipitation_rate_rain_legend-5f06458648-5aab54e3ec66.json",
+      "image": "assets/images/general--global_precipitation_rate_rain_legend-5f06458648.webp",
+      "thumbnail": "assets/images/general--global_precipitation_rate_rain_legend-5f06458648-thumb.webp",
+      "sha256": "5f06458648feb029ce84a90f4eb0bb9b6813402355017d4380bcedce06b05736",
+      "colours": [],
+      "bytes": 4388
+    },
+    {
+      "id": "general--global_precipitation_rate_snow_legend",
+      "name": "Global Precipitation Rate Snow Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "general",
+      "source": "general/global_precipitation_rate_snow_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/general--global_precipitation_rate_snow_legend-8d4a6abbdd-5aab54e3ec66.json",
+      "image": "assets/images/general--global_precipitation_rate_snow_legend-8d4a6abbdd.webp",
+      "thumbnail": "assets/images/general--global_precipitation_rate_snow_legend-8d4a6abbdd-thumb.webp",
+      "sha256": "8d4a6abbdde7c86b72c744a35594d243758b61c1dffc2fa2740b4b7c3372afe8",
+      "colours": [],
+      "bytes": 4388
+    },
+    {
+      "id": "general--night_lights_change_8k",
+      "name": "Night Lights Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_change_8k-c46d9ae67c-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_change_8k-c46d9ae67c.webp",
+      "thumbnail": "assets/images/general--night_lights_change_8k-c46d9ae67c-thumb.webp",
+      "sha256": "c46d9ae67c93f97bd1d376fc4d2246451576f3cdc78e2b7b4dcf41bc02ee9601",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "bytes": 1151136
+    },
+    {
+      "id": "general--night_lights_change_cb_8k",
+      "name": "Night Lights Change Cb 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_change_cb_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_change_cb_8k-6000e88c39-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_change_cb_8k-6000e88c39.webp",
+      "thumbnail": "assets/images/general--night_lights_change_cb_8k-6000e88c39-thumb.webp",
+      "sha256": "6000e88c39b40186226a7a020e4b995620d9e4f55fcfd57a5ed988c4c6fb7789",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "bytes": 1165958
+    },
+    {
+      "id": "general--night_lights_decade_change",
+      "name": "Night Lights Decade Change",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_decade_change.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_decade_change-2ac72d0e0e-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_decade_change-2ac72d0e0e.webp",
+      "thumbnail": "assets/images/general--night_lights_decade_change-2ac72d0e0e-thumb.webp",
+      "sha256": "2ac72d0e0e99654c9ba1df4798bae0c2c9cce992521cd1942e750e01546a569d",
+      "colours": [
+        "neutral",
+        "purple",
+        "orange",
+        "magenta",
+        "yellow"
+      ],
+      "bytes": 900263
+    },
+    {
+      "id": "general--night_lights_decade_change_legend",
+      "name": "Night Lights Decade Change Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "general",
+      "source": "general/night_lights_decade_change_legend.jpg",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_decade_change_legend-928e0df6a7-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_decade_change_legend-928e0df6a7.webp",
+      "thumbnail": "assets/images/general--night_lights_decade_change_legend-928e0df6a7-thumb.webp",
+      "sha256": "928e0df6a7d68715f34bfc352b5bb37439f10812bf7b9bb73de133b62efc74ac",
+      "colours": [],
+      "bytes": 144226
+    },
+    {
+      "id": "general--night_lights_global_compare_2012",
+      "name": "Night Lights Global Compare 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_global_compare_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_global_compare_2012-31deb9a5a5-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_global_compare_2012-31deb9a5a5.webp",
+      "thumbnail": "assets/images/general--night_lights_global_compare_2012-31deb9a5a5-thumb.webp",
+      "sha256": "31deb9a5a5c2f06a4d661fb02dee59d07a04db331fec3566f228241c07daa03b",
+      "colours": [
+        "neutral",
+        "yellow"
+      ],
+      "bytes": 706160
+    },
+    {
+      "id": "general--night_lights_global_compare_2023",
+      "name": "Night Lights Global Compare 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_global_compare_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_global_compare_2023-2f9b2e2a39-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_global_compare_2023-2f9b2e2a39.webp",
+      "thumbnail": "assets/images/general--night_lights_global_compare_2023-2f9b2e2a39-thumb.webp",
+      "sha256": "2f9b2e2a39a87e9b2627a04a77cb32d17fe235929ec0d45d582e7b638ba658b9",
+      "colours": [
+        "neutral",
+        "yellow"
+      ],
+      "bytes": 863222
+    },
+    {
+      "id": "general--night_lights_india_2012",
+      "name": "Night Lights India 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_india_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_india_2012-d937181a8f-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_india_2012-d937181a8f.webp",
+      "thumbnail": "assets/images/general--night_lights_india_2012-d937181a8f-thumb.webp",
+      "sha256": "d937181a8f65a98f9ce73c0dc946d82183d9cf2e48804814de97132df765a9dd",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 1142270
+    },
+    {
+      "id": "general--night_lights_india_2023",
+      "name": "Night Lights India 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_india_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_india_2023-50fdc1de4e-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_india_2023-50fdc1de4e.webp",
+      "thumbnail": "assets/images/general--night_lights_india_2023-50fdc1de4e-thumb.webp",
+      "sha256": "50fdc1de4e16760a6ec068ebae5cdb5e1842ca54b9728162d33c8011af8517a8",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 1568742
+    },
+    {
+      "id": "general--night_lights_india_change_8k",
+      "name": "Night Lights India Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_india_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_india_change_8k-36455dfa58-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_india_change_8k-36455dfa58.webp",
+      "thumbnail": "assets/images/general--night_lights_india_change_8k-36455dfa58-thumb.webp",
+      "sha256": "36455dfa58b9fc7bbb13e0d18a9e9b508d7e62e6d021bd434d8662a0bfeaf6af",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "bytes": 1879313
+    },
+    {
+      "id": "general--night_lights_only_lights_change_8k",
+      "name": "Night Lights Only Lights Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_only_lights_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_only_lights_change_8k-aec726c1b2-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_only_lights_change_8k-aec726c1b2.webp",
+      "thumbnail": "assets/images/general--night_lights_only_lights_change_8k-aec726c1b2-thumb.webp",
+      "sha256": "aec726c1b266514e436a53b21fe02c0af7db88cfd447e47153efec5e62ccacfc",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "bytes": 1263267
+    },
+    {
+      "id": "general--night_lights_popout_change_8k",
+      "name": "Night Lights Popout Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_popout_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_popout_change_8k-2fe5135ec3-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_popout_change_8k-2fe5135ec3.webp",
+      "thumbnail": "assets/images/general--night_lights_popout_change_8k-2fe5135ec3-thumb.webp",
+      "sha256": "2fe5135ec3a9a5deac8123dcbd40bdddd0995232ab9441d8541f08eb35172fba",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "bytes": 1319978
+    },
+    {
+      "id": "general--night_lights_ukraine_2012",
+      "name": "Night Lights Ukraine 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_ukraine_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_ukraine_2012-4f045a1431-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_ukraine_2012-4f045a1431.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_2012-4f045a1431-thumb.webp",
+      "sha256": "4f045a1431bdfd7647e517e8bb77d9987ef3f362fb621a53d9bf82d85b6d1003",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 1675789
+    },
+    {
+      "id": "general--night_lights_ukraine_2023",
+      "name": "Night Lights Ukraine 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_ukraine_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "data": "assets/data/general--night_lights_ukraine_2023-418a63b9e2-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_ukraine_2023-418a63b9e2.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_2023-418a63b9e2-thumb.webp",
+      "sha256": "418a63b9e2275a354b668778aed87be7b2a3cd2e407af43415053d0d7b69d296",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 1757587
+    },
+    {
+      "id": "general--night_lights_ukraine_change_8k",
+      "name": "Night Lights Ukraine Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_ukraine_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_ukraine_change_8k-f9d3761941-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_ukraine_change_8k-f9d3761941.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_change_8k-f9d3761941-thumb.webp",
+      "sha256": "f9d3761941967889e5ba536b8feb48305970b3e55c1fe642ff87d64cf268dfd8",
+      "colours": [
+        "purple",
+        "orange",
+        "neutral",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "bytes": 2739428
+    },
+    {
+      "id": "general--night_lights_zooms_composite",
+      "name": "Night Lights Zooms Composite",
+      "description": "Human activity through nighttime lights",
+      "sphere": "general",
+      "source": "general/night_lights_zooms_composite.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "general/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--night_lights_zooms_composite-6e3e92eae4-5aab54e3ec66.json",
+      "image": "assets/images/general--night_lights_zooms_composite-6e3e92eae4.webp",
+      "thumbnail": "assets/images/general--night_lights_zooms_composite-6e3e92eae4-thumb.webp",
+      "sha256": "6e3e92eae49ca666f2f694efaf17f342bf10c113ead2118f959e48d26e2581bc",
+      "colours": [
+        "neutral",
+        "purple",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "bytes": 915137
+    },
+    {
+      "id": "general--precipitation_and_clouds",
+      "name": "Precipitation And Clouds",
+      "description": "Rainfall and cloud cover together",
+      "sphere": "general",
+      "source": "general/precipitation_and_clouds.jpg",
+      "kind": "observation",
+      "explanation": "Rainfall and cloud cover together. Coloured rain and snow bands are the audible layer. Physical terrain, ocean and plain cloud backgrounds are excluded.",
+      "legend": {
+        "text": "0–20 mm — precipitation; light → very heavy",
+        "sources": [
+          "general/precipitation_and_clouds_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/general--precipitation_and_clouds-96972ed7f1-5aab54e3ec66.json",
+      "image": "assets/images/general--precipitation_and_clouds-96972ed7f1.webp",
+      "thumbnail": "assets/images/general--precipitation_and_clouds-96972ed7f1-thumb.webp",
+      "sha256": "96972ed7f12047ce02640d460c49952a9e0defeedd23c39a7fcb323c2ee1faf0",
+      "colours": [
+        "green",
+        "blue",
+        "cyan",
+        "purple"
+      ],
+      "bytes": 1565674
+    },
+    {
+      "id": "general--precipitation_and_clouds_legend",
+      "name": "Precipitation And Clouds Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "general",
+      "source": "general/precipitation_and_clouds_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/general--precipitation_and_clouds_legend-8ed5d800de-5aab54e3ec66.json",
+      "image": "assets/images/general--precipitation_and_clouds_legend-8ed5d800de.webp",
+      "thumbnail": "assets/images/general--precipitation_and_clouds_legend-8ed5d800de-thumb.webp",
+      "sha256": "8ed5d800de9d80a871408a9c35cb4bc53584a16d2a84e5982a2e8f9a146a84e5",
+      "colours": [],
+      "bytes": 10626
+    },
+    {
+      "id": "hydrosphere--atlantic_ocean_currents_montage",
+      "name": "Atlantic Ocean Currents Montage",
+      "description": "Currents flowing through the Atlantic",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/atlantic_ocean_currents_montage.png",
+      "kind": "observation",
+      "explanation": "Currents flowing through the Atlantic. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--atlantic_ocean_currents_montage-3acfc44400-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--atlantic_ocean_currents_montage-3acfc44400.webp",
+      "thumbnail": "assets/images/hydrosphere--atlantic_ocean_currents_montage-3acfc44400-thumb.webp",
+      "sha256": "3acfc444003890a89da5bb8c6ed80791573f8ef72f1dbc3214ef40b3d506b00b",
+      "colours": [
+        "green",
+        "yellow",
+        "orange",
+        "blue",
+        "cyan",
+        "neutral"
+      ],
+      "bytes": 2491886
+    },
+    {
+      "id": "hydrosphere--global_ocean_currents_montage",
+      "name": "Global Ocean Currents Montage",
+      "description": "Currents circulating around the world",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/global_ocean_currents_montage.png",
+      "kind": "observation",
+      "explanation": "Currents circulating around the world. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--global_ocean_currents_montage-9f4991a381-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--global_ocean_currents_montage-9f4991a381.webp",
+      "thumbnail": "assets/images/hydrosphere--global_ocean_currents_montage-9f4991a381-thumb.webp",
+      "sha256": "9f4991a381560210a1b0d5066d08a1e5cae1376bfb153301c3f858219aeaf567",
+      "colours": [
+        "green",
+        "orange",
+        "yellow",
+        "red",
+        "neutral",
+        "cyan",
+        "blue"
+      ],
+      "bytes": 3491869
+    },
+    {
+      "id": "hydrosphere--ocean_currents_ecco2",
+      "name": "Ocean Currents ECCO2",
+      "description": "Ocean circulation and current patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_currents_ecco2.jpg",
+      "kind": "observation",
+      "explanation": "Ocean circulation and current patterns. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--ocean_currents_ecco2-dcfd17864c-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_currents_ecco2-dcfd17864c.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_currents_ecco2-dcfd17864c-thumb.webp",
+      "sha256": "dcfd17864c2940f9ce1cf406e866818379991d57b0e900f9b8812f0c7cf72e3c",
+      "colours": [
+        "green",
+        "orange",
+        "yellow",
+        "red",
+        "blue",
+        "neutral",
+        "cyan"
+      ],
+      "bytes": 3971763
+    },
+    {
+      "id": "hydrosphere--ocean_currents_ecco2_alt",
+      "name": "Ocean Currents ECCO2 Alt",
+      "description": "Ocean circulation and current patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_currents_ecco2_alt.jpg",
+      "kind": "observation",
+      "explanation": "Ocean circulation and current patterns. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/hydrosphere--ocean_currents_ecco2-dcfd17864c.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_currents_ecco2-dcfd17864c-thumb.webp",
+      "sha256": "dcfd17864c2940f9ce1cf406e866818379991d57b0e900f9b8812f0c7cf72e3c",
+      "colours": [
+        "green",
+        "orange",
+        "yellow",
+        "red",
+        "blue",
+        "neutral",
+        "cyan"
+      ],
+      "data": "assets/data/hydrosphere--ocean_currents_ecco2_alt-dcfd17864c-5aab54e3ec66.json",
+      "bytes": 3971855
+    },
+    {
+      "id": "hydrosphere--ocean_currents_ecco2_legend",
+      "name": "Ocean Currents ECCO2 Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_currents_ecco2_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--ocean_currents_ecco2_legend-7c4c25f9ca-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_currents_ecco2_legend-7c4c25f9ca.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_currents_ecco2_legend-7c4c25f9ca-thumb.webp",
+      "sha256": "7c4c25f9ca51bb458c100ca4d31f452b8dfdbce8898e2945b7042729d55404c5",
+      "colours": [],
+      "bytes": 6656
+    },
+    {
+      "id": "hydrosphere--ocean_currents_grid_crop1",
+      "name": "Ocean Currents Grid Crop1",
+      "description": "Ocean circulation and current patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_currents_grid_crop1.png",
+      "kind": "observation",
+      "explanation": "Ocean circulation and current patterns. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--ocean_currents_grid_crop1-c9296d1bf8-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_currents_grid_crop1-c9296d1bf8.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_currents_grid_crop1-c9296d1bf8-thumb.webp",
+      "sha256": "c9296d1bf8a8e25958c8bba927283d19b16cac853988c105d840184a32382f5a",
+      "colours": [
+        "green",
+        "cyan",
+        "neutral",
+        "blue"
+      ],
+      "bytes": 2613832
+    },
+    {
+      "id": "hydrosphere--ocean_currents_grid_crop2",
+      "name": "Ocean Currents Grid Crop2",
+      "description": "Ocean circulation and current patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_currents_grid_crop2.png",
+      "kind": "observation",
+      "explanation": "Ocean circulation and current patterns. Coloured current traces form the audible pattern. Grey continent fills and the dark ocean base are excluded.",
+      "legend": {
+        "text": "0 · 10 · 20 · 32 °C — colour represents sea-surface temperature along currents",
+        "sources": [
+          "hydrosphere/ocean_currents_ecco2_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--ocean_currents_grid_crop2-39569bc5ba-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_currents_grid_crop2-39569bc5ba.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_currents_grid_crop2-39569bc5ba-thumb.webp",
+      "sha256": "39569bc5ba52713754016abe3300eee563c6ccd5655b65cdc49ccc054eb5ef9a",
+      "colours": [
+        "green",
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 3176170
+    },
+    {
+      "id": "hydrosphere--ocean_heat_graph",
+      "name": "Ocean Heat Graph",
+      "description": "Changes in ocean heat content",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_heat_graph.png",
+      "kind": "observation",
+      "explanation": "Changes in ocean heat content. The highlighted graph trace is audible. Background geography, axes and labels are excluded.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--ocean_heat_graph-60548da6ba-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_heat_graph-60548da6ba.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_heat_graph-60548da6ba-thumb.webp",
+      "sha256": "60548da6ba1613804912d0e4282cb55207be4f7ba129a72b912f533402c6a248",
+      "colours": [
+        "orange",
+        "yellow"
+      ],
+      "bytes": 320075
+    },
+    {
+      "id": "hydrosphere--ocean_spilhaus_basemap",
+      "name": "Ocean Spilhaus Basemap",
+      "description": "Geographic reference without measurement data",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_spilhaus_basemap.png",
+      "kind": "reference",
+      "explanation": "Geographic reference without measurement data. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--ocean_spilhaus_basemap-fd70529b43-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_spilhaus_basemap-fd70529b43.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_spilhaus_basemap-fd70529b43-thumb.webp",
+      "sha256": "fd70529b43b4c83b4256e33a80094e5a79bf4b8b0d2d2215af33de75d279ad1d",
+      "colours": [],
+      "bytes": 8282
+    },
+    {
+      "id": "hydrosphere--ocean_spilhaus_projection",
+      "name": "Ocean Spilhaus Projection",
+      "description": "Connected oceans in Spilhaus projection",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/ocean_spilhaus_projection.png",
+      "kind": "observation",
+      "explanation": "Connected oceans in Spilhaus projection. The highlighted graph trace is audible. Background geography, axes and labels are excluded.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--ocean_spilhaus_projection-f0d2324d31-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--ocean_spilhaus_projection-f0d2324d31.webp",
+      "thumbnail": "assets/images/hydrosphere--ocean_spilhaus_projection-f0d2324d31-thumb.webp",
+      "sha256": "f0d2324d31ca801ed0799b0d59db5a93cc8ec622da6ba9530041ee631e1be4a4",
+      "colours": [
+        "orange",
+        "yellow"
+      ],
+      "bytes": 226178
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature",
+      "name": "Sea Surface Temperature",
+      "description": "Ocean surface warmth across regions",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature.png",
+      "kind": "observation",
+      "explanation": "Ocean surface warmth across regions. Listen to the coloured temperature field over the ocean. Grey land fills are excluded; blue ocean measurements remain audible.",
+      "legend": {
+        "text": "−5 · 0 · 5 · 10 · 15 · 20 · 25 · 30 · 35 °C — sea-surface temperature; blue → red = colder → warmer",
+        "sources": [
+          "hydrosphere/sea_surface_temperature_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--sea_surface_temperature-627e79d6ce-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature-627e79d6ce.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature-627e79d6ce-thumb.webp",
+      "sha256": "627e79d6cea1ef616f40954fd9cbbf4a0c6316e5bca869527fb2ae9794259a8d",
+      "colours": [
+        "blue",
+        "red",
+        "orange",
+        "neutral",
+        "yellow"
+      ],
+      "bytes": 3007186
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature_anomaly_global",
+      "name": "Sea Surface Temperature Anomaly Global",
+      "description": "Ocean warming and cooling patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature_anomaly_global.jpg",
+      "kind": "observation",
+      "explanation": "Ocean warming and cooling patterns. Listen to the coloured temperature field over the ocean. Grey land fills are excluded; blue ocean measurements remain audible.",
+      "legend": {
+        "text": "−4 · −3 · −2 · −1 · 0 · 1 · 2 · 3 · 4 °C — temperature anomaly; blue = cooler · brown = warmer",
+        "sources": [
+          "hydrosphere/sea_surface_temperature_anomaly_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--sea_surface_temperature_anomaly_global-ec9b1a8630-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature_anomaly_global-ec9b1a8630.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature_anomaly_global-ec9b1a8630-thumb.webp",
+      "sha256": "ec9b1a8630e220f2803955f7920dec32861a1f08e890605183fb5eb62688a485",
+      "colours": [
+        "orange",
+        "neutral",
+        "blue",
+        "yellow",
+        "red",
+        "cyan"
+      ],
+      "bytes": 4956155
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature_anomaly_legend",
+      "name": "Sea Surface Temperature Anomaly Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature_anomaly_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--sea_surface_temperature_anomaly_legend-d45621e95a-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature_anomaly_legend-d45621e95a.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature_anomaly_legend-d45621e95a-thumb.webp",
+      "sha256": "d45621e95a19567bab047e9e1cf6b90585a07a05bf4c50ca51b4492b06d51302",
+      "colours": [],
+      "bytes": 292232
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature_anomaly_pacific",
+      "name": "Sea Surface Temperature Anomaly Pacific",
+      "description": "Ocean warming and cooling patterns",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature_anomaly_pacific.png",
+      "kind": "observation",
+      "explanation": "Ocean warming and cooling patterns. Listen to the coloured temperature field over the ocean. Grey land fills are excluded; blue ocean measurements remain audible.",
+      "legend": {
+        "text": "−4 · −3 · −2 · −1 · 0 · 1 · 2 · 3 · 4 °C — temperature anomaly; blue = cooler · brown = warmer",
+        "sources": [
+          "hydrosphere/sea_surface_temperature_anomaly_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--sea_surface_temperature_anomaly_pacific-5df5d18a8e-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature_anomaly_pacific-5df5d18a8e.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature_anomaly_pacific-5df5d18a8e-thumb.webp",
+      "sha256": "5df5d18a8e84246ce8efebc219838aa13b8545116af8570bbcfef0e1bd51ac66",
+      "colours": [
+        "orange",
+        "blue",
+        "red",
+        "neutral",
+        "yellow"
+      ],
+      "bytes": 4383859
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature_global",
+      "name": "Sea Surface Temperature Global",
+      "description": "Ocean surface warmth across regions",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature_global.jpg",
+      "kind": "observation",
+      "explanation": "Ocean surface warmth across regions. Listen to the coloured temperature field over the ocean. Grey land fills are excluded; blue ocean measurements remain audible.",
+      "legend": {
+        "text": "−5 · 0 · 5 · 10 · 15 · 20 · 25 · 30 · 35 °C — sea-surface temperature; blue → red = colder → warmer",
+        "sources": [
+          "hydrosphere/sea_surface_temperature_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/hydrosphere--sea_surface_temperature_global-5787cb7aa2-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature_global-5787cb7aa2.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature_global-5787cb7aa2-thumb.webp",
+      "sha256": "5787cb7aa227fb20f40f612739c80f0219ce5a47a84d604edfc63aebe8541bb0",
+      "colours": [
+        "blue",
+        "red",
+        "orange",
+        "neutral",
+        "yellow",
+        "cyan"
+      ],
+      "bytes": 3016912
+    },
+    {
+      "id": "hydrosphere--sea_surface_temperature_legend",
+      "name": "Sea Surface Temperature Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "hydrosphere",
+      "source": "hydrosphere/sea_surface_temperature_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/hydrosphere--sea_surface_temperature_legend-8bfc8b4b20-5aab54e3ec66.json",
+      "image": "assets/images/hydrosphere--sea_surface_temperature_legend-8bfc8b4b20.webp",
+      "thumbnail": "assets/images/hydrosphere--sea_surface_temperature_legend-8bfc8b4b20-thumb.webp",
+      "sha256": "8bfc8b4b20566b073709a3990ad3ff3f0d791a3717391ed87ab28c2bc0e88a88",
+      "colours": [],
+      "bytes": 289124
+    },
+    {
+      "id": "lithosphere--active_fires_robinson",
+      "name": "Active Fires Robinson",
+      "description": "Worldwide fire intensity and distribution",
+      "sphere": "lithosphere",
+      "source": "lithosphere/active_fires_robinson.png",
+      "kind": "observation",
+      "explanation": "Worldwide fire intensity and distribution. Warm clusters mark visible fire activity. Listen for where clusters occur and how strongly they stand out.",
+      "legend": {
+        "text": "1–25,000 MW — fire radiative power; dark red → yellow → white = increasing power",
+        "sources": [
+          "lithosphere/active_fires_robinson.png"
+        ],
+        "embedded": true
+      },
+      "data": "assets/data/lithosphere--active_fires_robinson-b8b32087c1-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--active_fires_robinson-b8b32087c1.webp",
+      "thumbnail": "assets/images/lithosphere--active_fires_robinson-b8b32087c1-thumb.webp",
+      "sha256": "b8b32087c15547d7511710b6d28b7e9505adf22455dcb750d5fddb37362ec19c",
+      "colours": [
+        "red",
+        "orange",
+        "yellow",
+        "neutral"
+      ],
+      "bytes": 1578190
+    },
+    {
+      "id": "lithosphere--active_fires_robinson_2020",
+      "name": "Active Fires Robinson 2020",
+      "description": "Worldwide fire intensity and distribution",
+      "sphere": "lithosphere",
+      "source": "lithosphere/active_fires_robinson_2020.jpg",
+      "kind": "observation",
+      "explanation": "Worldwide fire intensity and distribution. Warm clusters mark visible fire activity. Listen for where clusters occur and how strongly they stand out.",
+      "legend": {
+        "text": "1–250 MW — fire radiative power; dark red → yellow → white = increasing power",
+        "sources": [
+          "lithosphere/active_fires_robinson_2020.jpg"
+        ],
+        "embedded": true
+      },
+      "data": "assets/data/lithosphere--active_fires_robinson_2020-5db6451189-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--active_fires_robinson_2020-5db6451189.webp",
+      "thumbnail": "assets/images/lithosphere--active_fires_robinson_2020-5db6451189-thumb.webp",
+      "sha256": "5db64511890b884c8a6d55bb32d7f01581886ee50bf903b0c86294ac1ddebdaa",
+      "colours": [
+        "red",
+        "orange",
+        "neutral",
+        "yellow"
+      ],
+      "bytes": 522210
+    },
+    {
+      "id": "lithosphere--near_surface_temperature",
+      "name": "Near Surface Temperature",
+      "description": "Temperatures close to Earth's surface",
+      "sphere": "lithosphere",
+      "source": "lithosphere/near_surface_temperature.jpg",
+      "kind": "observation",
+      "explanation": "Temperatures close to Earth's surface. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "−40 to 40 °C — near-surface temperature; cold → hot",
+        "sources": [
+          "lithosphere/near_surface_temperature_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/lithosphere--near_surface_temperature-b41d4f65b7-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--near_surface_temperature-b41d4f65b7.webp",
+      "thumbnail": "assets/images/lithosphere--near_surface_temperature-b41d4f65b7-thumb.webp",
+      "sha256": "b41d4f65b7003dff1a06750c23bb7f3fc273c166b11e2d332ebc77cdcd953153",
+      "colours": [
+        "red",
+        "blue",
+        "yellow",
+        "green",
+        "orange",
+        "cyan",
+        "neutral",
+        "purple",
+        "magenta"
+      ],
+      "bytes": 4319970
+    },
+    {
+      "id": "lithosphere--near_surface_temperature_legend",
+      "name": "Near Surface Temperature Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "lithosphere",
+      "source": "lithosphere/near_surface_temperature_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/lithosphere--near_surface_temperature_legend-ec8815940b-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--near_surface_temperature_legend-ec8815940b.webp",
+      "thumbnail": "assets/images/lithosphere--near_surface_temperature_legend-ec8815940b-thumb.webp",
+      "sha256": "ec8815940bde6a3246a940976e9ee3c1f415182d63673d3190f19bd3a9e7b333",
+      "colours": [],
+      "bytes": 9819
+    },
+    {
+      "id": "lithosphere--night_lights_change_8k",
+      "name": "Night Lights Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_change_8k-c46d9ae67c.webp",
+      "thumbnail": "assets/images/general--night_lights_change_8k-c46d9ae67c-thumb.webp",
+      "sha256": "c46d9ae67c93f97bd1d376fc4d2246451576f3cdc78e2b7b4dcf41bc02ee9601",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_change_8k-c46d9ae67c-5aab54e3ec66.json",
+      "bytes": 1151225
+    },
+    {
+      "id": "lithosphere--night_lights_change_cb_8k",
+      "name": "Night Lights Change Cb 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_change_cb_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_change_cb_8k-6000e88c39.webp",
+      "thumbnail": "assets/images/general--night_lights_change_cb_8k-6000e88c39-thumb.webp",
+      "sha256": "6000e88c39b40186226a7a020e4b995620d9e4f55fcfd57a5ed988c4c6fb7789",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_change_cb_8k-6000e88c39-5aab54e3ec66.json",
+      "bytes": 1166047
+    },
+    {
+      "id": "lithosphere--night_lights_decade_change",
+      "name": "Night Lights Decade Change",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_decade_change.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_decade_change-2ac72d0e0e.webp",
+      "thumbnail": "assets/images/general--night_lights_decade_change-2ac72d0e0e-thumb.webp",
+      "sha256": "2ac72d0e0e99654c9ba1df4798bae0c2c9cce992521cd1942e750e01546a569d",
+      "colours": [
+        "neutral",
+        "purple",
+        "orange",
+        "magenta",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_decade_change-2ac72d0e0e-5aab54e3ec66.json",
+      "bytes": 900346
+    },
+    {
+      "id": "lithosphere--night_lights_decade_change_legend",
+      "name": "Night Lights Decade Change Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_decade_change_legend.jpg",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_decade_change_legend-928e0df6a7.webp",
+      "thumbnail": "assets/images/general--night_lights_decade_change_legend-928e0df6a7-thumb.webp",
+      "sha256": "928e0df6a7d68715f34bfc352b5bb37439f10812bf7b9bb73de133b62efc74ac",
+      "colours": [],
+      "data": "assets/data/lithosphere--night_lights_decade_change_legend-928e0df6a7-5aab54e3ec66.json",
+      "bytes": 144259
+    },
+    {
+      "id": "lithosphere--night_lights_global_compare_2012",
+      "name": "Night Lights Global Compare 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_global_compare_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_global_compare_2012-31deb9a5a5.webp",
+      "thumbnail": "assets/images/general--night_lights_global_compare_2012-31deb9a5a5-thumb.webp",
+      "sha256": "31deb9a5a5c2f06a4d661fb02dee59d07a04db331fec3566f228241c07daa03b",
+      "colours": [
+        "neutral",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_global_compare_2012-31deb9a5a5-5aab54e3ec66.json",
+      "bytes": 706211
+    },
+    {
+      "id": "lithosphere--night_lights_global_compare_2023",
+      "name": "Night Lights Global Compare 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_global_compare_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_global_compare_2023-2f9b2e2a39.webp",
+      "thumbnail": "assets/images/general--night_lights_global_compare_2023-2f9b2e2a39-thumb.webp",
+      "sha256": "2f9b2e2a39a87e9b2627a04a77cb32d17fe235929ec0d45d582e7b638ba658b9",
+      "colours": [
+        "neutral",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_global_compare_2023-2f9b2e2a39-5aab54e3ec66.json",
+      "bytes": 863273
+    },
+    {
+      "id": "lithosphere--night_lights_india_2012",
+      "name": "Night Lights India 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_india_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_india_2012-d937181a8f.webp",
+      "thumbnail": "assets/images/general--night_lights_india_2012-d937181a8f-thumb.webp",
+      "sha256": "d937181a8f65a98f9ce73c0dc946d82183d9cf2e48804814de97132df765a9dd",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "data": "assets/data/lithosphere--night_lights_india_2012-d937181a8f-5aab54e3ec66.json",
+      "bytes": 1142321
+    },
+    {
+      "id": "lithosphere--night_lights_india_2023",
+      "name": "Night Lights India 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_india_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_india_2023-50fdc1de4e.webp",
+      "thumbnail": "assets/images/general--night_lights_india_2023-50fdc1de4e-thumb.webp",
+      "sha256": "50fdc1de4e16760a6ec068ebae5cdb5e1842ca54b9728162d33c8011af8517a8",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "data": "assets/data/lithosphere--night_lights_india_2023-50fdc1de4e-5aab54e3ec66.json",
+      "bytes": 1568793
+    },
+    {
+      "id": "lithosphere--night_lights_india_change_8k",
+      "name": "Night Lights India Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_india_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_india_change_8k-36455dfa58.webp",
+      "thumbnail": "assets/images/general--night_lights_india_change_8k-36455dfa58-thumb.webp",
+      "sha256": "36455dfa58b9fc7bbb13e0d18a9e9b508d7e62e6d021bd434d8662a0bfeaf6af",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "data": "assets/data/lithosphere--night_lights_india_change_8k-36455dfa58-5aab54e3ec66.json",
+      "bytes": 1879393
+    },
+    {
+      "id": "lithosphere--night_lights_only_lights_change_8k",
+      "name": "Night Lights Only Lights Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_only_lights_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_only_lights_change_8k-aec726c1b2.webp",
+      "thumbnail": "assets/images/general--night_lights_only_lights_change_8k-aec726c1b2-thumb.webp",
+      "sha256": "aec726c1b266514e436a53b21fe02c0af7db88cfd447e47153efec5e62ccacfc",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "data": "assets/data/lithosphere--night_lights_only_lights_change_8k-aec726c1b2-5aab54e3ec66.json",
+      "bytes": 1263347
+    },
+    {
+      "id": "lithosphere--night_lights_popout_change_8k",
+      "name": "Night Lights Popout Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_popout_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_popout_change_8k-2fe5135ec3.webp",
+      "thumbnail": "assets/images/general--night_lights_popout_change_8k-2fe5135ec3-thumb.webp",
+      "sha256": "2fe5135ec3a9a5deac8123dcbd40bdddd0995232ab9441d8541f08eb35172fba",
+      "colours": [
+        "purple",
+        "neutral",
+        "orange",
+        "magenta",
+        "red"
+      ],
+      "data": "assets/data/lithosphere--night_lights_popout_change_8k-2fe5135ec3-5aab54e3ec66.json",
+      "bytes": 1320058
+    },
+    {
+      "id": "lithosphere--night_lights_ukraine_2012",
+      "name": "Night Lights Ukraine 2012",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_ukraine_2012.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_ukraine_2012-4f045a1431.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_2012-4f045a1431-thumb.webp",
+      "sha256": "4f045a1431bdfd7647e517e8bb77d9987ef3f362fb621a53d9bf82d85b6d1003",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "data": "assets/data/lithosphere--night_lights_ukraine_2012-4f045a1431-5aab54e3ec66.json",
+      "bytes": 1675840
+    },
+    {
+      "id": "lithosphere--night_lights_ukraine_2023",
+      "name": "Night Lights Ukraine 2023",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_ukraine_2023.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": null,
+      "image": "assets/images/general--night_lights_ukraine_2023-418a63b9e2.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_2023-418a63b9e2-thumb.webp",
+      "sha256": "418a63b9e2275a354b668778aed87be7b2a3cd2e407af43415053d0d7b69d296",
+      "colours": [
+        "yellow",
+        "neutral"
+      ],
+      "data": "assets/data/lithosphere--night_lights_ukraine_2023-418a63b9e2-5aab54e3ec66.json",
+      "bytes": 1757638
+    },
+    {
+      "id": "lithosphere--night_lights_ukraine_change_8k",
+      "name": "Night Lights Ukraine Change 8K",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_ukraine_change_8k.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_ukraine_change_8k-f9d3761941.webp",
+      "thumbnail": "assets/images/general--night_lights_ukraine_change_8k-f9d3761941-thumb.webp",
+      "sha256": "f9d3761941967889e5ba536b8feb48305970b3e55c1fe642ff87d64cf268dfd8",
+      "colours": [
+        "purple",
+        "orange",
+        "neutral",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_ukraine_change_8k-f9d3761941-5aab54e3ec66.json",
+      "bytes": 2739517
+    },
+    {
+      "id": "lithosphere--night_lights_zooms_composite",
+      "name": "Night Lights Zooms Composite",
+      "description": "Human activity through nighttime lights",
+      "sphere": "lithosphere",
+      "source": "lithosphere/night_lights_zooms_composite.jpg",
+      "kind": "observation",
+      "explanation": "Human activity through nighttime lights. Listen for clusters of visible lights and changes in lighting. Dark terrain and ocean remain silent.",
+      "legend": {
+        "text": "Lighting change, 2012–2023: scale runs from lights out → no change → new lights",
+        "sources": [
+          "lithosphere/night_lights_decade_change_legend.jpg"
+        ],
+        "embedded": false
+      },
+      "image": "assets/images/general--night_lights_zooms_composite-6e3e92eae4.webp",
+      "thumbnail": "assets/images/general--night_lights_zooms_composite-6e3e92eae4-thumb.webp",
+      "sha256": "6e3e92eae49ca666f2f694efaf17f342bf10c113ead2118f959e48d26e2581bc",
+      "colours": [
+        "neutral",
+        "purple",
+        "orange",
+        "magenta",
+        "red",
+        "yellow"
+      ],
+      "data": "assets/data/lithosphere--night_lights_zooms_composite-6e3e92eae4-5aab54e3ec66.json",
+      "bytes": 915226
+    },
+    {
+      "id": "lithosphere--surface_temperature_anomaly_2023",
+      "name": "Surface Temperature Anomaly 2023",
+      "description": "Surface warming and cooling patterns",
+      "sphere": "lithosphere",
+      "source": "lithosphere/surface_temperature_anomaly_2023.jpg",
+      "kind": "observation",
+      "explanation": "Surface warming and cooling patterns. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "Surface temperature anomaly: blue = cooler · pale = near reference · red = warmer",
+        "sources": [
+          "lithosphere/surface_temperature_anomaly_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/lithosphere--surface_temperature_anomaly_2023-8e7883a981-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--surface_temperature_anomaly_2023-8e7883a981.webp",
+      "thumbnail": "assets/images/lithosphere--surface_temperature_anomaly_2023-8e7883a981-thumb.webp",
+      "sha256": "8e7883a981ca6b904adba080828e321e756938bf07e373f5c32312748417f9b8",
+      "colours": [
+        "yellow",
+        "red",
+        "orange",
+        "neutral",
+        "blue"
+      ],
+      "bytes": 2548701
+    },
+    {
+      "id": "lithosphere--surface_temperature_anomaly_legend",
+      "name": "Surface Temperature Anomaly Legend",
+      "description": "Colour scale for interpreting observations",
+      "sphere": "lithosphere",
+      "source": "lithosphere/surface_temperature_anomaly_legend.png",
+      "kind": "reference",
+      "explanation": "Colour scale for interpreting observations. Listen to the extracted colour patterns and their positions.",
+      "legend": null,
+      "data": "assets/data/lithosphere--surface_temperature_anomaly_legend-a76181537d-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--surface_temperature_anomaly_legend-a76181537d.webp",
+      "thumbnail": "assets/images/lithosphere--surface_temperature_anomaly_legend-a76181537d-thumb.webp",
+      "sha256": "a76181537d301a7b3c6aff4b74b38bc8cf34a1aa6c6810178c200fadc2ad7cad",
+      "colours": [],
+      "bytes": 4434
+    },
+    {
+      "id": "lithosphere--surface_temperature_anomaly_sos",
+      "name": "Surface Temperature Anomaly SOS",
+      "description": "Surface warming and cooling patterns",
+      "sphere": "lithosphere",
+      "source": "lithosphere/surface_temperature_anomaly_sos.jpg",
+      "kind": "observation",
+      "explanation": "Surface warming and cooling patterns. The colour field represents observations across both continents and oceans. Geographic outlines and marginal labels add no sound.",
+      "legend": {
+        "text": "Surface temperature anomaly: blue = cooler · pale = near reference · red = warmer",
+        "sources": [
+          "lithosphere/surface_temperature_anomaly_legend.png"
+        ],
+        "embedded": false
+      },
+      "data": "assets/data/lithosphere--surface_temperature_anomaly_sos-602f329572-5aab54e3ec66.json",
+      "image": "assets/images/lithosphere--surface_temperature_anomaly_sos-602f329572.webp",
+      "thumbnail": "assets/images/lithosphere--surface_temperature_anomaly_sos-602f329572-thumb.webp",
+      "sha256": "602f329572c5cfbe9975d9e76eeba10f9494950cc1972f34b72257741269aef0",
+      "colours": [
+        "yellow",
+        "red",
+        "orange",
+        "neutral",
+        "blue"
+      ],
+      "bytes": 2704803
+    }
+  ],
+  "failures": []
+}

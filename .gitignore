@@ -1,0 +1,5 @@
+# Optional local junction to the original image collection. The website ships
+# portable previews and scanner JSON under assets/ instead.
+/resources/
+__pycache__/
+*.pyc
