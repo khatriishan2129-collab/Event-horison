@@ -13,5 +13,3 @@ Team name - Event horison
 1. Ishan Khatri
 2. Nahar Kumar
 3. Aneeka Karan
-4. Tiyasha Singha
-5. Karan Kutty
